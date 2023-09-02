@@ -23,17 +23,11 @@
         const width = canvas.width;
         const height = canvas.height;
 
-        let playerX = 0;
-        let playerY = 0;
-
         // Store the timestamp of the previous frame
         let lastTimestamp = 0;
 
         // Game loop
         function update(dt) {
-            // Update game logic here using delta time (dt)
-            playerX += 100 * dt; // Move the player at a constant speed
-            playerY += 100 * dt;
         }
 
         function render() {
@@ -41,10 +35,7 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             //add background
             ctx.fillStyle = 'black';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.fillStyle = 'blue';
-            ctx.fillRect(playerX, playerY, 50, 50);
+            ctx.fillRect(0, 0, canvas.width, canvas.height);            
         }
 
         function gameLoop(timestamp) {
