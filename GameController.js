@@ -1,5 +1,5 @@
 class GameController {
-    images = [];
+    images = {};
     entities = [];
     loadImages = (callback) => {
         let imagesToLoad = ["Images/player.png"];
@@ -8,7 +8,7 @@ class GameController {
             let image = new Image();
             image.src = imageFile;
             image.onload = (loadedImage) => {
-                this.images.push(loadedImage.target);
+                this.images[imageFile]=loadedImage.target;
                 resourceCounter++;
                 if (resourceCounter >= imagesToLoad.length) callback();
             };
@@ -17,12 +17,17 @@ class GameController {
 
     start = () => {
         this.loadImages(this.loaded);
-        let e = new Entity(this,"Images/player.png");
-        this.entities.push(e);
     }
 
     loaded = () => {
-        console.log("loaded");
+        let e = new Entity(this,{
+            sprite:null, 
+            fileName:"Images/player.png",
+            cellSize:{width:16,height:16},
+            spriteSize:{width:100,height:100},
+            grid:{rows:4,columns:4}
+        });
+        this.entities.push(e);
     }
 
     update = (deltaTime) => {
