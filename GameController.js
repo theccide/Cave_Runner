@@ -1,5 +1,6 @@
 class GameController {
     images = {};
+    sounds = [];
     entities = [];
     loadImages = (callback) => {
         let imagesToLoad = ["Images/player.png"];
@@ -14,12 +15,30 @@ class GameController {
             };
         });
     }
+    loadSounds = (callback) => {
+        let soundsToLoad = ["Sounds/noise.wav"];
+        let resourceCounter = 0;
+        soundsToLoad.forEach(soundFile => {
+            let audio = new Audio();
+            audio.src = soundFile;
+            audio.oncanplaythrough = () => {
+                this.sounds.push(audio);
+                resourceCounter++;
+                if (resourceCounter >= soundsToLoad.length) callback();
+            };
+        });
+    };
 
     start = () => {
-        this.loadImages(this.loaded);
+        this.loadImages(this.resourceFinished);
+        this.loadSounds(this.resourceFinished);
     }
-
-    loaded = () => {
+    resourceCounter = 0;
+    resourceFinished = () => {
+        this.resourceCounter ++;
+        if(this.resourceCounter >= 2) this.finished();
+    }
+    finished = () => {
         let e = new Entity(this,{
             sprite:null, 
             fileName:"Images/player.png",
@@ -28,6 +47,12 @@ class GameController {
             grid:{rows:4,columns:4}
         });
         this.entities.push(e);
+
+        const playButton = document.getElementById('playButton');
+        playButton.addEventListener('click', () => {
+            this.sounds[0].play()
+        });
+
     }
 
     update = (deltaTime) => {
