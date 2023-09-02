@@ -15,7 +15,7 @@ class Entity {
                 this.position.x,
                 this.position.y,
                 this.spriteSheet.spriteSize.width,
-                this.spriteSheet.spriteSize.height,            
+                this.spriteSheet.spriteSize.height,45            
             );
     }
 }

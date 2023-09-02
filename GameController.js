@@ -47,7 +47,8 @@ class GameController {
             grid:{rows:4,columns:4}
         });
         this.entities.push(e);
-
+        e.position.x=500;
+        e.position.y=500;
         const playButton = document.getElementById('playButton');
         playButton.addEventListener('click', () => {
             this.sounds[0].play()
