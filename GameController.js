@@ -36,9 +36,9 @@ class GameController {
     resourceCounter = 0;
     resourceFinished = () => {
         this.resourceCounter ++;
-        if(this.resourceCounter >= 2) this.finished();
+        if(this.resourceCounter >= 2) this.finishedLoading();
     }
-    finished = () => {
+    finishedLoading = () => {
         let e = new Entity(this,{
             sprite:null, 
             fileName:"Images/player.png",
