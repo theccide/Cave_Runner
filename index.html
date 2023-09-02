@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Boilerplate</title>
+    <script src="Jam_Engine/Animation.js"></script>
+    <script src="Jam_Engine/AStar.js"></script>
+    <script src="Jam_Engine/Graphics.js"></script>
+    <script src="Jam_Engine/Sound.js"></script>
+    <script src="Jam_Engine/Tools.js"></script>
+    <script src="Enemy.js"></script>
+    <script src="Player.js"></script>
+    <script src="GameController.js"></script>
+</head>
+<body>
+    <canvas id="myCanvas" width="1900" height="940"></canvas>
+
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const width = canvas.width;
+        const height = canvas.height;
+
+        let playerX = 0;
+        let playerY = 0;
+
+        // Store the timestamp of the previous frame
+        let lastTimestamp = 0;
+
+        // Game loop
+        function update(dt) {
+            // Update game logic here using delta time (dt)
+            playerX += 100 * dt; // Move the player at a constant speed
+            playerY += 100 * dt;
+        }
+
+        function render() {
+            //clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            //add background
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(playerX, playerY, 50, 50);
+        }
+
+        function gameLoop(timestamp) {
+            // Calculate delta time
+            const dt = (timestamp - lastTimestamp) / 1000; // Convert to seconds
+            lastTimestamp = timestamp;
+
+            // Update and render the game
+            update(dt);
+            render();
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start the game loop
+        requestAnimationFrame(gameLoop);
+    </script>
+</body>
+</html>
