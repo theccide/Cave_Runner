@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Canvas Boilerplate</title>
-    <script src="Jam_Engine/Animation.js"></script>
     <script src="Jam_Engine/AStar.js"></script>
     <script src="Jam_Engine/Graphics.js"></script>
     <script src="Jam_Engine/Sound.js"></script>
     <script src="Jam_Engine/Tools.js"></script>
+    <script src="Entity.js"></script>
     <script src="Enemy.js"></script>
     <script src="Player.js"></script>
     <script src="GameController.js"></script>
@@ -23,11 +23,14 @@
         const width = canvas.width;
         const height = canvas.height;
 
+        const gameController = new GameController();
+
         // Store the timestamp of the previous frame
         let lastTimestamp = 0;
 
         // Game loop
-        function update(dt) {
+        function update(deltaTime) {
+            gameController.update(deltaTime);
         }
 
         function render() {
@@ -49,7 +52,7 @@
 
             requestAnimationFrame(gameLoop);
         }
-
+        gameController.start();
         // Start the game loop
         requestAnimationFrame(gameLoop);
     </script>
