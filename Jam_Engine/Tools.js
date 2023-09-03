@@ -1,3 +1,27 @@
+const wrap=(num, length)=> (num+length)%(length);
+const dist=(x1, y1, x2, y2)=>{
+    let a = x1 - x2;
+    let b = y1 - y2;    
+    return Math.sqrt( a*a + b*b );
+}
+// An educated guess of how far it is between two points
+const heuristic=(a, b)=>dist(a.x, a.y, b.x, b.y);
+
+const loadImages = (imagesToLoad, callback) => {
+    //let imagesToLoad = ["Images/background1.png"];
+    let resourceCounter = 0;
+    let images = {}
+    imagesToLoad.forEach(imageFile => {
+        let image = new Image();
+        image.src = imageFile;
+        image.onload = (loadedImage) => {
+            images[imageFile]=loadedImage.target;
+            resourceCounter++;
+            if (resourceCounter >= imagesToLoad.length) callback(images);
+        };
+    });
+}
+
 class Tools {
     static MIN=0;
     static MAX=1;

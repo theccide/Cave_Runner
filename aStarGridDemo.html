@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Canvas Boilerplate</title>
-    <script src="Jam_Engine/AStar.js"></script>
     <script src="Jam_Engine/Graphics.js"></script>
-    <script src="Jam_Engine/Tools.js"></script>
+    <script src="Jam_Engine/Tools.js"></script>\
+    <script src="Jam_Engine/UI/Button.js"></script>
+    <script src="Jam_Engine/Grid.js"></script>
+    <script src="Jam_Engine/AStar.js"></script>
     <script src="Entity.js"></script>
     <script src="Enemy.js"></script>
     <script src="Player.js"></script>
     <script src="GameController.js"></script>
-    <script src="grid.js"></script>
     <script src="aStarGridDemo.js"></script>
 </head>
 <body>
-    <canvas id="myCanvas" width="1900" height="940"></canvas>
+    <canvas id="myCanvas" width="2200" height="1000"></canvas>
     <button id="playButton"></button>
 
     <script>
@@ -29,8 +30,8 @@
 
         // Store the timestamp of the previous frame
         let lastTimestamp = 0;
-        let worldMap = new WorldMap({canvas});
-
+        let worldMap = new WorldMap({canvas:{width:1888+200,height:928}});
+        let images = {};
         // Game loop
         function update(delta) {
             worldMap.update(delta);
@@ -43,7 +44,7 @@
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawBox(0,0,width,height,'black'); 
-            drawImageFrom00(images["Images/background1.png"],200,0,width-200,height);
+            drawImageFrom00(images["Images/background1.png"],200,0,1888,928);
             update(dt);
 
             requestAnimationFrame(gameLoop);
@@ -53,12 +54,13 @@
         const getMouseMoveInput=(event)=>{worldMap.getMouseMoveInput(event);}
         const getKeyboardInput=(event)=>{console.log(event);}
 
-        const finishedLoading = () => {
+        const finishedLoading = (loadedImages) => {
             console.log('loaded');
+            images = loadedImages;
             requestAnimationFrame(gameLoop);
         }
 
-        loadImages(finishedLoading);
+        loadImages(["Images/background1.png"],finishedLoading);
         
     </script>
     <script src="Jam_Engine/InputHandler.js"></script>
