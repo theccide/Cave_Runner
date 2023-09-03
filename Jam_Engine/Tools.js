@@ -22,6 +22,21 @@ const loadImages = (imagesToLoad, callback) => {
     });
 }
 
+loadSounds = (soundsToLoad, callback) => {
+    // let soundsToLoad = ["Sounds/noise.wav"];
+    let resourceCounter = 0;
+    let sounds = {}
+    soundsToLoad.forEach(soundFile => {
+        let audio = new Audio();
+        audio.src = soundFile;
+        audio.oncanplaythrough = () => {
+            sounds[soundFile]=audio;
+            resourceCounter++;
+            if (resourceCounter >= soundsToLoad.length) callback(sounds);
+        };
+    });
+};
+
 class Tools {
     static MIN=0;
     static MAX=1;
