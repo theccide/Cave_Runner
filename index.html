@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Canvas Boilerplate</title>
-    <script src="Jam_Engine/AStar.js"></script>
     <script src="Jam_Engine/Graphics.js"></script>
     <script src="Jam_Engine/Tools.js"></script>
+    <script src="Jam_Engine/Grid.js"></script>
+    <script src="Jam_Engine/AStar.js"></script>
     <script src="Entity.js"></script>
     <script src="Enemy.js"></script>
     <script src="Player.js"></script>
+    <script src="LevelMap.js"></script>
     <script src="GameController.js"></script>
 </head>
 <body>
@@ -53,9 +55,16 @@
 
             requestAnimationFrame(gameLoop);
         }
+
         gameController.start();
+
+        const getMouseInput=(event)=>{ gameController.getMouseInput(event);}    
+        const getMouseMoveInput=(event)=>{gameController.getMouseMoveInput(event);}
+        const getKeyboardInput=(event)=>{gameController.getKeyboardInput(event);}
+        
         // Start the game loop
         requestAnimationFrame(gameLoop);
     </script>
+    <script src="Jam_Engine/InputHandler.js"></script>
 </body>
 </html>

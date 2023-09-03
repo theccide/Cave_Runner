@@ -3,8 +3,14 @@ class GameController {
     sounds = {};
     entities = [];
     resouncesReady = false;
+    levelMap = {};
+
+    getMouseInput=(event)=>{this.levelMap.getMouseInput(event);}    
+    getMouseMoveInput=(event)=>{this.levelMap.getMouseMoveInput(event);}
+    getKeyboardInput=(event)=>{this.levelMap.getKeyboardInput(event);}
 
     start = () => {
+        this.levelMap = new LevelMap();
         loadImages(["Images/player.png","Images/map1.png"],this.imagesFinished);
         loadSounds(["Sounds/noise.wav"],this.soundsFinished);        
     }
@@ -44,7 +50,10 @@ class GameController {
     update = (deltaTime) => {
         if(!this.resouncesReady) return;
 
-        drawImageFrom00(this.images["Images/map1.png"],0,0,width,height)
+        drawImageFrom00(this.images["Images/map1.png"],0,0,width,height);
+
+        this.levelMap.update(deltaTime);
+
         this.entities.forEach(entity => {
             entity.update(deltaTime);
         });
