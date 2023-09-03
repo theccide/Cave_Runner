@@ -3,10 +3,11 @@ class Entity {
     position = {x:0, y:0};
     direction = "none";
     isMoving = false;
-    constructor (gameController, spriteSheet) {
+    constructor (gameController, spriteSheet, position) {
         this.gameController = gameController;
         this.spriteSheet = spriteSheet;
         this.spriteSheet.sprite = gameController.images[spriteSheet.fileName];
+        this.position = position;
     }
     update = (deltaTime) => {
         drawImageSprite(this.spriteSheet.sprite,0,0,
@@ -15,7 +16,7 @@ class Entity {
                 this.position.x,
                 this.position.y,
                 this.spriteSheet.spriteSize.width,
-                this.spriteSheet.spriteSize.height,45            
+                this.spriteSheet.spriteSize.height            
             );
     }
 }
