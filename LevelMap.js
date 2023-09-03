@@ -19,28 +19,15 @@ class LevelMap{
         return {x,y};
     }
 
-    mouseDown = false;
     getMouseInput(event){
-        this.mouseDown = false;
         if(event.type === "down"){
             if(Collision.testPointOnBox(event.position, this.bounds)){
-                if(this.settingTarget){
-                    this.target = this.mouseToGrid(event);
-                    this.settingTarget = false;
-                }
-                else if(this.settingMob){
-                    this.mob = this.mouseToGrid(event);
-                    this.settingMob = false;
-                }
-                else
-                    this.mouseDown = true;
+                this.target = this.mouseToGrid(event);
             }
-            this.buttons.forEach(button=>button.getMouseInput(event));
         }
     }    
     getMouseMoveInput(event){}
     getKeyboardInput(event){
-        // console.log(event);
         if(event.type==="down" && event.key==="Enter"){
             this.aStar.setup(this.mob, this.target, this.grid);
             this.aStar.findPath();
