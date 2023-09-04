@@ -288,6 +288,68 @@ class Tools {
     }       
 }
 
+class Tools2D{
+    static normalize(v) {
+        let length=Math.sqrt(v.x*v.x + v.y*v.y);       
+        if(length===0) return v;
+        return {x:v.x/length,y:v.y/length};
+    }
+
+    static distanceBetweenVerts( v1, v2 ){
+        var dx = v1.x - v2.x;
+        var dy = v1.y - v2.y;
+        return Math.sqrt( dx * dx + dy * dy);
+    }
+
+    static fromAngle (angle, length) {
+        if (typeof length === 'undefined')  length = 1;        
+        return {x:length * Math.cos(angle), y:length * Math.sin(angle)};
+    };
+
+    static getRandomVector() {
+        return Tools2D.fromAngle(Math.random() * TWO_PI);
+    }; 
+
+    static mag(v){return Math.sqrt(v.x*v.x + v.y*v.y);}
+
+    static addVector(vector1, amount){return {x: vector1.x+amount, y: vector1.y+amount};}
+    static subVector(vector1, amount){return {x: vector1.x-amount, y: vector1.y-amount};}
+    static multVector(vector1, amount){return {x: vector1.x*amount, y: vector1.y*amount};}
+    static divVector(vector1, amount){return {x: vector1.x/amount, y: vector1.y/amount};}    
+
+    static addVectors(vector1, vector2){return {x: vector1.x+vector2.x, y: vector1.y+vector2.y};}
+    static subVectors(vector1, vector2){return {x: vector1.x-vector2.x, y: vector1.y-vector2.y};}
+    static multVectors(vector1, vector2){return {x: vector1.x*vector2.x, y: vector1.y*vector2.y};}    
+    static divVectors(vector1, vector2){return {x: vector1.x/vector2.x, y: vector1.y/vector2.y};}      
+
+    static moveTowards_CloseEnough(delta, pos, target, speed, hitDist){
+        let normal = Tools2D.normalize({x: (target.x - pos.x), y: (target.y - pos.y)});
+
+        pos.x += normal.x * speed * delta;
+        pos.y += normal.y * speed * delta;
+       
+        return {
+            angle:Math.atan2(target.y - pos.y, target.x - pos.x),
+            hit:Tools.distanceBetweenPoints(pos, target) < hitDist
+        };
+    }
+
+    static moveTowards_UntilChange(delta, pos, target, speed){
+        const normal = Tools2D.normalize({x: (target.x - pos.x), y: (target.y - pos.y)});
+
+        pos.x += normal.x * speed * delta;
+        pos.y += normal.y * speed * delta;
+       
+        // Check if the normal changed on the next step.  If so then either you past the target or you got too close
+        const normalAfter = Tools2D.normalize({x: (target.x - pos.x), y: (target.y - pos.y)});
+
+        return {
+            angle:Math.atan2(target.y - pos.y, target.x - pos.x),
+            hit: normal.x != normalAfter.x || normal.y != normalAfter.y
+        };
+    }
+}
+
 class Collision {
     static buildBounds(center, size){
         return {

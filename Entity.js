@@ -11,6 +11,7 @@ class Entity {
     position = {x:0, y:0};
     direction = "none";
     isMoving = false;
+    speed = 100;
     constructor (gameController, spriteSheet, position) {
         this.gameController = gameController;
         this.spriteSheet = spriteSheet;
@@ -19,7 +20,7 @@ class Entity {
     }
     changeState = (state) => {this.state = state;}
 
-    brain = () => {
+    brain = (deltaTime) => {
         switch (this.state) {
             case this.states.IDLE:
                 console.log("Idle state");
@@ -28,19 +29,29 @@ class Entity {
                 console.log("Searching state");
                 break;
             case this.states.CHASING:
-                if(this.tweenPercent == 0) this.path.shift();
                 if(this.path.length <= 1) break;
+                /*
                 this.position = Tools.tween2D(this.position,this.path[1],this.tweenPercent+=0.1);
-                if(this.tweenPercent >= 1) this.tweenPercent = 0;
+                if(this.tweenPercent >= 1) {
+                    this.tweenPercent = 0;
+                    this.path.shift();
+                }
+                */
+
+                //const result = Tools2D.moveTowards_UntilChange(1,this.position,this.path[1],1);
+                const result = Tools2D.moveTowards_CloseEnough(deltaTime,this.position,this.path[1],this.speed,8);
+                if(result.hit){                     
+                    this.path.shift();
+                    if(this.path.length === 1) this.position = this.path[0]; // correct last cell for rounding errors
+                }
                 //console.log("Chasing state");
-                //tween2D(this.position);
                 break;
             default:
               console.log("Yep, no state");
           }
     }
     update = (deltaTime) => {
-        this.brain();
+        this.brain(deltaTime);
         drawImageSprite(this.spriteSheet.sprite,0,0,
                 this.spriteSheet.cellSize.width,
                 this.spriteSheet.cellSize.height,
