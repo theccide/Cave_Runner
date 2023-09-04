@@ -41,6 +41,18 @@ class Tools {
     static MIN=0;
     static MAX=1;
 
+    static compressArray(array) {
+        const jsonString = JSON.stringify(array);
+        const compressedData = pako.deflate(jsonString);
+        return btoa(String.fromCharCode.apply(null, compressedData));
+    }
+
+    static decompressArray(base64String) {
+        const compressedData = Uint8Array.from(atob(base64String), c => c.charCodeAt(0));
+        const jsonString = pako.inflate(compressedData, { to: 'string' });
+        return JSON.parse(jsonString);
+    }
+
     static randomSwap(arr, numberOfSwaps=1){
         for(let i=0; i<numberOfSwaps; i++){
             let i1 = Tools.getNumberBetween(0, arr.length-1);

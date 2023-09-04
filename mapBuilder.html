@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canvas Boilerplate</title>
+    <title>Map Builder</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.3/pako.min.js"></script>
     <script src="Jam_Engine/Graphics.js"></script>
     <script src="Jam_Engine/Tools.js"></script>\
     <script src="Jam_Engine/UI/Button.js"></script>
@@ -40,7 +41,7 @@
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawBox(0,0,width,height,'black'); 
-            drawImageFrom00(images["Images/background1.png"],200,0,1888,928);
+            drawImageFrom00(images["Images/map1Grid.png"],200,0,1888,928);
             update(dt);
 
             requestAnimationFrame(gameLoop);
@@ -56,7 +57,7 @@
             requestAnimationFrame(gameLoop);
         }
 
-        loadImages(["Images/background1.png"],finishedLoading);
+        loadImages(["Images/map1Grid.png"],finishedLoading);
         
     </script>
     <script src="Jam_Engine/InputHandler.js"></script>

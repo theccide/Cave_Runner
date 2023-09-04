@@ -77,8 +77,8 @@ class WorldMap{
     buttonClicked(self, id){
         // console.log("Button Clicked:",id);
         if(id >=0 ) self.currentColor = id;
-        if(id==-2) localStorage.setItem('model', JSON.stringify(self.grid.matrix));        
-        if(id==-3) self.grid.matrix = JSON.parse(localStorage.getItem('model'));
+        if(id==-2) localStorage.setItem('model', Tools.compressArray(self.grid.matrix));        
+        if(id==-3) self.grid.matrix = Tools.decompressArray(localStorage.getItem('model'));
         if(id==-4) self.settingMob = true;
         if(id==-5) self.settingTarget = true;
         if(id==-6) {

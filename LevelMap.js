@@ -1,4 +1,10 @@
+let mapData={
+    map1:"eJzNlk0OhSAMhC/EQs5juP81NG4etJ3+YepLFyQI/aZTUM+ztw9itJt7lMc/ct/21l8v2rVV6ZPL4/O7dD935ddzae1dnLM6TLneEzFrWMdcvXEHETdab9xpeSbOtVb/Rs1DTMZc7GVvFtXWpXFXfZTr77rWI5k7Z8hyrfskcztTUcPl1Vdw597WcdcMe+fKz2XPCdd7j7SbfDAuVp97b8hkykWeWHnQak1j/Xffz91mqD5XBeJqnZP+NzzrhAhzmXKhmgw37Fhu78P9IMa4AHSNfxY=",
+    map2:"eJyLjjbUGQAYqwO014DucNTeUXsHxl7auGrU3sFjLwLS017awFF7R+0dtXfU3lF7R+0dtXcg+kexAA+mfR0="
+};
+
 class LevelMap{
+    showDebugInfo = false;
     bounds = {};
     buttons = [];
     target=null;
@@ -42,7 +48,7 @@ class LevelMap{
         this.bounds = {x:0, y:0, width: canvas.width, height: canvas.height};
         this.grid = new Grid(this, 29, 59, {...this.bounds});
         this.grid.colors = this.colors;
-        this.grid.matrix = JSON.parse(localStorage.getItem('model'));
+        this.grid.matrix = Tools.decompressArray(mapData.map1);
         this.aStar = new AStarGrid();
 
         this.mob={x:2,y:2};
@@ -50,9 +56,11 @@ class LevelMap{
     } 
     
     update(delta){
-        this.grid.update(delta);  
-        if(this.target) this.grid.fillCellAt(this.target.y,this.target.x,"blue");
-        if(this.mob) this.grid.fillCellAt(this.mob.y,this.mob.x,"green");
-        this.aStar.path.forEach(cell=>this.grid.fillCellAt(cell.y,cell.x,"purple"));
+        if(this.showDebugInfo){
+            this.grid.update(delta);  
+            if(this.target) this.grid.fillCellAt(this.target.y,this.target.x,"blue");
+            if(this.mob) this.grid.fillCellAt(this.mob.y,this.mob.x,"green");
+            this.aStar.path.forEach(cell=>this.grid.fillCellAt(cell.y,cell.x,"purple"));
+        }
     }
 }
