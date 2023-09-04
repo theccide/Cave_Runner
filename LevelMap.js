@@ -29,10 +29,12 @@ class LevelMap{
     getMouseMoveInput(event){}
     getKeyboardInput(event){
         if(event.type==="down" && event.key==="Enter"){
-            this.gameController.entities[0].changeState(gameController.entities[0].states.CHASING);
-            this.aStar.setup(this.mob, this.target, this.grid);
+            this.mob = this.gameController.entities[0];
+            this.mob.changeState(this.mob.states.CHASING);
+            //this.aStar.setup(this.mob, this.target, this.grid);
+            this.aStar.setup({x:Math.floor(this.mob.position.x/32),y:Math.floor(this.mob.position.y/32)}, this.target, this.grid);
             //console.log(this.aStar.findPath().map(pos=>{return {x:pos.x*32,y:pos.y*32}}).reverse());
-            this.gameController.entities[0].path = this.aStar.findPath().map(pos=>{return {x:(pos.x*32)+16,y:(pos.y*32)+16}}).reverse();
+            this.mob.path = this.aStar.findPath().map(pos=>{return {x:(pos.x*32)+16,y:(pos.y*32)+16}}).reverse();
         }
     }
     constructor(gameController){
