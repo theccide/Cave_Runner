@@ -15,7 +15,8 @@ class AStar{
         while (temp.previous) {
           this.path.push(temp.previous);
           temp = temp.previous;
-        }        
+        }    
+        return this.path;    
     }
 
     iteratePath(){
@@ -30,7 +31,7 @@ class AStar{
             let current = this.current = this.openSet[lowestIndex]; // the current node is the one with the lowest f
 
             if(current == this.end){ // if current == end then we found the path!
-                console.log("DONE");
+                //console.log("DONE");
                 return false;
             }
 
@@ -56,7 +57,7 @@ class AStar{
                 }
             }
         } else {
-            console.log('no solution');
+            //console.log('no solution');
             return false;
         }
         return true;

@@ -62,7 +62,16 @@ class Tools {
         }
         return a;
     }
-
+    static tween1D(start, end, percentage) {
+        if (percentage < 0) percentage = 0;
+        if (percentage > 1) percentage = 1;
+        return start + (end - start) * percentage;
+    }
+    static tween2D(start, end, percentage) {
+        let x = Tools.tween1D(start.x,end.x,percentage);
+        let y = Tools.tween1D(start.y,end.y,percentage);
+        return {x,y};
+    }
     static getRandomNumberArray(start, end){
         let length = end-start;
         let array = [];

@@ -10,7 +10,7 @@ class GameController {
     getKeyboardInput=(event)=>{this.levelMap.getKeyboardInput(event);}
 
     start = () => {
-        this.levelMap = new LevelMap();
+        this.levelMap = new LevelMap(this);
         loadImages(["Images/player.png","Images/map1.png"],this.imagesFinished);
         loadSounds(["Sounds/noise.wav"],this.soundsFinished);        
     }
