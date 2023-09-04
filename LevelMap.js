@@ -39,7 +39,6 @@ class LevelMap{
             this.mob.changeState(this.mob.states.CHASING);
             //this.aStar.setup(this.mob, this.target, this.grid);
             this.aStar.setup({x:Math.floor(this.mob.position.x/32),y:Math.floor(this.mob.position.y/32)}, this.target, this.grid);
-            //console.log(this.aStar.findPath().map(pos=>{return {x:pos.x*32,y:pos.y*32}}).reverse());
             this.mob.path = this.aStar.findPath().map(pos=>{return {x:(pos.x*32)+16,y:(pos.y*32)+16}}).reverse();
         }
     }
@@ -60,6 +59,12 @@ class LevelMap{
             this.grid.update(delta);  
             if(this.target) this.grid.fillCellAt(this.target.y,this.target.x,"blue");
             if(this.mob) this.grid.fillCellAt(this.mob.y,this.mob.x,"green");
+            this.grid.fillCellAt(1,6,"red");
+            this.grid.fillCellAt(3,4,"red");
+            this.grid.fillCellAt(6,3,"red");
+            // this.grid.fillCellAt(1,38,"red");
+            // this.grid.fillCellAt(3,4,"red");
+            // this.grid.fillCellAt(27,1,"red");
             this.aStar.path.forEach(cell=>this.grid.fillCellAt(cell.y,cell.x,"purple"));
         }
     }

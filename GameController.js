@@ -5,13 +5,16 @@ class GameController {
     resouncesReady = false;
     levelMap = {};
 
-    getMouseInput=(event)=>{this.levelMap.getMouseInput(event);}    
-    getMouseMoveInput=(event)=>{this.levelMap.getMouseMoveInput(event);}
-    getKeyboardInput=(event)=>{this.levelMap.getKeyboardInput(event);}
+    // getMouseInput=(event)=>{this.levelMap.getMouseInput(event);}    
+    // getMouseMoveInput=(event)=>{this.levelMap.getMouseMoveInput(event);}
+    // getKeyboardInput=(event)=>{this.levelMap.getKeyboardInput(event);}
+    getMouseInput=(event)=>{this.player.getMouseInput(event);}    
+    getMouseMoveInput=(event)=>{this.player.getMouseMoveInput(event);}
+    getKeyboardInput=(event)=>{this.player.getKeyboardInput(event);}
 
     start = () => {
         this.levelMap = new LevelMap(this);
-        loadImages(["Images/player.png","Images/map1.png"],this.imagesFinished);
+        loadImages(["Images/player.png","Images/map1.png","Images/player_testing.png"],this.imagesFinished);
         loadSounds(["Sounds/noise.wav"],this.soundsFinished);        
     }
 
@@ -44,6 +47,7 @@ class GameController {
         playButton.addEventListener('click', () => {
             this.sounds["Sounds/noise.wav"].play()
         });
+        this.player = new Player(this);
         this.resouncesReady = true;
     }
 
@@ -57,5 +61,6 @@ class GameController {
         this.entities.forEach(entity => {
             entity.update(deltaTime);
         });
+        this.player.update(deltaTime);
     }
 }
