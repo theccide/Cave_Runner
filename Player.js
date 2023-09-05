@@ -34,6 +34,7 @@ class Player extends Entity{
         );
     }
     update = (deltaTime) => {
+
         drawImageSprite(this.spriteSheet.sprite,0,0,
             this.spriteSheet.cellSize.width,
             this.spriteSheet.cellSize.height,
@@ -42,11 +43,15 @@ class Player extends Entity{
             this.spriteSheet.spriteSize.width,
             this.spriteSheet.spriteSize.height            
         );
+        const dir = Math.sign(this.moveDirection);
+        const dist = this.speed*dir*deltaTime;
         if((this.moveDirection == Player.RIGHT) || (this.moveDirection == Player.LEFT)){
-            this.position.x+=this.speed*this.moveDirection*deltaTime;
+            if(this.gameController.levelMap.findCellFrom({x:this.position.x+(dir*8), y:this.position.y}).col === 0)
+                this.position.x+=dist;
         }
         if((this.moveDirection == Player.UP) || (this.moveDirection == Player.DOWN)){
-            this.position.y+=this.speed*(this.moveDirection/2)*deltaTime;
-        }
+            if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(dir*8)}).col === 0)
+                this.position.y+=dist;
+        }             
     }
 }
