@@ -4,6 +4,7 @@ class GameController {
     entities = [];
     resouncesReady = false;
     levelMap = {};
+    camera = null;
 
     // getMouseInput=(event)=>{this.levelMap.getMouseInput(event);}    
     // getMouseMoveInput=(event)=>{this.levelMap.getMouseMoveInput(event);}
@@ -12,7 +13,8 @@ class GameController {
     getMouseMoveInput=(event)=>{this.player.getMouseMoveInput(event);}
     getKeyboardInput=(event)=>{this.player.getKeyboardInput(event);}
 
-    start = () => {
+    start = (camera) => {
+        this.camera = camera;
         this.levelMap = new LevelMap(this);
         loadImages(["Images/player.png","Images/map1.png","Images/player_testing.png"],this.imagesFinished);
         loadSounds(["Sounds/noise.wav"],this.soundsFinished);        

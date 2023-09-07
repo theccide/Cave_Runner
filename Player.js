@@ -4,6 +4,7 @@ class Player extends Entity{
     static RIGHT = 1;
     static UP = -2;
     static DOWN = 2;
+    camera = null;
     moveDirection = Player.STOP;
     getMouseInput=(event)=>{}    
     getMouseMoveInput=(event)=>{}
@@ -32,8 +33,11 @@ class Player extends Entity{
             },
             {x:(32*4)+16,y:(32*4)+16}
         );
+        this.camera = gameController.camera;
     }
     update = (deltaTime) => {
+        this.camera.offWindow.x = this.position.x-this.camera.offWindow.width/2;
+        this.camera.offWindow.y = this.position.y-this.camera.offWindow.height/2;
 
         drawImageSprite(backBuffer, this.spriteSheet.sprite,0,0,
             this.spriteSheet.cellSize.width,
