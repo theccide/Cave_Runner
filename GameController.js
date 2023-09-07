@@ -54,7 +54,7 @@ class GameController {
     update = (deltaTime) => {
         if(!this.resouncesReady) return;
 
-        drawImageFrom00(this.images["Images/map1.png"],0,0,width,height);
+        drawImageFrom00(backBuffer, this.images["Images/map1.png"],0,0,WIDTH,HEIGHT);
 
         this.levelMap.update(deltaTime);
 

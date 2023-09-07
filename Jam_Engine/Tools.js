@@ -22,7 +22,7 @@ const loadImages = (imagesToLoad, callback) => {
     });
 }
 
-loadSounds = (soundsToLoad, callback) => {
+const loadSounds = (soundsToLoad, callback) => {
     // let soundsToLoad = ["Sounds/noise.wav"];
     let resourceCounter = 0;
     let sounds = {}

@@ -19,15 +19,16 @@
     <script>
         const canvas = document.getElementById('myCanvas');
         const ctx = canvas.getContext('2d');
+        const backBuffer = canvas.getContext('2d');
 
-        const width = canvas.width;
-        const height = canvas.height;
-
+        const WIDTH = 1888;
+        const HEIGHT = 928;
+        
         ctx.imageSmoothingEnabled= false
 
         // Store the timestamp of the previous frame
         let lastTimestamp = 0;
-        let worldMap = new WorldMap({canvas:{width:1888+200,height:928}});
+        let worldMap = new WorldMap({canvas:{width:WIDTH+200,height:HEIGHT}});
         let images = {};
         // Game loop
         function update(delta) {
@@ -39,9 +40,9 @@
             const dt = (timestamp - lastTimestamp) / 1000; // Convert to seconds
             lastTimestamp = timestamp;
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawBox(0,0,width,height,'black'); 
-            drawImageFrom00(images["Images/map1Grid.png"],200,0,1888,928);
+            ctx.clearRect(0, 0, WIDTH, HEIGHT);
+            drawBox(backBuffer, 0,0, WIDTH, HEIGHT,'black'); 
+            drawImageFrom00(backBuffer, images["Images/map1Grid.png"],200,0,1888,928);
             update(dt);
 
             requestAnimationFrame(gameLoop);

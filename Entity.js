@@ -74,7 +74,7 @@ class Entity {
     }
     update = (deltaTime) => {
         this.brain(deltaTime);
-        drawImageSprite(this.spriteSheet.sprite,0,0,
+        drawImageSprite(backBuffer, this.spriteSheet.sprite,0,0,
                 this.spriteSheet.cellSize.width,
                 this.spriteSheet.cellSize.height,
                 this.position.x,

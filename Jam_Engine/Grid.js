@@ -1,6 +1,6 @@
 class Grid{
     colors=['black','blue']
-    bounds = {x:0,y:0,width:canvas.width,height:canvas.height}
+    bounds = {x:0,y:0,width:WIDTH,height:HEIGHT}
     matrix = [];
     cellWidth = 0; 
     cellHeight= 0;
@@ -57,19 +57,21 @@ class Grid{
         for(let i_row=0; i_row<this.numRows; i_row++){
             for(let i_col=0; i_col<this.numCols; i_col++){
                 drawBox(
+                    backBuffer, 
                     Math.floor(this.bounds.x+(i_col*this.cellWidth)), 
                     Math.floor(this.bounds.y+(i_row*this.cellHeight)), 
                     Math.ceil(this.cellWidth), 
                     Math.ceil(this.cellHeight), 
                     this.colors[this.matrix[i_row][i_col]]);
                 if(this.showBorders)
-                    drawBox(this.bounds.x+(i_col*this.cellWidth), this.bounds.y+i_row*this.cellHeight, this.cellWidth, this.cellHeight, 'grey',{outline:true, thickness:1});
+                    drawBox(backBuffer, this.bounds.x+(i_col*this.cellWidth), this.bounds.y+i_row*this.cellHeight, this.cellWidth, this.cellHeight, 'grey',{outline:true, thickness:1});
             }
         }        
     }
 
     fillCellAt(i_row, i_col, color){
         drawBox(
+            backBuffer, 
             Math.floor(this.bounds.x+(i_col*this.cellWidth)), 
             Math.floor(this.bounds.y+(i_row*this.cellHeight)), 
             Math.ceil(this.cellWidth), 

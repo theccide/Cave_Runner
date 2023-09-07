@@ -52,7 +52,7 @@ class LevelMap{
     }
     constructor(gameController){
         this.gameController = gameController;
-        this.bounds = {x:0, y:0, width: canvas.width, height: canvas.height};
+        this.bounds = {x:0, y:0, width: WIDTH, height: HEIGHT};
         this.grid = new Grid(this, 29, 59, {...this.bounds});
         this.grid.colors = this.colors;
         this.grid.matrix = Tools.decompressArray(mapData.map1);

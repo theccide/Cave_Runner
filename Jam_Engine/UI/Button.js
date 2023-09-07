@@ -26,8 +26,8 @@ class Button {
     }
 
     update(){
-        drawBox(this.bounds.x,this.bounds.y,this.bounds.width,this.bounds.height, this.color);
-        drawBox(this.bounds.x,this.bounds.y,this.bounds.width,this.bounds.height, "black",{outline:true, thickness:3});
-        drawText(this.bounds.x,this.fontY, this.text, this.fontSize, "white");
+        drawBox(backBuffer, this.bounds.x,this.bounds.y,this.bounds.width,this.bounds.height, this.color);
+        drawBox(backBuffer, this.bounds.x,this.bounds.y,this.bounds.width,this.bounds.height, "black",{outline:true, thickness:3});
+        drawText(backBuffer, this.bounds.x,this.fontY, this.text, this.fontSize, "white");
     }
 }
