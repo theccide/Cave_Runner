@@ -16,7 +16,7 @@ class GameController {
     start = (camera) => {
         this.camera = camera;
         this.levelMap = new LevelMap(this);
-        loadImages(["Images/player.png","Images/map1.png","Images/player_testing.png"],this.imagesFinished);
+        loadImages(["Images/player.png","Images/map1.png","Images/player_testing.png","Images/lightsource.png"],this.imagesFinished);
         loadSounds(["Sounds/noise.wav"],this.soundsFinished);        
     }
 

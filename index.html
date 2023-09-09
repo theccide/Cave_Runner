@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Cave Runner</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.3/pako.min.js"></script>
     <script src="Jam_Engine/Graphics.js"></script>
@@ -17,7 +18,9 @@
     <script src="GameController.js"></script>
 </head>
 <body style="background-color: black;">
-    <canvas id="myCanvas" width="1000" height="1000"></canvas>
+    <div class="parent-container">
+        <canvas id="myCanvas" width="1000" height="1000"></canvas>
+    </div>
     <button id="playButton"></button>
 
     <script>
@@ -69,6 +72,8 @@
             update(dt);
 
             camera.render(screenBuffer);
+            if(gameController.images["Images/lightsource.png"])
+                drawImageFrom00(screenBuffer, gameController.images["Images/lightsource.png"],0,0,canvas.width,canvas.height);
 
             requestAnimationFrame(gameLoop);
         }
