@@ -335,6 +335,7 @@ class Tools2D{
     static divVectors(vector1, vector2){return {x: vector1.x/vector2.x, y: vector1.y/vector2.y};}      
 
     static moveTowards_CloseEnough(delta, pos, target, speed, hitDist){
+        if(target == null) return;
         let normal = Tools2D.normalize({x: (target.x - pos.x), y: (target.y - pos.y)});
 
         pos.x += normal.x * speed * delta;
