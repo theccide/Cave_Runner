@@ -5,16 +5,15 @@ class GameController {
     resouncesReady = false;
     levelMap = {};
     camera = null;
+    currentScene = null;
 
-    // getMouseInput=(event)=>{this.levelMap.getMouseInput(event);}    
-    // getMouseMoveInput=(event)=>{this.levelMap.getMouseMoveInput(event);}
-    // getKeyboardInput=(event)=>{this.levelMap.getKeyboardInput(event);}
     getMouseInput=(event)=>{this.player.getMouseInput(event);}    
     getMouseMoveInput=(event)=>{this.player.getMouseMoveInput(event);}
     getKeyboardInput=(event)=>{this.player.getKeyboardInput(event);}
 
-    start = (camera) => {
-        this.camera = camera;
+    start = (scene) => {
+        this.currentScene = scene;
+        this.camera = scene.camera;
         this.levelMap = new LevelMap(this);
         loadImages(["Images/player.png","Images/map1.png","Images/player_testing.png","Images/lightsource.png"],this.imagesFinished);
         loadSounds(["Sounds/noise.wav"],this.soundsFinished);        
@@ -56,7 +55,8 @@ class GameController {
     update = (deltaTime) => {
         if(!this.resouncesReady) return;
 
-        drawImageFrom00(backBuffer, this.images["Images/map1.png"],0,0,WIDTH,HEIGHT);
+        drawImageFrom00(this.currentScene.backBuffer, this.images["Images/map1.png"],
+                        0,0,this.currentScene.offBounds.width,this.currentScene.offBounds.height);
 
         this.levelMap.update(deltaTime);
 

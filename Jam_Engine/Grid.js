@@ -1,6 +1,6 @@
 class Grid{
     colors=['black','blue']
-    bounds = {x:0,y:0,width:WIDTH,height:HEIGHT}
+    bounds = {x:0,y:0,width:0,height:0}
     matrix = [];
     cellWidth = 0; 
     cellHeight= 0;

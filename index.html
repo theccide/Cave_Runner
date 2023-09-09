@@ -10,12 +10,17 @@
     <script src="Jam_Engine/Tools.js"></script>
     <script src="Jam_Engine/Grid.js"></script>
     <script src="Jam_Engine/AStar.js"></script>
+    <script src="Jam_Engine/Scene.js"></script>    
     <script src="Entity.js"></script>
     <script src="Enemy.js"></script>
     <script src="Player.js"></script>
     <script src="LevelMap.js"></script>
     <script src="Camera.js"></script>
     <script src="GameController.js"></script>
+    <script src="Scences/MainGame.js"></script>
+    <script src="Scences/Title.js"></script>
+    <script src="Scences/GameOver.js"></script>
+
 </head>
 <body style="background-color: black;">
     <div class="parent-container">
@@ -25,67 +30,24 @@
 
     <script>
         const canvas = document.getElementById('myCanvas');
-
-        const WIDTH = 1888;
-        const HEIGHT = 928;
-
-        // const SCREEN_HEIGHT = canvas.height;
-        // const SCREEN_WIDTH = canvas.width;
-
         const screenBuffer = canvas.getContext('2d');
-        const backCanvas = createBufferedImage(WIDTH, HEIGHT);
-        const backBuffer = backCanvas.getContext('2d');
-
-        const gameController = new GameController();
-        backBuffer.imageSmoothingEnabled= false;
         screenBuffer.imageSmoothingEnabled= false;
 
-        let camera = new Camera({
-            backCanvas,
-            screenWindow:{x:0,y:0,width: canvas.width, height:canvas.height},
-            offWindow:{x:0,y:0,width:250,height:250}
-        });
+        let currentScene = new MainGame();        
+        let lastTimestamp = 0; // Store the timestamp of the previous frame
 
-        // Store the timestamp of the previous frame
-        let lastTimestamp = 0;
-
-        // Game loop
-        function update(deltaTime) {
-            gameController.update(deltaTime);
-        }
-
-        function render() {
-            //clear canvas
-            backBuffer.clearRect(0, 0, WIDTH, HEIGHT);
-            //add background
-            backBuffer.fillStyle = 'black';
-            backBuffer.fillRect(0, 0, WIDTH, HEIGHT);            
-        }
-
-        function gameLoop(timestamp) {
-            // Calculate delta time
-            const dt = (timestamp - lastTimestamp) / 1000; // Convert to seconds
-            lastTimestamp = timestamp;
-
-            // Update and render the game
-            render();
-            update(dt);
-
-            camera.render(screenBuffer);
-            if(gameController.images["Images/lightsource.png"])
-                drawImageFrom00(screenBuffer, gameController.images["Images/lightsource.png"],0,0,canvas.width,canvas.height);
-
+        function gameLoop(timestamp) {            
+            const dt = (timestamp - lastTimestamp) / 1000; // Calculate delta time
+            lastTimestamp = timestamp;            
+            currentScene.update(dt); // Update and render the game            
             requestAnimationFrame(gameLoop);
         }
 
-        gameController.start(camera);
-
-        const getMouseInput=(event)=>{ gameController.getMouseInput(event);}    
-        const getMouseMoveInput=(event)=>{gameController.getMouseMoveInput(event);}
-        const getKeyboardInput=(event)=>{gameController.getKeyboardInput(event);}
+        const getMouseInput=(event)=>{ currentScene.getMouseInput(event); }    
+        const getMouseMoveInput=(event)=>{ currentScene.getMouseMoveInput(event); }
+        const getKeyboardInput=(event)=>{ currentScene.getKeyboardInput(event); }
         
-        // Start the game loop
-        requestAnimationFrame(gameLoop);
+        requestAnimationFrame(gameLoop); // Start the game loop
     </script>
     <script src="Jam_Engine/InputHandler.js"></script>
 </body>

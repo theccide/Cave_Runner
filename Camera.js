@@ -10,7 +10,7 @@ class Camera{
     }
 
     render(screenBuffer){
-        drawImageSpriteFrom00(screenBuffer, backCanvas,             
+        drawImageSpriteFrom00(screenBuffer, this.backCanvas,             
             this.offWindow.x, this.offWindow.y, this.offWindow.width, this.offWindow.height,
             this.screenWindow.x, this.screenWindow.y, this.screenWindow.width, this.screenWindow.height,
         );

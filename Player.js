@@ -39,7 +39,8 @@ class Player extends Entity{
         this.camera.offWindow.x = this.position.x-this.camera.offWindow.width/2;
         this.camera.offWindow.y = this.position.y-this.camera.offWindow.height/2;
 
-        drawImageSprite(backBuffer, this.spriteSheet.sprite,0,0,
+        drawImageSprite(this.gameController.currentScene.backBuffer, 
+            this.spriteSheet.sprite,0,0,
             this.spriteSheet.cellSize.width,
             this.spriteSheet.cellSize.height,
             this.position.x,

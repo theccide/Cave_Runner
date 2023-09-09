@@ -50,9 +50,9 @@ class LevelMap{
             this.mob.path = this.aStar.findPath().map(pos=>{return {x:(pos.x*32)+16,y:(pos.y*32)+16}}).reverse();
         }
     }
-    constructor(gameController){
-        this.gameController = gameController;
-        this.bounds = {x:0, y:0, width: WIDTH, height: HEIGHT};
+    constructor(gc){
+        this.gameController = gc;
+        this.bounds = {x:0, y:0, width: gc.currentScene.offBounds.width, height: gc.currentScene.offBounds.height};
         this.grid = new Grid(this, 29, 59, {...this.bounds});
         this.grid.colors = this.colors;
         this.grid.matrix = Tools.decompressArray(mapData.map1);
