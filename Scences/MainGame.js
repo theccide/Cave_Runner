@@ -13,7 +13,7 @@ class MainGame extends Scene {
             offBounds:{x:0,y:0,width: 1888,height: 928}            
         });
         this.gameController = new GameController();
-        this.backBuffer.imageSmoothingEnabled= false;
+        this.backBuffer.imageSmoothingEnabled = false;
         this.camera = new Camera({
             backCanvas:this.backCanvas,
             screenWindow:{x:0,y:0,width: canvas.width, height:canvas.height},

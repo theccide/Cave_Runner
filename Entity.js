@@ -81,6 +81,7 @@ class Entity {
                 }
                 if(this.path.length === 1) {
                     this.frame=0;
+                    changeScene(new GameOver(this.gameController.score*100));
                     break;
                 }
                 result2 = Tools2D.moveTowards_CloseEnough(deltaTime,this.position,this.path[1],this.speed-5,8);//move to the next waypoint
