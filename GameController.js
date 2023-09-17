@@ -4,6 +4,9 @@ class GameController {
         RUBY : 1,
         EMERALD : 2
     }
+
+    score = 0;
+
     //ANIMATION
     frame = 0;
     elapsedTime = 0;
@@ -26,7 +29,7 @@ class GameController {
         this.currentScene = scene;
         this.camera = scene.camera;
         this.levelMap = new LevelMap(this);
-        loadImages(["Images/goblin_sheet.png","Images/map1.png","Images/player_testing.png","Images/lightsource.png","Images/gems.png"],this.imagesFinished);
+        loadImages(["Images/goblin_sheet.png","Images/map1.png","Images/player_sheet.png","Images/lightsource.png","Images/gems.png"],this.imagesFinished);
         loadSounds(["Sounds/noise.wav"],this.soundsFinished);        
     }
 
@@ -85,7 +88,7 @@ class GameController {
         });
         for (let i = 0; i < this.gems.length; i ++) {
             drawImageSprite(this.currentScene.backBuffer, this.images["Images/gems.png"], this.frame*10, this.gems[i].type*10, 9, 9, this.gems[i].pos.x, this.gems[i].pos.y, 10, 10);
-            if(Collision.testCircleOnCircle(this.player.position,8,this.gems[i].pos,8))this.gems.splice(i, 1);
+            if(Collision.testCircleOnCircle(this.player.position,8,this.gems[i].pos,8)){this.score+=(4 - (this.gems[i].type + 1));this.gems.splice(i, 1);console.log(this.score);}
         }
         this.player.update(deltaTime);
     }
