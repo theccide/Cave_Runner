@@ -58,11 +58,9 @@ class Player extends Entity {
             }
             else this.frame = 0;
         }
-        //if(this.moveDirection.x == 0 && this.moveDirection.y == 0) this.frame = 0;
 
-        this.camera.offWindow.x = this.position.x - this.camera.offWindow.width / 2;
-        this.camera.offWindow.y = this.position.y - this.camera.offWindow.height / 2;
-
+        this.camera.offWindow.x = this.position.x - this.camera.screenWindow.width / 2;
+        this.camera.offWindow.y = this.position.y - this.camera.screenWindow.height / 2;
 
         drawImageSprite(this.gameController.currentScene.backBuffer,
             this.spriteSheet.sprite,1 + (12 * this.frame),1 + (25 * this.spriteDir),

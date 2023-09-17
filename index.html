@@ -21,6 +21,7 @@
     <script src="Scences/MainGame.js"></script>
     <script src="Scences/Title.js"></script>
     <script src="Scences/GameOver.js"></script>
+    <script src="Scences/LargeMap.js"></script>
 
 </head>
 <body style="background-color: black;">
@@ -34,7 +35,7 @@
         const screenBuffer = canvas.getContext('2d');
         screenBuffer.imageSmoothingEnabled= false;
 
-        let currentScene = new Title();        
+        let currentScene = new LargeMap();        
         let lastTimestamp = 0; // Store the timestamp of the previous frame
 
         function changeScene (scene) {
