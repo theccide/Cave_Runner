@@ -57,7 +57,7 @@ class Grid{
         for(let i_row=0; i_row<this.numRows; i_row++){
             for(let i_col=0; i_col<this.numCols; i_col++){
                 drawBox(
-                    backBuffer, 
+                    (typeof backbuffer !== 'undefined')?backbuffer:currentScene.backBuffer, 
                     Math.floor(this.bounds.x+(i_col*this.cellWidth)), 
                     Math.floor(this.bounds.y+(i_row*this.cellHeight)), 
                     Math.ceil(this.cellWidth), 
@@ -71,7 +71,7 @@ class Grid{
 
     fillCellAt(i_row, i_col, color){
         drawBox(
-            backBuffer, 
+            (typeof backbuffer !== 'undefined')?backbuffer:currentScene.backBuffer, 
             Math.floor(this.bounds.x+(i_col*this.cellWidth)), 
             Math.floor(this.bounds.y+(i_row*this.cellHeight)), 
             Math.ceil(this.cellWidth), 

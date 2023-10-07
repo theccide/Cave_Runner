@@ -37,6 +37,31 @@ const loadSounds = (soundsToLoad, callback) => {
     });
 };
 
+function saveCanvasToPNG(canvasId, filename) {
+    // Get the canvas element based on its id
+    var canvas = document.getElementById(canvasId);
+
+    if (!canvas) {
+        console.error("Canvas with ID", canvasId, "not found!");
+        return;
+    }
+
+    // Convert the canvas to a Data URL in PNG format
+    var imgURL = canvas.toDataURL("image/png");
+
+    // Create an anchor element
+    var link = document.createElement("a");
+    link.download = filename || "canvas.png"; // Set the filename or use a default
+    link.href = imgURL;
+
+    // Append the anchor to the document and click it to start download
+    document.body.appendChild(link);
+    link.click();
+
+    // Clean up by removing the anchor
+    document.body.removeChild(link);
+}
+
 class Tools {
     static MIN=0;
     static MAX=1;

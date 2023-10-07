@@ -7,7 +7,7 @@ function clearCircle(ctx, x, y, radius) {
 }
 
 class LargeMap extends Scene {
-
+    first = true;
     gameController = null;
 
     getMouseInput=(event)=>{ this.gameController.getMouseInput(event);}    
@@ -15,7 +15,7 @@ class LargeMap extends Scene {
     getKeyboardInput=(event)=>{this.gameController.getKeyboardInput(event);}
 
     constructor(){ super();
-        this.mapSize = {width: 1888,height: 928};
+        this.mapSize = {width: 2816,height: 1408};
         this.setup({
             viewBounds:{x:0,y:0,width: canvas.width,height: canvas.height},
             offBounds:{x:0,y:0,width: this.mapSize.width,height: this.mapSize.height}            
@@ -40,8 +40,8 @@ class LargeMap extends Scene {
         this.camera.render(screenBuffer);
 
         if(this.gameController.player){
-            drawBox(this.blackBuffer,0,0,this.camera.offWindow.width, this.camera.offWindow.height,"black");
-            // drawImageFrom00(this.blackBuffer, this.gameController.images["Images/map1.png"],0,0,this.camera.offWindow.width, this.camera.offWindow.height);
+            this.blackBuffer.clearRect(0, 0,this.camera.offWindow.width, this.camera.offWindow.height);         
+            drawBox(this.blackBuffer,0,0,this.camera.offWindow.width, this.camera.offWindow.height,"rgba(0, 0, 0, 0.9)");
             clearCircle(this.blackBuffer, this.gameController.player.position.x, this.gameController.player.position.y, 100);
 
             this.gameController.entities.forEach(entity => {

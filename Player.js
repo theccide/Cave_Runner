@@ -30,7 +30,7 @@ class Player extends Entity {
             spriteSize: { width: 11, height: 24 },
             grid: { rows: 4, columns: 4 },
         },
-        { x: (32 * 4) + 16, y: (32 * 4) + 16 });
+        { x: (32 * 2) + 16, y: (32 * 4) + 16 });
         this.camera = gameController.camera;
     }
 
