@@ -9,6 +9,7 @@ function clearCircle(ctx, x, y, radius) {
 class LargeMap extends Scene {
     first = true;
     gameController = null;
+    useDarkOverlay = false;
 
     getMouseInput=(event)=>{ this.gameController.getMouseInput(event);}    
     getMouseMoveInput=(event)=>{this.gameController.getMouseMoveInput(event);}
@@ -39,7 +40,7 @@ class LargeMap extends Scene {
         this.gameController.update(dt);
         this.camera.render(screenBuffer);
 
-        if(this.gameController.player){
+        if(this.gameController.player && this.useDarkOverlay){
             this.blackBuffer.clearRect(0, 0,this.camera.offWindow.width, this.camera.offWindow.height);         
             drawBox(this.blackBuffer,0,0,this.camera.offWindow.width, this.camera.offWindow.height,"rgba(0, 0, 0, 0.9)");
             clearCircle(this.blackBuffer, this.gameController.player.position.x, this.gameController.player.position.y, 100);

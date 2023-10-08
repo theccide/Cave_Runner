@@ -1,8 +1,5 @@
 class Player extends Entity {
     camera = null;
-    moveDirection = { x: 0, y: 0 };
-    spriteDir = 0;
-
     frame = 0;
     elapsedTime = 0;
     frameChangeInterval = 0.1;//IN SECONDS
@@ -11,70 +8,73 @@ class Player extends Entity {
     getMouseMoveInput = (event) => {}
     getKeyboardInput = (event) => {
         if (event.type === "down") {
-            if (event.key === "w") {this.moveDirection.y = -1; this.spriteDir = 3;}
-            else if (event.key === "s") {this.moveDirection.y = 1; this.spriteDir = 0;}
-            if (event.key === "a") {this.moveDirection.x = -1; this.spriteDir = 1;}
-            else if (event.key === "d") {this.moveDirection.x = 1; this.spriteDir = 2;}
+            if (event.key === "w") {this.moveDirection.y = -1; this.faceDir = this.directions.UP;}
+            else if (event.key === "s") {this.moveDirection.y = 1; this.faceDir = this.directions.DOWN;}
+            if (event.key === "a") {this.moveDirection.x = -1; this.faceDir = this.directions.LEFT;}
+            else if (event.key === "d") {this.moveDirection.x = 1; this.faceDir = this.directions.RIGHT;}
+            if(event.key === "e") {
+                if(this.faceDir == this.directions.UP){this.switchAnimation("SWING_UP",true);}
+                if(this.faceDir == this.directions.DOWN){this.switchAnimation("SWING_DOWN",true);}
+                if(this.faceDir == this.directions.LEFT){this.switchAnimation("SWING_LEFT",true);}
+                if(this.faceDir == this.directions.RIGHT){this.switchAnimation("SWING_RIGHT",true);}
+            }
         } else if (event.type === "up") {
             if (event.key === "w" || event.key === "s") this.moveDirection.y = 0;
             if (event.key === "a" || event.key === "d") this.moveDirection.x = 0;
-        }
+        }        
     }
-
 
     constructor(gameController) {
         super(gameController, {
             sprite: null,
-            fileName: "Images/player_sheet.png",
-            cellSize: { width: 11, height: 24 },
-            spriteSize: { width: 11, height: 24 },
-            grid: { rows: 4, columns: 4 },
+            fileName: "Images/spritemaps/complete_hero.png",
+            cellSize: { width: 64, height: 64 },
+            spriteSize: { width: 64, height: 64 },
+            grid: { rows: 16, columns: 8 },
+            startAnimation: "IDLE_DOWN",
+            animations:{
+                "IDLE_DOWN":    [[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[7,0]], // 0
+                "IDLE_RIGHT":   [[0,1],[1,1],[2,1],[3,1],[4,1],[5,1],[6,1],[7,1]], // 1
+                "IDLE_UP":      [[0,2],[1,2],[2,2],[3,2],[4,2],[5,2],[6,2],[7,2]], // 2
+                "IDLE_LEFT":    [[0,3],[1,3],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3]], // 3
+
+                "WALK_DOWN":    [[0,4],[1,4],[2,4],[3,4],[4,4],[5,4],[6,4],[7,4]], // 4
+                "WALK_RIGHT":   [[0,5],[1,5],[2,5],[3,5],[4,5],[5,5],[6,5],[7,5]], // 5
+                "WALK_UP":      [[0,6],[1,6],[2,6],[3,6],[4,6],[5,6],[6,6],[7,6]], // 6
+                "WALK_LEFT":    [[0,7],[1,7],[2,7],[3,7],[4,7],[5,7],[6,7],[7,7]], // 7
+
+                "RUN_DOWN":     [[0,8],[1,8],[2,8],[3,8],[4,8],[5,8],[6,8],[7,8]], // 8
+                "RUN_RIGHT":    [[0,9],[1,9],[2,9],[3,9],[4,9],[5,9],[6,9],[7,9]], // 9
+                "RUN_UP":       [[0,10],[1,10],[2,10],[3,10],[4,10],[5,10],[6,10],[7,10]], // 10
+                "RUN_LEFT":     [[0,11],[1,11],[2,11],[3,11],[4,11],[5,11],[6,11],[7,11]], // 11
+
+                "SWING_DOWN":   [[0,12],[1,12],[2,12],[3,12],[4,12],[5,12],[6,12],[7,12]], // 12
+                "SWING_RIGHT":  [[0,13],[1,13],[2,13],[3,13],[4,13],[5,13],[6,13],[7,13]], // 13
+                "SWING_UP":     [[0,14],[1,14],[2,14],[3,14],[4,14],[5,14],[6,14],[7,14]], // 14
+                "SWING_LEFT":   [[0,15],[1,15],[2,15],[3,15],[4,15],[5,15],[6,15],[7,15]]  // 15
+            }
         },
         { x: (32 * 2) + 16, y: (32 * 4) + 16 });
+        this.moveDirection = {x:0, y:0};
         this.camera = gameController.camera;
     }
 
-    nextFrame = (deltaTime) => {
-        this.elapsedTime += deltaTime;
-
-        if (this.elapsedTime >= this.frameChangeInterval) {
-            this.frame += 1;
-            this.frame %= 4;
-            this.elapsedTime = 0; // Reset the elapsed time
-        }
-    }
-
     update = (deltaTime) => {
-
-        this.nextFrame(deltaTime);
-        if(this.moveDirection.x != 0) {
-            if(this.moveDirection.x > 0){this.spriteDir = 2;}
-            else{this.spriteDir = 1;}
-        }
-        else{
-            if(this.moveDirection.y != 0) {
-                if(this.moveDirection.y > 0){this.spriteDir = 0;}
-                else{this.spriteDir = 3;}
-            }
-            else this.frame = 0;
-        }
+        this.drawWalkableSprite(deltaTime);
 
         this.camera.offWindow.x = this.position.x - this.camera.screenWindow.width / 2;
         this.camera.offWindow.y = this.position.y - this.camera.screenWindow.height / 2;
 
-        drawImageSprite(this.gameController.currentScene.backBuffer,
-            this.spriteSheet.sprite,1 + (12 * this.frame),1 + (25 * this.spriteDir),
-            this.spriteSheet.cellSize.width,
-            this.spriteSheet.cellSize.height,
-            this.position.x,
-            this.position.y,
-            this.spriteSheet.spriteSize.width,
-            this.spriteSheet.spriteSize.height            
-        );
-
-
-        if(this.gameController.levelMap.findCellFrom({x:this.position.x+(this.moveDirection.x*10), y:this.position.y}).col === 0) this.position.x += this.speed * this.moveDirection.x * deltaTime;
-        if(this.moveDirection.y < 0) {if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*15)}).col === 0) this.position.y += this.speed * this.moveDirection.y * deltaTime;}
-        else {if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*25)}).col === 0) this.position.y += this.speed * this.moveDirection.y * deltaTime;}
+        // collison detection
+        if(this.gameController.levelMap.findCellFrom({x:this.position.x+(this.moveDirection.x*10), y:this.position.y}).col === 0) 
+            this.position.x += this.speed * this.moveDirection.x * deltaTime;
+        if(this.moveDirection.y < 0) {
+            if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*15)}).col === 0) 
+                this.position.y += this.speed * this.moveDirection.y * deltaTime;
+        }
+        else {
+            if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*25)}).col === 0) 
+                this.position.y += this.speed * this.moveDirection.y * deltaTime;
+        }
     }
 }
