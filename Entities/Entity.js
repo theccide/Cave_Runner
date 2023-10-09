@@ -13,19 +13,16 @@ class Entity {
     
     constructor (gameController, spriteSheet, position) {
         this.gameController = gameController;
-        this.spriteSheet = spriteSheet;
-        this.spriteSheet.sprite = gameController.images[spriteSheet.fileName];
         this.position = position;
+        if(spriteSheet) this.initSpriteSheet(spriteSheet);
+    }
+
+    initSpriteSheet(spriteSheet){
+        this.spriteSheet = spriteSheet;
+        this.spriteSheet.sprite = this.gameController.images[spriteSheet.fileName];
         this.currentAnimation = this.spriteSheet.startAnimation;
     }
     
-    changeState = (state) => {this.state = state;}
-
-    findWaypoint = () => {
-        this.gameController.levelMap.aStar.setup({x:Math.floor(this.position.x/32),y:Math.floor(this.position.y/32)}, this.target, this.gameController.levelMap.grid);
-        this.path = this.gameController.levelMap.aStar.findPath().map(pos=>{return {x:(pos.x*32)+16,y:(pos.y*32)+16}}).reverse();
-    }
-
     switchAnimation(name, nonInteruptable=false){
         if(this.nonInteruptable && this.playOnce) return; // dont play another animation if not allowed
         if(this.currentAnimation == name) return;
@@ -50,6 +47,22 @@ class Entity {
         }
     }
     
+    drawSprite=(deltaTime)=>{
+        this.nextFrame(deltaTime);
+
+        drawImageSprite(this.gameController.currentScene.backBuffer,
+            this.spriteSheet.sprite,
+            this.spriteSheet.animations[this.currentAnimation][this.frame][0]*this.spriteSheet.cellSize.width,
+            this.spriteSheet.animations[this.currentAnimation][this.frame][1]*this.spriteSheet.cellSize.height,
+            this.spriteSheet.cellSize.width,
+            this.spriteSheet.cellSize.height,
+            this.position.x,
+            this.position.y,
+            this.spriteSheet.spriteSize.width,
+            this.spriteSheet.spriteSize.height            
+        );
+    }
+
     brain = (deltaTime) => {}
 
     update = (deltaTime) => {

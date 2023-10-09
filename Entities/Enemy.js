@@ -8,6 +8,13 @@ class Enemy extends MoveableEntity{
         this.searchingWaypoints = searchingWaypoints;
     }
 
+    changeState = (state) => {this.state = state;}
+
+    findWaypoint = () => {
+        this.gameController.levelMap.aStar.setup({x:Math.floor(this.position.x/32),y:Math.floor(this.position.y/32)}, this.target, this.gameController.levelMap.grid);
+        this.path = this.gameController.levelMap.aStar.findPath().map(pos=>{return {x:(pos.x*32)+16,y:(pos.y*32)+16}}).reverse();
+    }
+    
     brain = (deltaTime) => {
         this.calcState();
 
