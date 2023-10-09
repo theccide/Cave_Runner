@@ -3,4 +3,9 @@
     justify-content: center; /* Horizontally center */
     align-items: center;     /* Vertically center */
     height: 100vh;           /* Take full viewport height */
+    overflow: hidden;
+}
+body{
+    overflow-y: hidden; /* Hide vertical scrollbar */
+    overflow-x: hidden; /* Hide horizontal scrollbar */
 }

@@ -26,13 +26,17 @@
 </head>
 <body style="background-color: black;">
     <div class="parent-container"> -->
-        <canvas id="myCanvas" width="2000" height="1000"></canvas>
+        <canvas id="myCanvas" width="0" height="0"></canvas>
     </div>
     <button id="playButton"></button> -->
 
     <script>
         const canvas = document.getElementById('myCanvas');
         const screenBuffer = canvas.getContext('2d');
+
+        screenBuffer.canvas.width  = window.innerWidth;
+        screenBuffer.canvas.height = window.innerHeight;
+        
         screenBuffer.imageSmoothingEnabled= false;
 
         let currentScene = new LargeMap();        
