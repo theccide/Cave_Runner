@@ -9,7 +9,7 @@ function clearCircle(ctx, x, y, radius) {
 class LargeMap extends Scene {
     first = true;
     gameController = null;
-    useDarkOverlay = false;
+    useDarkOverlay = true;
 
     getMouseInput=(event)=>{ this.gameController.getMouseInput(event);}    
     getMouseMoveInput=(event)=>{this.gameController.getMouseMoveInput(event);}
