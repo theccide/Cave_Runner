@@ -1,10 +1,13 @@
 class Enemy extends MoveableEntity{
-    states = { IDLE : 0, SEARCHING : 1, CHASING : 2 };
+    states = { IDLE : 0, PATROLLING : 1, CHASING : 2 };
     state = this.states.CHASING;
-
-    //TODO: remove this from here //WAY POINTS FOR SEARCHING
-    searchingWaypoints = [{x:6,y:1},{x:4,y:3},{x:3,y:6}];
+    searchingWaypoints = [];
     
+    constructor(gameController, spriteSheet, position, searchingWaypoints) {
+        super(gameController, spriteSheet, position);
+        this.searchingWaypoints = searchingWaypoints;
+    }
+
     brain = (deltaTime) => {
         this.calcState();
 
@@ -12,8 +15,8 @@ class Enemy extends MoveableEntity{
             case this.states.IDLE:
                 console.log("Idle state");
                 break;
-            case this.states.SEARCHING:
-                this.runSearchingState(deltaTime);
+            case this.states.PATROLLING:
+                this.runPatrollingState(deltaTime);
                 break;
             case this.states.CHASING:
                 this.runChasingState(deltaTime);
@@ -26,15 +29,15 @@ class Enemy extends MoveableEntity{
     calcState=()=>{
         let distance = Math.sqrt(Math.pow((this.position.x-this.gameController.player.position.x),2) + Math.pow((this.position.y-this.gameController.player.position.y),2));
         if(distance < 50) {
-            if(this.state = this.states.SEARCHING){this.target = null;this.path = [];}
+            if(this.state = this.states.PATROLLING){this.target = null;this.path = [];}
             this.state = this.states.CHASING;
         }
         else {
-            this.state = this.states.SEARCHING;
+            this.state = this.states.PATROLLING;
         }
     }
 
-    runSearchingState=(deltaTime)=>{
+    runPatrollingState=(deltaTime)=>{
         if(!this.target) {
             this.waypointPointer=0;
             this.target = this.searchingWaypoints[this.waypointPointer];
@@ -44,11 +47,11 @@ class Enemy extends MoveableEntity{
         const targetWaypoint = Tools2D.moveTowards_CloseEnough(deltaTime,this.position,this.path[1],this.speed-10,8);//move to the next waypoint
         if(targetWaypoint?.hit){
             this.path.shift();
-            if(this.path.length === 1) {
+            if(this.path.length === 1) { // correct last cell for rounding errors
                 this.position = this.path[0];
                 this.target=this.searchingWaypoints[(this.waypointPointer+=1) % this.searchingWaypoints.length];
                 this.findWaypoint();
-            } // correct last cell for rounding errors
+            } 
         }
         if(targetWaypoint) this.animateTowards(targetWaypoint);
 
