@@ -17,7 +17,16 @@ class GameController {
         this.currentScene = scene;
         this.camera = scene.camera;
         this.levelMap = new LevelMap(this);
-        loadImages(["Images/spritemaps/skeleton.png","Images/map1.png","Images/spritemaps/complete_hero.png","Images/lightsource.png","Images/gems.png","Images/gems2.png"],this.imagesFinished);
+        loadImages([
+            "Images/spritemaps/skeleton.png",
+            "Images/spritemaps/complete_hero.png",
+            "Images/spritemaps/torch.png",
+            "Images/spritemaps/torch2.png",
+            "Images/map1.png",
+            "Images/lightsource.png",
+            "Images/gems.png"
+        ],this.imagesFinished);
+
         loadSounds(["Sounds/noise.wav"],this.soundsFinished);        
     }
 
@@ -66,6 +75,8 @@ class GameController {
         this.entities.push(new Gem(this, gemTypes.DIAMOND,{x:128,y:512}));
         this.entities.push(new Gem(this, gemTypes.RUBY,{x:128+32,y:512}));
         this.entities.push(new Gem(this, gemTypes.EMERALD,{x:128+64,y:512}));
+
+        this.entities.push(new Torch(this, "thick", {x:512,y:512}));
 
         this.player = new Player(this);
         this.resouncesReady = true;

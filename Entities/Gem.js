@@ -17,7 +17,7 @@ class Gem extends Entity{
         this.gemType = gemType;
         this.initSpriteSheet( {
             sprite: null,
-            fileName: "Images/gems2.png",
+            fileName: "Images/gems.png",
             cellSize: { width: 10, height: 10 },
             spriteSize: { width: 16, height: 16 },
             grid: { rows: 3, columns: 6 },
