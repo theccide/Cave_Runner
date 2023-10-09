@@ -62,9 +62,14 @@ class Player extends Entity {
     update = (deltaTime) => {
         this.drawWalkableSprite(deltaTime);
 
-        this.camera.offWindow.x = this.position.x - this.camera.screenWindow.width / 2;
-        this.camera.offWindow.y = this.position.y - this.camera.screenWindow.height / 2;
+        const halfScreenWidth = (screenBuffer.canvas.width/2);
+        const halfScreenHeight = (screenBuffer.canvas.height/2);
 
+        if(this.position.x>halfScreenWidth && this.position.x<(this.camera.offWindow.width-halfScreenWidth))
+        this.camera.offWindow.x = this.position.x - this.camera.screenWindow.width / 2;
+        if(this.position.y>halfScreenHeight && this.position.y<(this.camera.offWindow.height-halfScreenHeight))
+            this.camera.offWindow.y = this.position.y - this.camera.screenWindow.height / 2;
+        
         // collison detection
         if(this.gameController.levelMap.findCellFrom({x:this.position.x+(this.moveDirection.x*10), y:this.position.y}).col === 0) 
             this.position.x += this.speed * this.moveDirection.x * deltaTime;

@@ -98,10 +98,10 @@ class GameController {
         }, {x:(32*2)+16,y:(32*2)+16});
         
         this.entities.push(e);
-        const playButton = document.getElementById('playButton');
-        playButton.addEventListener('click', () => {
-            this.sounds["Sounds/noise.wav"].play()
-        });
+        // const playButton = document.getElementById('playButton');
+        // playButton.addEventListener('click', () => {
+        //     this.sounds["Sounds/noise.wav"].play()
+        // });
         this.player = new Player(this);
         this.resouncesReady = true;
     }
