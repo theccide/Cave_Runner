@@ -23,7 +23,14 @@ class MoveableEntity extends Entity{
             if(this.moveDirection.x > 0) this.switchAnimation("WALK_RIGHT");
             if(this.moveDirection.x < 0) this.switchAnimation("WALK_LEFT");
         }
-        if(this.moveDirection.y != 0) {
+        breakme: if(this.moveDirection.y != 0) {
+            // holding 2 move keys (Example: Down and Left)
+            if(this.moveDirection.x != 0) {
+                if(this.moveDirection.x > 0) this.switchAnimation("WALK_RIGHT");
+                if(this.moveDirection.x < 0) this.switchAnimation("WALK_LEFT");
+                break breakme;
+            }            
+
             if(this.moveDirection.y > 0) this.switchAnimation("WALK_DOWN");
             if(this.moveDirection.y < 0) this.switchAnimation("WALK_UP");
         }
