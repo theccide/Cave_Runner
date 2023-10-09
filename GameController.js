@@ -12,7 +12,11 @@ class GameController {
     elapsedTime = 0;
     frameChangeInterval = 0.1;//IN SECONDS
     //OTHER
-    gems = [{type:this.gemTypes.DIAMOND,pos:{x:64,y:64}},{type:this.gemTypes.EMERALD,pos:{x:96,y:64}},{type:this.gemTypes.RUBY,pos:{x:128,y:64}}];
+    gems = [
+        {type:this.gemTypes.DIAMOND,pos:{x:64,y:64}},
+        {type:this.gemTypes.EMERALD,pos:{x:96,y:64}},
+        {type:this.gemTypes.RUBY,pos:{x:128,y:64}}
+    ];
     images = {};
     sounds = {};
     entities = [];
@@ -51,7 +55,7 @@ class GameController {
 
     finishedLoading = () => {
         
-        let e = new Entity(this,{
+        let e = new Enemy(this,{
             sprite:null, 
             // fileName: "Images/spritemaps/complete_hero.png",
             fileName: "Images/spritemaps/skeleton.png",            

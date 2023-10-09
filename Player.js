@@ -1,8 +1,8 @@
-class Player extends Entity {
+class Player extends MoveableEntity {
     camera = null;
-    frame = 0;
-    elapsedTime = 0;
-    frameChangeInterval = 0.1;//IN SECONDS
+    // frame = 0;
+    // elapsedTime = 0;
+    // frameChangeInterval = 0.1;//IN SECONDS
 
     getMouseInput = (event) => {}
     getMouseMoveInput = (event) => {}
@@ -60,7 +60,7 @@ class Player extends Entity {
     }
 
     update = (deltaTime) => {
-        this.drawWalkableSprite(deltaTime);
+        this.drawSprite(deltaTime);
 
         const halfScreenWidth = (screenBuffer.canvas.width/2);
         const halfScreenHeight = (screenBuffer.canvas.height/2);

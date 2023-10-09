@@ -1,21 +1,9 @@
-class Entity {
-    
-    //TODO: remove this from here
-    states = { IDLE : 0, SEARCHING : 1, CHASING : 2 };
-    state = this.states.CHASING;
+class MoveableEntity extends Entity{
     directions = { DOWN : 0, LEFT : 1, RIGHT: 2, UP : 3 };
-    
-    // ANIMATION VARIABLES
-    spriteSheet = {sprite:null,fileName:'',spriteSize:{width:0,height:0},cellSize:{width:0,height:0},grid:{rows:0,columns:0}};
-    frame = 0;
-    elapsedTime = 0;
-    currentAnimation = "";
-    frameChangeInterval = 0.1;//IN SECONDS
+
     moveDirection={x:0,y:0};
     faceDir = this.directions.DOWN;
-    animationQueue = [];
-    nonInteruptable = false;
-    
+
     //TODO: remove this from here //WAY POINTS FOR SEARCHING
     searchingWaypoints = [{x:6,y:1},{x:4,y:3},{x:3,y:6}];
     
@@ -23,25 +11,12 @@ class Entity {
     waypointPointer = null;
     tweenPercent = 0;
     path = [];
-    position = {x:0, y:0};
     direction = "none";
     isMoving = false;
     speed = 100;
-    gameController = null;
-    
-    constructor (gameController, spriteSheet, position) {
-        this.gameController = gameController;
-        this.spriteSheet = spriteSheet;
-        this.spriteSheet.sprite = gameController.images[spriteSheet.fileName];
-        this.position = position;
-        this.currentAnimation = this.spriteSheet.startAnimation;
-    }
-    
-    changeState = (state) => {this.state = state;}
 
-    findWaypoint = () => {
-        this.gameController.levelMap.aStar.setup({x:Math.floor(this.position.x/32),y:Math.floor(this.position.y/32)}, this.target, this.gameController.levelMap.grid);
-        this.path = this.gameController.levelMap.aStar.findPath().map(pos=>{return {x:(pos.x*32)+16,y:(pos.y*32)+16}}).reverse();
+    constructor(gameController, spriteSheet, position) {
+        super(gameController, spriteSheet, position);        
     }
 
     brain = (deltaTime) => {
@@ -149,7 +124,7 @@ class Entity {
         }
     }
 
-    drawWalkableSprite=(deltaTime)=>{
+    drawSprite=(deltaTime)=>{
         this.nextFrame(deltaTime);
 
         if(this.moveDirection.x != 0) {
@@ -178,11 +153,5 @@ class Entity {
             this.spriteSheet.spriteSize.width,
             this.spriteSheet.spriteSize.height            
         );
-    }
-
-    update = (deltaTime) => {
-        this.nextFrame(deltaTime);
-        this.brain(deltaTime);
-        this.drawWalkableSprite(deltaTime);
     }
 }
