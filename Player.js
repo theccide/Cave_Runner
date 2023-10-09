@@ -1,8 +1,5 @@
 class Player extends MoveableEntity {
     camera = null;
-    // frame = 0;
-    // elapsedTime = 0;
-    // frameChangeInterval = 0.1;//IN SECONDS
 
     getMouseInput = (event) => {}
     getMouseMoveInput = (event) => {}
