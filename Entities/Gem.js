@@ -11,16 +11,17 @@ const GEM_NAMES = {
 };
 
 class Gem extends Entity{
-        
-    constructor (gameController, type, position) {
+    gemType="";
+    constructor (gameController, gemType, position) {
         super(gameController, null, position);
+        this.gemType = gemType;
         this.initSpriteSheet( {
             sprite: null,
             fileName: "Images/gems2.png",
             cellSize: { width: 10, height: 10 },
             spriteSize: { width: 16, height: 16 },
             grid: { rows: 3, columns: 6 },
-            startAnimation: GEM_NAMES[type],
+            startAnimation: GEM_NAMES[gemType],
             animations:{
                 "DIAMOND":    [[0,0],[1,0],[2,0],[3,0],[4,0],[5,0]], // 0
                 "RUBY":       [[0,1],[1,1],[2,1],[3,1],[4,1],[5,1]], // 1
@@ -31,8 +32,9 @@ class Gem extends Entity{
     }
 
     brain=(dt)=>{
-        if(Collision.testCircleOnCircle(this.gameController.player.position,8,this.position,8))
+        if(Collision.testCircleOnCircle(this.gameController.player.position,8,this.position,8)){
             this.gameController.destroy(this);
-        
+            this.gameController.score+=(4 - (this.gemsType + 1));
+        }        
     }
 }
