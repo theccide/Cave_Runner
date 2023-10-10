@@ -22,6 +22,7 @@ class GameController {
             "Images/spritemaps/complete_hero.png",
             "Images/spritemaps/torch.png",
             "Images/spritemaps/torch2.png",
+            "Images/spritemaps/miniboss.png",
             "Images/map1.png",
             "Images/lightsource.png",
             "Images/gems.png"
@@ -77,6 +78,8 @@ class GameController {
         this.entities.push(new Gem(this, gemTypes.EMERALD,{x:128+64,y:512}));
 
         this.entities.push(new Torch(this, "thick", {x:512,y:512}));
+
+        this.entities.push(new MiniBoss(this, {x:400,y:200}));
 
         this.player = new Player(this);
         this.resouncesReady = true;

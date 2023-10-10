@@ -8,6 +8,7 @@ class Entity {
     frameChangeInterval = 0.1;//IN SECONDS
     animationQueue = [];
     nonInteruptable = false;
+    isLightSource = true;
     
     position = {x:0, y:0};
     

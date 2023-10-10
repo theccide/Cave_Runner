@@ -46,7 +46,8 @@ class LargeMap extends Scene {
             clearCircle(this.blackBuffer, this.gameController.player.position.x, this.gameController.player.position.y, 100);
 
             this.gameController.entities.forEach(entity => {
-                clearCircle(this.blackBuffer, entity.position.x, entity.position.y, 100);                
+                if(entity.isLightSource)
+                    clearCircle(this.blackBuffer, entity.position.x, entity.position.y, 100);                
             });
 
             drawImageSpriteFrom00(screenBuffer, this.blackCanvas,             
