@@ -37,6 +37,31 @@ const loadSounds = (soundsToLoad, callback) => {
     });
 };
 
+const loadJSONs=(files, callback)=> {
+    let loadedFiles = {};
+    let loadedCount = 0;
+
+    files.forEach((file, index) => {
+        fetch(file)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to load file: ${file}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                loadedFiles[file] = data;
+                loadedCount++;
+                if (loadedCount === files.length) {
+                    callback(loadedFiles);
+                }
+            })
+            .catch(error => {
+                console.error("Error loading JSON file:", error);
+            });
+    });
+}
+
 function saveCanvasToPNG(canvasId, filename) {
     // Get the canvas element based on its id
     var canvas = document.getElementById(canvasId);

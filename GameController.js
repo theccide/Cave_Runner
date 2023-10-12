@@ -2,6 +2,7 @@ class GameController {
     score = 0;
     images = {};
     sounds = {};
+    scripts = {};
     entities = [];
     resouncesReady = false;
     levelMap = {};
@@ -28,7 +29,8 @@ class GameController {
             "Images/gems.png"
         ],this.imagesFinished);
 
-        loadSounds(["Sounds/noise.wav"],this.soundsFinished);        
+        loadSounds(["Sounds/noise.wav"],this.soundsFinished);
+        loadJSONs(["resources/scripts/objects.json"], this.jsonsFinished);
     }
 
     imagesFinished=(loadedImages)=>{
@@ -41,10 +43,15 @@ class GameController {
         this.resourceFinished();
     }
 
+    jsonsFinished=(loadedJSONs)=>{
+        this.scripts = loadedJSONs;
+        this.resourceFinished();
+    }
+
     resourceCounter = 0;
     resourceFinished = () => {
         this.resourceCounter ++;
-        if(this.resourceCounter >= 2) this.finishedLoadingResources();
+        if(this.resourceCounter >= 3) this.finishedLoadingResources();
     }
 
     finishedLoadingResources = () => {
@@ -72,10 +79,12 @@ class GameController {
         );
         
         this.entities.push(e);
+        const gemLocations = this.scripts["resources/scripts/objects.json"].gems;
+        gemLocations.forEach(gem=>this.entities.push(new Gem(this, Tools.getNumberBetween(0,2),{...gem})))
 
-        this.entities.push(new Gem(this, gemTypes.DIAMOND,{x:128,y:512}));
-        this.entities.push(new Gem(this, gemTypes.RUBY,{x:128+32,y:512}));
-        this.entities.push(new Gem(this, gemTypes.EMERALD,{x:128+64,y:512}));
+        // this.entities.push(new Gem(this, gemTypes.DIAMOND,{x:128,y:512}));
+        // this.entities.push(new Gem(this, gemTypes.RUBY,{x:128+32,y:512}));
+        // this.entities.push(new Gem(this, gemTypes.EMERALD,{x:128+64,y:512}));
 
         this.entities.push(new Torch(this, "thick", {x:512,y:512}));
 
