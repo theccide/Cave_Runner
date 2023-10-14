@@ -58,11 +58,6 @@ class GameController {
         const buildEnemy=(obj)=>{
             if (obj.type === 0){
 
-                // move the first waypoint to be the last waypoint
-                // let tmp = obj.wp[0];
-                // obj.wp.shift;
-                // obj.wp.push(tmp);
-
                 return new Enemy(this,{
                     sprite:null, 
                     fileName: "Images/spritemaps/skeleton.png",            
@@ -86,30 +81,7 @@ class GameController {
                 );                
             }
         }
-            
-        // let e = new Enemy(this,{
-        //     sprite:null, 
-        //     fileName: "Images/spritemaps/skeleton.png",            
-        //     cellSize: { width: 32, height: 32 },
-        //     spriteSize: { width: 32, height: 32 },
-        //     grid: { rows: 16, columns: 8 },
-        //     startAnimation: "IDLE_DOWN",
-        //     animations:{
-        //         "IDLE_DOWN":    [[0,0],[1,0],[2,0],[3,0]], // 0
-        //         "IDLE_RIGHT":   [[0,1],[1,1],[2,1],[3,1]], // 1
-        //         "IDLE_UP":      [[0,2],[1,2],[2,2],[3,2]], // 2
-        //         "IDLE_LEFT":    [[0,6],[1,6],[2,6],[3,6]], // 6
-        //         "WALK_DOWN":    [[0,3],[1,3],[2,3],[3,3]], // 3
-        //         "WALK_RIGHT":   [[0,4],[1,4],[2,4],[3,4]], // 4
-        //         "WALK_UP":      [[0,5],[1,5],[2,5],[3,5]], // 5
-        //         "WALK_LEFT":    [[0,7],[1,7],[2,7],[3,7]], // 7
-        //     }
-        // }, 
-        //     {x:(32*2)+16,y:(32*2)+16}, // position
-        //     [{x:6,y:1},{x:4,y:3},{x:3,y:6}] // patrol points
-        // );
-        
-        // this.entities.push(e);
+                   
         const objLocations = this.scripts["resources/scripts/objects.json"];
         objLocations.gems.forEach(obj=>this.entities.push(new Gem(this, obj.type,{x:obj.x,y:obj.y})));
         objLocations.torches.forEach(obj=>this.entities.push(new Torch(this, ["thin","thick"][obj.type],{x:obj.x,y:obj.y})));

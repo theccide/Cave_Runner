@@ -51,7 +51,7 @@ class Player extends MoveableEntity {
                 "SWING_LEFT":   [[0,15],[1,15],[2,15],[3,15],[4,15],[5,15],[6,15],[7,15]]  // 15
             }
         },
-        { x: (32 * 2) + 16, y: (32 * 4) + 16 });
+        { x: (32 * 30) + 16, y: (32 * 18) + 16 });
         this.moveDirection = {x:0, y:0};
         this.camera = gameController.camera;
     }

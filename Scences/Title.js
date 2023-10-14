@@ -2,7 +2,12 @@ class Title extends Scene{
     images = {}
     loaded = false;
 
-    getMouseInput=(event)=>{if(event.type == "down")changeScene(new MainGame())}    
+    getMouseInput=(event)=>{
+        if(event.type == "down"){
+            screenBuffer.globalAlpha = 1;
+            changeScene(new LargeMap())
+        }
+    }    
     getMouseMoveInput=(event)=>{}
     getKeyboardInput=(event)=>{}
 
@@ -25,7 +30,7 @@ class Title extends Scene{
     update(dt){
         super.update(dt);
         if(!this.loaded) return;
-        drawImageFrom00(screenBuffer, this.images["Images/titlescreen.png"],0,0,canvas.width,canvas.height);
+        drawImage(screenBuffer, this.images["Images/titlescreen.png"],canvas.height,canvas.height/2,canvas.height/2,canvas.height/2);
         // this.button.update(dt);
     }
 }

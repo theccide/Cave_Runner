@@ -23,6 +23,7 @@
     <script src="Camera.js"></script>
     <script src="GameController.js"></script>
     <script src="Scences/MainGame.js"></script>
+    <script src="Scences/Logo.js"></script>
     <script src="Scences/Title.js"></script>
     <script src="Scences/GameOver.js"></script>
     <script src="Scences/LargeMap.js"></script>
@@ -43,7 +44,7 @@
         
         screenBuffer.imageSmoothingEnabled= false;
 
-        let currentScene = new LargeMap();        
+        let currentScene = new Logo();        
         let lastTimestamp = 0; // Store the timestamp of the previous frame
 
         function changeScene (scene) {
