@@ -161,14 +161,14 @@ const drawFill=(ctx, path,col, params)=>{
 const drawLines=(ctx, path,col, params)=>{
     ctx.fillStyle = col;
     ctx.beginPath();
-    ctx.lineWidth = (params.lineWidth)?params.lineWidth:1;
+    ctx.lineWidth = (params?.lineWidth)?params.lineWidth:1;
     for(let i=0; i<path.length; i++){
         if(i===0)
             ctx.moveTo(path[i].x, path[i].y);
         else
             ctx.lineTo(path[i].x,path[i].y);
     }
-    if(!params.openPath) ctx.closePath();
+    if(!params?.openPath) ctx.closePath();
     ctx.strokeStyle = col;
     ctx.stroke();  
 }

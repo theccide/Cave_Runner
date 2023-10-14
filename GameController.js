@@ -55,39 +55,65 @@ class GameController {
     }
 
     finishedLoadingResources = () => {
-        
-        let e = new Enemy(this,{
-            sprite:null, 
-            fileName: "Images/spritemaps/skeleton.png",            
-            cellSize: { width: 32, height: 32 },
-            spriteSize: { width: 32, height: 32 },
-            grid: { rows: 16, columns: 8 },
-            startAnimation: "IDLE_DOWN",
-            animations:{
-                "IDLE_DOWN":    [[0,0],[1,0],[2,0],[3,0]], // 0
-                "IDLE_RIGHT":   [[0,1],[1,1],[2,1],[3,1]], // 1
-                "IDLE_UP":      [[0,2],[1,2],[2,2],[3,2]], // 2
-                "IDLE_LEFT":    [[0,6],[1,6],[2,6],[3,6]], // 6
-                "WALK_DOWN":    [[0,3],[1,3],[2,3],[3,3]], // 3
-                "WALK_RIGHT":   [[0,4],[1,4],[2,4],[3,4]], // 4
-                "WALK_UP":      [[0,5],[1,5],[2,5],[3,5]], // 5
-                "WALK_LEFT":    [[0,7],[1,7],[2,7],[3,7]], // 7
+        const buildEnemy=(obj)=>{
+            if (obj.type === 0){
+
+                // move the first waypoint to be the last waypoint
+                // let tmp = obj.wp[0];
+                // obj.wp.shift;
+                // obj.wp.push(tmp);
+
+                return new Enemy(this,{
+                    sprite:null, 
+                    fileName: "Images/spritemaps/skeleton.png",            
+                    cellSize: { width: 32, height: 32 },
+                    spriteSize: { width: 32, height: 32 },
+                    grid: { rows: 16, columns: 8 },
+                    startAnimation: "IDLE_DOWN",
+                    animations:{
+                        "IDLE_DOWN":    [[0,0],[1,0],[2,0],[3,0]], // 0
+                        "IDLE_RIGHT":   [[0,1],[1,1],[2,1],[3,1]], // 1
+                        "IDLE_UP":      [[0,2],[1,2],[2,2],[3,2]], // 2
+                        "IDLE_LEFT":    [[0,6],[1,6],[2,6],[3,6]], // 6
+                        "WALK_DOWN":    [[0,3],[1,3],[2,3],[3,3]], // 3
+                        "WALK_RIGHT":   [[0,4],[1,4],[2,4],[3,4]], // 4
+                        "WALK_UP":      [[0,5],[1,5],[2,5],[3,5]], // 5
+                        "WALK_LEFT":    [[0,7],[1,7],[2,7],[3,7]], // 7
+                    }
+                }, 
+                    {x:obj.x, y:obj.y}, // position
+                    obj.wp.map(wp=>{wp.x = Math.round(wp.x/32); wp.y = Math.round(wp.y/32); return wp}) // patrol points
+                );                
             }
-        }, 
-            {x:(32*2)+16,y:(32*2)+16}, // position
-            [{x:6,y:1},{x:4,y:3},{x:3,y:6}] // patrol points
-        );
+        }
+            
+        // let e = new Enemy(this,{
+        //     sprite:null, 
+        //     fileName: "Images/spritemaps/skeleton.png",            
+        //     cellSize: { width: 32, height: 32 },
+        //     spriteSize: { width: 32, height: 32 },
+        //     grid: { rows: 16, columns: 8 },
+        //     startAnimation: "IDLE_DOWN",
+        //     animations:{
+        //         "IDLE_DOWN":    [[0,0],[1,0],[2,0],[3,0]], // 0
+        //         "IDLE_RIGHT":   [[0,1],[1,1],[2,1],[3,1]], // 1
+        //         "IDLE_UP":      [[0,2],[1,2],[2,2],[3,2]], // 2
+        //         "IDLE_LEFT":    [[0,6],[1,6],[2,6],[3,6]], // 6
+        //         "WALK_DOWN":    [[0,3],[1,3],[2,3],[3,3]], // 3
+        //         "WALK_RIGHT":   [[0,4],[1,4],[2,4],[3,4]], // 4
+        //         "WALK_UP":      [[0,5],[1,5],[2,5],[3,5]], // 5
+        //         "WALK_LEFT":    [[0,7],[1,7],[2,7],[3,7]], // 7
+        //     }
+        // }, 
+        //     {x:(32*2)+16,y:(32*2)+16}, // position
+        //     [{x:6,y:1},{x:4,y:3},{x:3,y:6}] // patrol points
+        // );
         
-        this.entities.push(e);
-        const gemLocations = this.scripts["resources/scripts/objects.json"].gems;
-        gemLocations.forEach(gem=>this.entities.push(new Gem(this, Tools.getNumberBetween(0,2),{...gem})))
-
-        // this.entities.push(new Gem(this, gemTypes.DIAMOND,{x:128,y:512}));
-        // this.entities.push(new Gem(this, gemTypes.RUBY,{x:128+32,y:512}));
-        // this.entities.push(new Gem(this, gemTypes.EMERALD,{x:128+64,y:512}));
-
-        this.entities.push(new Torch(this, "thick", {x:512,y:512}));
-
+        // this.entities.push(e);
+        const objLocations = this.scripts["resources/scripts/objects.json"];
+        objLocations.gems.forEach(obj=>this.entities.push(new Gem(this, obj.type,{x:obj.x,y:obj.y})));
+        objLocations.torches.forEach(obj=>this.entities.push(new Torch(this, ["thin","thick"][obj.type],{x:obj.x,y:obj.y})));
+        objLocations.enemies.forEach(obj=>this.entities.push(buildEnemy(obj)));
         this.entities.push(new MiniBoss(this, {x:400,y:200}));
 
         this.player = new Player(this);

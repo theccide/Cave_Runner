@@ -2,7 +2,7 @@ class Torch extends Entity{
     constructor (gameController, type, position) {
         super(gameController, null, position);
         // this.isLightSource = false;
-        if(type="thin")
+        if(type=="thin")
             this.initSpriteSheet( {
                 sprite: null,
                 fileName: "Images/spritemaps/torch.png",
@@ -14,7 +14,7 @@ class Torch extends Entity{
                     "BURN":    [[0,0],[1,0],[2,0],[3,0],[4,0],[5,0]], // 0
                 }
             });
-        if(type="thick")
+        if(type=="thick")
             this.initSpriteSheet( {
                 sprite: null,
                 fileName: "Images/spritemaps/torch2.png",

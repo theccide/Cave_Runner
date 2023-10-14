@@ -12,16 +12,146 @@
     <script src="../Jam_Engine/AStar.js"></script>
 </head>
 <body>
+    <p>
+        <label class="large-font">
+            <input type="checkbox" id="sectionModeCheckbox"> Selection Mode
+        </label>
+        <select id="objectDropdown"></select>
+        <select id="typeDropdown"></select>
+        <label class="large-font">
+            <input type="checkbox" id="eraseCheckbox"> Erase Mode
+        </label>
+        <label class="large-font">
+            <input type="checkbox" id="waypointCheckbox"> Waypoint Mode
+        </label>
+        <button class="large-font" id="saveButton">Save</button>
+    </p>
     <canvas id="myCanvas" width="2816" height="1408"></canvas>
+    <style>
+        /* Style the select dropdown */
+        #objectDropdown {
+            font-size: 24px;  /* Adjust this value as per your needs */
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            width: 200px; /* Optional: You can adjust the width if needed */
+        }
 
+        /* Style the options inside the dropdown */
+        #objectDropdown option {
+            font-size: 24px; /* Adjust this value as per your needs */
+            padding: 8px 12px;
+        }    
+        /* Style the select dropdown */
+        #typeDropdown {
+            font-size: 24px;  /* Adjust this value as per your needs */
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            width: 200px; /* Optional: You can adjust the width if needed */
+        }
+
+        /* Style the options inside the dropdown */
+        #typeDropdown option {
+            font-size: 24px; /* Adjust this value as per your needs */
+            padding: 8px 12px;
+        } 
+        .large-font {
+            font-size: 24px;
+        }               
+    </style>
     <script>
+        let eraseMode = false;
+        let waypointMode = false;
+        let selectionMode = false;
+        let currentType = 0;
+        let currentObject = null;
+
+        const generateRandomId=(length)=> {
+            let result           = '';
+            let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let charactersLength = characters.length;
+            for ( let i = 0; i < length; i++ ) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        }
+        
+        const setCheckBox=(id, ischecked)=>{
+            const sectionModeCheckbox = document.getElementById('sectionModeCheckbox');
+            const eraseCheckbox = document.getElementById('eraseCheckbox');
+            const waypointCheckbox = document.getElementById('waypointCheckbox');
+
+            if(id==='sectionModeCheckbox'){
+                selectionMode = ischecked;
+                eraseMode = eraseCheckbox.checked = false;
+                waypointMode = waypointCheckbox.checked = false;
+            }
+
+            if(id==='eraseCheckbox'){
+                eraseMode = ischecked;
+                selectionMode = sectionModeCheckbox.checked = false;
+            }
+            
+            if(id==='waypointCheckbox'){
+                waypointMode = ischecked;
+                selectionMode = sectionModeCheckbox.checked = false;
+            }            
+        }
+
+        document.getElementById('sectionModeCheckbox').addEventListener('change', function(){ setCheckBox('sectionModeCheckbox', this.checked); });
+        document.getElementById('eraseCheckbox').addEventListener('change', function(){ setCheckBox('eraseCheckbox', this.checked); });
+        document.getElementById('waypointCheckbox').addEventListener('change', function(){ setCheckBox('waypointCheckbox', this.checked); });
+
+        const objectTypes={
+            gems: ["DIAMOND","RUBY","EMERALD"],
+            enemies: ["SKELETON", "BAT", "SLIME", "WIZZARD"],
+            torches: ["BLUE_THIN", "BLUE_THICK"]
+        }
+        // Populate the object dropdown
+        const objectDropdown = document.getElementById('objectDropdown');
+        for (let objectName in objectTypes) {
+            const option = document.createElement('option');
+            option.value = objectName;
+            option.textContent = objectName;
+            objectDropdown.appendChild(option);
+        }
+
+        // Function to update the type dropdown based on the object selected
+        function updateObjectDropdown() {
+            const selectedObject = objectDropdown.value;
+            const types = objectTypes[selectedObject];
+
+            // Clear existing options
+            const typeDropdown = document.getElementById('typeDropdown');
+            typeDropdown.innerHTML = '';
+
+            // Add new options based on the selected object
+            for (let type of types) {
+                const option = document.createElement('option');
+                option.value = type;
+                option.textContent = type;
+                typeDropdown.appendChild(option);
+            }
+            updateTypeDropdown();
+            currentObject = null;
+        }
+        function updateTypeDropdown() {
+            currentType=typeDropdown.selectedIndex;
+            workingObject = {
+                objectName: objectDropdown.value, 
+                objectID: objectDropdown.selectedIndex,
+                typeName: typeDropdown.value, 
+                typeID: typeDropdown.selectedIndex                
+            };
+            currentObject = null;
+        }
+
         const canvas = document.getElementById('myCanvas');
         const ctx = canvas.getContext('2d');
         const backBuffer = canvas.getContext('2d');
         ctx.imageSmoothingEnabled= false
-        let objectList = {
-            gems:[]
-        }
+        let workingObject = null;
+
+        let objectList = {}
 
         const saveAsJSON=()=>{
             const blob = new Blob([JSON.stringify(objectList, null, 4)], {type: "application/json"});
@@ -33,25 +163,104 @@
             link.click();
             document.body.removeChild(link);                        
         }
+
         const update=()=> {
             drawImageFrom00(backBuffer, images["Images/map1.png"],0,0,2816,1408);
 
-            if(objectList?.gems) objectList.gems.forEach(gem=>drawCircle(backBuffer, gem.x,gem.y, 10,"Green"));
+            // color everything grey
+            const keys = Object.keys(objectList);
+            keys.forEach(key=>objectList[key].forEach(obj=>drawCircle(backBuffer, obj.x,obj.y, 10,"grey")))
 
+            // color what is selected as green
+            if(workingObject){
+                objectList[workingObject.objectName].forEach(obj=>{
+                        const color = currentType==obj.type?"lightgreen":"green";
+                        drawCircle(backBuffer, obj.x,obj.y, 10,color);
+                    }
+                );
+            }
+            if(currentObject) {
+                drawLines(backBuffer, currentObject.wp, "black");
+                currentObject.wp.forEach((wp,i)=>{
+                    if(i!==0) drawCircle(backBuffer, wp.x,wp.y, 10,"black")
+                });
+                drawCircle(backBuffer, currentObject.x, currentObject.y, 10, "red");
+            }
+            
             // Schedule the next frame
             setTimeout(() => {
                 requestAnimationFrame(update);
             }, 1000 / 10);  // 1000 ms / 10 FPS = 100 ms per frame
         }
 
-        const finishedLoading = (loadedImages) => {
+        const imagesfinished = (loadedImages) => {
             images = loadedImages;
             update();
         }
 
+        const jsonsFinished = (loadedScripts) => {
+            objectList = loadedScripts["objects.json"];
+            let dropdown = document.getElementById('objectDropdown'); 
+            dropdown.addEventListener('change', updateObjectDropdown);
+            updateObjectDropdown();
+
+            let dropdownType = document.getElementById('typeDropdown'); 
+            dropdownType.addEventListener('change', updateTypeDropdown);
+
+            document.getElementById('saveButton').addEventListener('click', function() {
+                saveAsJSON();
+            });            
+        }
+
+        const isCloseEnough = (pos1, pos2) => {
+            const threshold = 10;  // pixels; adjust as needed
+            const dx = pos1.x - pos2.x;
+            const dy = pos1.y - pos2.y;
+            return Math.sqrt(dx * dx + dy * dy) <= threshold;
+        };
+
         const getMouseInput=(event)=>{ 
-            if(event.type === "down"){
-                objectList.gems.push(event.position);                
+            let type = workingObject.typeID;
+            if(event.type === "down"){                        
+                if(eraseMode){ // Find objects at or near the event's position and remove them
+                    if(!waypointMode){ // remove an object
+                        for (let i = objectList[workingObject.objectName].length - 1; i >= 0; i--) {
+                            const objPosition = objectList[workingObject.objectName][i];
+                            if (isCloseEnough(event.position, objPosition)) {
+                                if (objectList[workingObject.objectName][i] == currentObject) currentObject = null;
+                                objectList[workingObject.objectName].splice(i, 1);
+                            }
+                        }
+                    }
+                    if(waypointMode){ // remove a waypoint
+                        for (let i = currentObject.wp.length - 1; i >= 0; i--) {
+                            const objPosition = currentObject.wp[i];
+                            if (isCloseEnough(event.position, objPosition)) {
+                                currentObject.wp.splice(i, 1);
+                            }
+                        }
+                    }
+                }
+                if(!eraseMode) {
+                    if(!waypointMode){
+                        if(!selectionMode){ // add an object
+                            let obj = {id: generateRandomId(8), x: Math.round(event.position.x), y:Math.round(event.position.y), type, wp:[{x: Math.round(event.position.x), y:Math.round(event.position.y)}]};
+                            currentObject = obj;                        
+                            objectList[workingObject.objectName].push(obj);
+                        }
+                        if(selectionMode){ // select an object
+                            for (let i = 0; i < objectList[workingObject.objectName].length; i++) {
+                                const objPosition = objectList[workingObject.objectName][i];
+                                if (isCloseEnough(event.position, objPosition)) {
+                                    currentObject = objectList[workingObject.objectName][i];
+                                }
+                            }
+                        }
+                    }
+                    if(waypointMode){ // add a waypoint
+                        currentObject.wp.push({x: Math.round(event.position.x), y:Math.round(event.position.y)});
+                    }
+                }
             }
         }
         const getMouseMoveInput=(event)=>{}
@@ -64,7 +273,9 @@
         let imagesToLoad = [
             "Images/map1.png"
         ];
-        loadImages(imagesToLoad,finishedLoading);
+
+        loadJSONs(["objects.json"], jsonsFinished);
+        loadImages(imagesToLoad,imagesfinished);
     </script>
     <script src="../Jam_Engine/InputHandler.js"></script>
 </body>

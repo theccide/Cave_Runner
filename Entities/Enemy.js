@@ -9,11 +9,6 @@ class Enemy extends MoveableEntity{
     }
 
     changeState = (state) => {this.state = state;}
-
-    findWaypoint = () => {
-        this.gameController.levelMap.aStar.setup({x:Math.floor(this.position.x/32),y:Math.floor(this.position.y/32)}, this.target, this.gameController.levelMap.grid);
-        this.path = this.gameController.levelMap.aStar.findPath().map(pos=>{return {x:(pos.x*32)+16,y:(pos.y*32)+16}}).reverse();
-    }
     
     brain = (deltaTime) => {
         this.calcState();
@@ -30,7 +25,7 @@ class Enemy extends MoveableEntity{
                 break;
             default:
               console.log("Yep, no state");          
-        }            
+        }          
     }
 
     calcState=()=>{
@@ -44,6 +39,11 @@ class Enemy extends MoveableEntity{
         }
     }
 
+    findWaypoint = () => {
+        this.gameController.levelMap.aStar.setup({x:Math.floor(this.position.x/32),y:Math.floor(this.position.y/32)}, this.target, this.gameController.levelMap.grid);
+        this.path = this.gameController.levelMap.aStar.findPath().map(pos=>{return {x:(pos.x*32)+16,y:(pos.y*32)+16}}).reverse();
+    }
+
     runPatrollingState=(deltaTime)=>{
         if(!this.target) {
             this.waypointPointer=0;
@@ -52,8 +52,8 @@ class Enemy extends MoveableEntity{
         }
        
         const targetWaypoint = Tools2D.moveTowards_CloseEnough(deltaTime,this.position,this.path[1],this.speed-10,8);//move to the next waypoint
-        if(targetWaypoint?.hit){
-            this.path.shift();
+        if(this.path.length === 1 || targetWaypoint?.hit){ // take in account that you can start on the waypoint at your position
+            if(this.path.length !== 1) this.path.shift();
             if(this.path.length === 1) { // correct last cell for rounding errors
                 this.position = this.path[0];
                 this.target=this.searchingWaypoints[(this.waypointPointer+=1) % this.searchingWaypoints.length];
@@ -61,7 +61,6 @@ class Enemy extends MoveableEntity{
             } 
         }
         if(targetWaypoint) this.animateTowards(targetWaypoint);
-
     }
 
     runChasingState=(deltaTime)=>{
@@ -83,30 +82,26 @@ class Enemy extends MoveableEntity{
     }
 
     animateTowards=(targetWaypoint)=>{
-        let angle = targetWaypoint.angle * (180 / Math.PI);
-        if(Math.abs(angle) <= 180 && Math.abs(angle) > 135) {
-            this.faceDir = this.directions.LEFT;
-            this.moveDirection.y = 0;
-            this.moveDirection.x = -1;
+        let angle = (targetWaypoint.angle * (180 / Math.PI))+180;
+        if(angle > 45 && angle <= 135) {
+            this.faceDir = this.directions.UP;
+            this.moveDirection.x = 0;
+            this.moveDirection.y = -1;
         }
-        if(Math.abs(angle) <= 45 && Math.abs(angle) > 0) {
+        if(angle > 135 && angle <= 225) {
             this.faceDir = this.directions.RIGHT;
             this.moveDirection.y = 0;
             this.moveDirection.x = 1;
         }
-        if(angle >= 0) {
-            if(Math.abs(angle) <= 135 && Math.abs(angle) > 45) {
-                this.faceDir = this.directions.DOWN;
-                this.moveDirection.x = 0;
-                this.moveDirection.y = 1;
-            }
+        if(angle > 225 && angle <= 315) {
+            this.faceDir = this.directions.DOWN;
+            this.moveDirection.x = 0;
+            this.moveDirection.y = 1;
         }
-        else {
-            if(Math.abs(angle) <= 135 && Math.abs(angle) > 45) {
-                this.faceDir = this.directions.UP;
-                this.moveDirection.x = 0;
-                this.moveDirection.y = -1;
-            }
-        }
-    }    
+        if(angle > 315 || angle <= 45) {
+            this.faceDir = this.directions.LEFT;
+            this.moveDirection.y = 0;
+            this.moveDirection.x = -1;
+        }            
+   }    
 }
