@@ -9,6 +9,7 @@ class Entity {
     animationQueue = [];
     nonInteruptable = false;
     isLightSource = true;
+    brightness = 0.25;
     
     position = {x:0, y:0};
     

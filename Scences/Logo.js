@@ -4,7 +4,7 @@ class Logo extends Scene{
     alpha = 0;
     fadeIn = true;
 
-    getMouseInput=(event)=>{if(event.type == "down")changeScene(new LargeMap())}    
+    getMouseInput=(event)=>{}    
     getMouseMoveInput=(event)=>{}
     getKeyboardInput=(event)=>{}
 

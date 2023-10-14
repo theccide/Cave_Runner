@@ -30,6 +30,10 @@ class GameController {
         ],this.imagesFinished);
 
         loadSounds(["Sounds/noise.wav"],this.soundsFinished);
+        if(localStorage.getItem('objectModel')){
+            this.jsonsFinished({"resources/scripts/objects.json":JSON.parse(localStorage.getItem('objectModel'))});
+        }
+        else
         loadJSONs(["resources/scripts/objects.json"], this.jsonsFinished);
     }
 

@@ -37,11 +37,9 @@
 
     <script>
         const canvas = document.getElementById('myCanvas');
-        const screenBuffer = canvas.getContext('2d');
-
+        let copyScreenBuffer = screenBuffer = canvas.getContext('2d');
         screenBuffer.canvas.width  = window.innerWidth;
-        screenBuffer.canvas.height = window.innerHeight;
-        
+        screenBuffer.canvas.height = window.innerHeight;        
         screenBuffer.imageSmoothingEnabled= false;
 
         let currentScene = new Logo();        

@@ -16,6 +16,7 @@
         <label class="large-font">
             <input type="checkbox" id="sectionModeCheckbox"> Selection Mode
         </label>
+        <button class="large-font" id="loadButton">Load</button>
         <select id="objectDropdown"></select>
         <select id="typeDropdown"></select>
         <label class="large-font">
@@ -25,6 +26,7 @@
             <input type="checkbox" id="waypointCheckbox"> Waypoint Mode
         </label>
         <button class="large-font" id="saveButton">Save</button>
+        <button class="large-font" id="saveFileButton">Save To File</button>
     </p>
     <canvas id="myCanvas" width="2816" height="1408"></canvas>
     <style>
@@ -153,7 +155,7 @@
 
         let objectList = {}
 
-        const saveAsJSON=()=>{
+        const saveAsJSONFile=()=>{
             const blob = new Blob([JSON.stringify(objectList, null, 4)], {type: "application/json"});
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
@@ -162,6 +164,10 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);                        
+        }
+
+        const saveAsJSONModel=()=>{
+            localStorage.setItem('objectModel',JSON.stringify(objectList));
         }
 
         const update=()=> {
@@ -207,9 +213,15 @@
             let dropdownType = document.getElementById('typeDropdown'); 
             dropdownType.addEventListener('change', updateTypeDropdown);
 
-            document.getElementById('saveButton').addEventListener('click', function() {
-                saveAsJSON();
+            document.getElementById('saveFileButton').addEventListener('click', function() {
+                saveAsJSONFile();
             });            
+            document.getElementById('saveButton').addEventListener('click', function() {
+                saveAsJSONModel();
+            });     
+            document.getElementById('loadButton').addEventListener('click', function() {
+                objectList = JSON.parse(localStorage.getItem('objectModel'));
+            });                        
         }
 
         const isCloseEnough = (pos1, pos2) => {
@@ -264,11 +276,7 @@
             }
         }
         const getMouseMoveInput=(event)=>{}
-        const getKeyboardInput=(event)=>{
-            if(event.type == "down" && event.key == " "){
-                saveAsJSON();
-            }
-        }
+        const getKeyboardInput=(event)=>{}
 
         let imagesToLoad = [
             "Images/map1.png"
