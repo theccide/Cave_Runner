@@ -103,7 +103,7 @@ class Enemy extends MoveableEntity{
         this.hitPoints -= (force*2);
         if(this.hitPoints <= 0){
             this.gameController.destroy(this);
-            this.gameController.instatiate({className:"Fx", position:this.position, params:{type: fxTypes.EXPLODE, destroyOnFinish:true}});
+            this.gameController.instatiate({className:"Fx", position:this.position, params:{fxType: fxTypes.EXPLODE, destroyOnFinishAnim:true}});
         }
     }
 

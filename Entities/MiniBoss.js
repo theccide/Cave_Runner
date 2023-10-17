@@ -35,7 +35,7 @@ class MiniBoss extends Entity{
                 this.nextTimeEvent = 2000;
                 if(currentTime > this.lastTimeEvent+this.nextTimeEvent){
                     this.lastTimeEvent = currentTime;
-                    this.state = this.states.TELEPORTING;
+                    this.state = (Math.random()>= 0.5)?this.states.TELEPORTING:this.states.SHOOTING;
                 }
                 break;
             case this.states.TELEPORTING:
@@ -49,6 +49,13 @@ class MiniBoss extends Entity{
                 }
                 break;
             case this.states.SHOOTING:
+                this.switchAnimation("Attack01");
+                this.endAnimationCallback=()=>{
+                    this.lastTimeEvent = currentTime;
+                    this.state = this.states.IDLE;                    
+                    this.gameController.instatiate({className:"Bullet", params:{fxType:fxTypes.POOF}, position:{...this.position}});
+                    this.endAnimationCallback = null;
+                }
                 break;
             case this.states.HIT:
                 break;

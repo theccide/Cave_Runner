@@ -120,6 +120,7 @@ class GameController {
     _instatiate=(entityInfo)=>{
         if(entityInfo.className==="Gem") this.entities.push(new Gem(this, entityInfo.type, entityInfo.position));
         if(entityInfo.className==="Fx") this.entities.push(new Fx(this, entityInfo.params, entityInfo.position));        
+        if(entityInfo.className==="Bullet") this.entities.push(new Bullet(this, entityInfo.params, entityInfo.position));
     }
 
     update = (deltaTime) => {        
