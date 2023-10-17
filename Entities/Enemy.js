@@ -1,27 +1,54 @@
+const enemyTypes = {
+    SKELITON : 0,
+    BAT : 1,
+    SLIME : 2,
+    WIZARD : 3,
+};
+
+const ENEMY_NAMES = {
+    0: 'SKELITON',
+    1: 'BAT',
+    2: 'SLIME',
+    3: 'WIZARD'
+};
+
 class Enemy extends MoveableEntity{
-    states = { IDLE : 0, PATROLLING : 1, CHASING : 2 };
+    hitPoints = 100;
+    states = { IDLE : 0, PATROLLING : 1, CHASING : 2, HIT : 3 };
     state = this.states.CHASING;
     searchingWaypoints = [];
+    hitForce = {x:0, y:0};
+    hitDirection = null;
+    dragFriction = 1;
     
-    constructor(gameController, spriteSheet, position, searchingWaypoints) {
+    constructor(gameController, id, spriteSheet, position, searchingWaypoints) {
         super(gameController, spriteSheet, position);
+        this.id = id;
         this.searchingWaypoints = searchingWaypoints;
     }
 
     changeState = (state) => {this.state = state;}
     
     brain = (deltaTime) => {
-        this.calcState();
 
         switch (this.state) {
             case this.states.IDLE:
+                this.autoControlAnimation = true;
                 console.log("Idle state");
                 break;
             case this.states.PATROLLING:
+                this.autoControlAnimation = true;
+                this.calcState();
                 this.runPatrollingState(deltaTime);
                 break;
             case this.states.CHASING:
+                this.autoControlAnimation = true;
+                this.calcState();
                 this.runChasingState(deltaTime);
+                break;
+            case this.states.HIT:
+                this.autoControlAnimation = false;
+                this.runHitState(deltaTime);
                 break;
             default:
               console.log("Yep, no state");          
@@ -31,7 +58,7 @@ class Enemy extends MoveableEntity{
     calcState=()=>{
         let distance = Math.sqrt(Math.pow((this.position.x-this.gameController.player.position.x),2) + Math.pow((this.position.y-this.gameController.player.position.y),2));
         if(distance < 50) {
-            if(this.state = this.states.PATROLLING){this.target = null;this.path = [];}
+            if(this.state == this.states.PATROLLING){this.target = null;this.path = [];}
             this.state = this.states.CHASING;
         }
         else {
@@ -61,6 +88,59 @@ class Enemy extends MoveableEntity{
             } 
         }
         if(targetWaypoint) this.animateTowards(targetWaypoint);
+    }
+
+    hit(direction, force){
+        this.frameChangeInterval = 0.3;
+        this.state = this.states.HIT;
+        this.hitDirection = direction;
+        this.autoControlAnimation = false;
+        this.hitTime = (new Date()).getTime();
+        if (direction == this.directions.UP) this.hitForce.y-=force;
+        if (direction == this.directions.DOWN) this.hitForce.y+=force;
+        if (direction == this.directions.LEFT) this.hitForce.x-=force;
+        if (direction == this.directions.RIGHT) this.hitForce.x+=force;
+        this.hitPoints -= (force*2);
+        if(this.hitPoints <= 0){
+            this.gameController.destroy(this);
+            this.gameController.instatiate({className:"Fx", position:this.position, params:{type: fxTypes.EXPLODE, destroyOnFinish:true}});
+        }
+    }
+
+    hitTime = 0;
+
+    runHitState=(deltaTime)=>{
+        this.switchAnimation("HIT");
+        const currentTime = (new Date()).getTime();
+        if(this.hitForce.x==0 && this.hitForce.y==0){
+            if(currentTime > this.hitTime + 500){
+                this.state = this.states.PATROLLING;
+                this.target = null;this.path = [];
+                this.frameChangeInterval = 0.1;
+            }            
+            return;
+        }
+        
+        deltaTime = 1;
+        if(this.hitForce.x > 0){
+            this.hitForce.x -= this.dragFriction * deltaTime;
+            if(this.hitForce.x < this.dragFriction) this.hitForce.x = 0;
+        }
+        if(this.hitForce.x < 0){
+            this.hitForce.x += this.dragFriction * deltaTime;
+            if(this.hitForce.x > 0 - this.dragFriction) this.hitForce.x = 0;
+        }
+        if(this.hitForce.y > 0){
+            this.hitForce.y -= this.dragFriction * deltaTime;
+            if(this.hitForce.y < this.dragFriction) this.hitForce.y = 0;
+        }
+        if(this.hitForce.y < 0){
+            this.hitForce.y += this.dragFriction * deltaTime;
+            if(this.hitForce.y > 0 - this.dragFriction) this.hitForce.y = 0;
+        }
+
+        this.position.x += this.hitForce.x;
+        this.position.y += this.hitForce.y;        
     }
 
     runChasingState=(deltaTime)=>{

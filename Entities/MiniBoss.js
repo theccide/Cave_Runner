@@ -1,7 +1,13 @@
 class MiniBoss extends Entity{
-    
-    constructor (gameController, position) {
+    states = { IDLE : 0, TELEPORTING : 1, SHOOTING : 2, HIT : 3 };
+    state = this.states.IDLE;
+    spawnPoints = [];
+    lastTimeEvent=0;
+    nextTimeEvent=0;
+
+    constructor (gameController, position, spawnPoints) {
         super(gameController, null, position);
+        this.spawnPoints = spawnPoints;
         this.initSpriteSheet( {
             sprite: null,
             fileName: "Images/spritemaps/miniboss.png",
@@ -18,7 +24,34 @@ class MiniBoss extends Entity{
             }
         });
         this.frameChangeInterval = 0.2;
+        this.lastTimeEvent = (new Date()).getTime();
     }
 
-    brain=(dt)=>{}
+    brain=(dt)=>{
+        const currentTime = (new Date()).getTime();
+        switch (this.state) {
+            case this.states.IDLE:
+                this.switchAnimation("Idle");
+                this.nextTimeEvent = 2000;
+                if(currentTime > this.lastTimeEvent+this.nextTimeEvent){
+                    this.lastTimeEvent = currentTime;
+                    this.state = this.states.TELEPORTING;
+                }
+                break;
+            case this.states.TELEPORTING:
+                this.switchAnimation("PowerUp02");
+                this.nextTimeEvent = 1000;
+                if(currentTime > this.lastTimeEvent+this.nextTimeEvent){
+                    this.lastTimeEvent = currentTime;
+                    this.state = this.states.IDLE;
+                    const newSpawnPoint = Tools.getNumberBetween(0, this.spawnPoints.length-1);
+                    this.position = this.spawnPoints[newSpawnPoint];
+                }
+                break;
+            case this.states.SHOOTING:
+                break;
+            case this.states.HIT:
+                break;
+        }  
+    }
 }

@@ -1,24 +1,35 @@
 class Player extends MoveableEntity {
-    camera = null;
+    camera = null;    
+    showPlayerDebug = false;
+    hitForce = 15;
 
     getMouseInput = (event) => {}
     getMouseMoveInput = (event) => {}
     getKeyboardInput = (event) => {
         if (event.type === "down") {
-            if (event.key === "w") {this.moveDirection.y = -1; this.faceDir = this.directions.UP;}
-            else if (event.key === "s") {this.moveDirection.y = 1; this.faceDir = this.directions.DOWN;}
-            if (event.key === "a") {this.moveDirection.x = -1; this.faceDir = this.directions.LEFT;}
-            else if (event.key === "d") {this.moveDirection.x = 1; this.faceDir = this.directions.RIGHT;}
+            if (event.key === "w") this.moveDirection.y = -1;
+            else if (event.key === "s") this.moveDirection.y = 1;
+            if (event.key === "a") this.moveDirection.x = -1;
+            else if (event.key === "d") this.moveDirection.x = 1;
             if(event.key === "e") {
-                if(this.faceDir == this.directions.UP){this.switchAnimation("SWING_UP",true);}
-                if(this.faceDir == this.directions.DOWN){this.switchAnimation("SWING_DOWN",true);}
-                if(this.faceDir == this.directions.LEFT){this.switchAnimation("SWING_LEFT",true);}
-                if(this.faceDir == this.directions.RIGHT){this.switchAnimation("SWING_RIGHT",true);}
+                if(this.faceDir == this.directions.UP){this.forceAnimation("SWING_UP");}
+                if(this.faceDir == this.directions.DOWN){this.forceAnimation("SWING_DOWN");}
+                if(this.faceDir == this.directions.LEFT){this.forceAnimation("SWING_LEFT");}
+                if(this.faceDir == this.directions.RIGHT){this.forceAnimation("SWING_RIGHT");}
+                this.gameController.enemies.forEach (enemy=>{                    
+                    if(Collision.testBoxOnBox(this.swingBoxBounds,enemy.collisionBounds)){
+                        enemy.hit(this.faceDir, this.hitForce);
+                    }
+                });
             }
         } else if (event.type === "up") {
             if (event.key === "w" || event.key === "s") this.moveDirection.y = 0;
             if (event.key === "a" || event.key === "d") this.moveDirection.x = 0;
-        }        
+        }
+        if (this.moveDirection.y>0) {this.faceDir = this.directions.DOWN;}
+        if (this.moveDirection.y<0) {this.faceDir = this.directions.UP;}
+        if (this.moveDirection.x>0) {this.faceDir = this.directions.RIGHT;}
+        if (this.moveDirection.x<0) {this.faceDir = this.directions.LEFT;}    
     }
 
     constructor(gameController) {
@@ -45,18 +56,33 @@ class Player extends MoveableEntity {
                 "RUN_UP":       [[0,10],[1,10],[2,10],[3,10],[4,10],[5,10],[6,10],[7,10]], // 10
                 "RUN_LEFT":     [[0,11],[1,11],[2,11],[3,11],[4,11],[5,11],[6,11],[7,11]], // 11
 
-                "SWING_DOWN":   [[0,12],[1,12],[2,12],[3,12],[4,12],[5,12],[6,12],[7,12]], // 12
-                "SWING_RIGHT":  [[0,13],[1,13],[2,13],[3,13],[4,13],[5,13],[6,13],[7,13]], // 13
-                "SWING_UP":     [[0,14],[1,14],[2,14],[3,14],[4,14],[5,14],[6,14],[7,14]], // 14
-                "SWING_LEFT":   [[0,15],[1,15],[2,15],[3,15],[4,15],[5,15],[6,15],[7,15]]  // 15
+                "SWING_DOWN":   [[0,12],[1,12],[2,12],[3,12],[4,12],[5,12],[6,12]], // 12
+                "SWING_RIGHT":  [[0,13],[1,13],[2,13],[3,13],[4,13],[5,13],[6,13]], // 13
+                "SWING_UP":     [[0,14],[1,14],[2,14],[3,14],[4,14],[5,14],[6,14]], // 14
+                "SWING_LEFT":   [[0,15],[1,15],[2,15],[3,15],[4,15],[5,15],[6,15]]  // 15
             }
         },
         { x: (32 * 30) + 16, y: (32 * 18) + 16 });
         this.moveDirection = {x:0, y:0};
         this.camera = gameController.camera;
+        this.id="player";
     }
 
+    swingBoxBounds= {x:-50,y:0,width:100,height:50};
     update = (deltaTime) => {
+        if(this.faceDir == this.directions.DOWN) this.swingBoxBounds= {x: this.position.x -50,y: this.position.y, width:100,height:75};
+        if(this.faceDir == this.directions.UP) this.swingBoxBounds= {x: this.position.x -50,y: this.position.y-75, width:100,height: 75};
+        if(this.faceDir == this.directions.RIGHT) this.swingBoxBounds= {x: this.position.x, y: this.position.y-50, width:75,height: 100};
+        if(this.faceDir == this.directions.LEFT) this.swingBoxBounds= {x: this.position.x-75, y: this.position.y-50, width:75,height: 100};
+        
+        if(this.showPlayerDebug)
+            drawBox(
+                this.gameController.currentScene.backBuffer,
+                this.swingBoxBounds.x, this.swingBoxBounds.y,
+                this.swingBoxBounds.width, this.swingBoxBounds.height,
+                "Black"
+            )
+
         this.drawSprite(deltaTime);
 
         const halfScreenWidth = (screenBuffer.canvas.width/2);

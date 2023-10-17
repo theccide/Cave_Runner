@@ -29,6 +29,7 @@ class Gem extends Entity{
             }
         });
         this.frameChangeInterval = 0.2;
+        this.bobbingStrength = 3;
     }
 
     brain=(dt)=>{

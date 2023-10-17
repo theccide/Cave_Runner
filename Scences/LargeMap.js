@@ -56,20 +56,29 @@ class LargeMap extends Scene {
             screenBuffer = copyScreenBuffer;
         }        
     }
-
+    
     update(dt){
         super.update(dt);
         this.gameController.update(dt);
         this.camera.render(screenBuffer);
 
+        const elapsed = (new Date()).getTime();
+        const getFlicker=(brightness)=>{
+            const amplitude = brightness*3; 
+            const frequency = 0.005; 
+            return amplitude * Math.sin(frequency * elapsed);
+        }
+
         if(this.gameController.player && this.useDarkOverlay){
             this.blackBuffer.clearRect(0, 0,this.camera.offWindow.width, this.camera.offWindow.height);         
             drawBox(this.blackBuffer,0,0,this.camera.offWindow.width, this.camera.offWindow.height,"rgba(0, 0, 0, 0.9)");
-            clearCircle(this.blackBuffer, this.gameController.player.position.x, this.gameController.player.position.y, 100, 0.8);
+            clearCircle(this.blackBuffer, this.gameController.player.position.x, this.gameController.player.position.y, 100+getFlicker(this.gameController.player.brightness), 0.8);
 
             this.gameController.entities.forEach(entity => {
-                if(entity.isLightSource)
-                    clearCircle(this.blackBuffer, entity.position.x, entity.position.y, 50+(entity.brightness*50), entity.brightness);
+                if(entity.isLightSource){
+
+                    clearCircle(this.blackBuffer, entity.position.x, entity.position.y, 50+(entity.brightness*50)+getFlicker(entity.brightness), entity.brightness);
+                }
             });
 
             drawImageSpriteFrom00(screenBuffer, this.blackCanvas,

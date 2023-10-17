@@ -11,6 +11,7 @@ class MoveableEntity extends Entity{
     direction = "none";
     isMoving = false;
     speed = 100;
+    autoControlAnimation = true;
 
     constructor(gameController, spriteSheet, position) {
         super(gameController, spriteSheet, position);        
@@ -19,26 +20,28 @@ class MoveableEntity extends Entity{
     drawSprite=(deltaTime)=>{
         this.nextFrame(deltaTime);
 
-        if(this.moveDirection.x != 0) {
-            if(this.moveDirection.x > 0) this.switchAnimation("WALK_RIGHT");
-            if(this.moveDirection.x < 0) this.switchAnimation("WALK_LEFT");
-        }
-        breakme: if(this.moveDirection.y != 0) {
-            // holding 2 move keys (Example: Down and Left)
+        if(this.autoControlAnimation){
             if(this.moveDirection.x != 0) {
                 if(this.moveDirection.x > 0) this.switchAnimation("WALK_RIGHT");
                 if(this.moveDirection.x < 0) this.switchAnimation("WALK_LEFT");
-                break breakme;
-            }            
+            }
+            breakme: if(this.moveDirection.y != 0) {
+                // holding 2 move keys (Example: Down and Left)
+                if(this.moveDirection.x != 0) {
+                    if(this.moveDirection.x > 0) this.switchAnimation("WALK_RIGHT");
+                    if(this.moveDirection.x < 0) this.switchAnimation("WALK_LEFT");
+                    break breakme;
+                }            
 
-            if(this.moveDirection.y > 0) this.switchAnimation("WALK_DOWN");
-            if(this.moveDirection.y < 0) this.switchAnimation("WALK_UP");
-        }
-        if(this.moveDirection.x == 0 && this.moveDirection.y == 0 ){
-            if(this.faceDir == this.directions.DOWN)   this.switchAnimation("IDLE_DOWN");
-            if(this.faceDir == this.directions.LEFT)   this.switchAnimation("IDLE_LEFT");
-            if(this.faceDir == this.directions.RIGHT)  this.switchAnimation("IDLE_RIGHT");
-            if(this.faceDir == this.directions.UP)     this.switchAnimation("IDLE_UP");
+                if(this.moveDirection.y > 0) this.switchAnimation("WALK_DOWN");
+                if(this.moveDirection.y < 0) this.switchAnimation("WALK_UP");
+            }
+            if(this.moveDirection.x == 0 && this.moveDirection.y == 0 ){
+                if(this.faceDir == this.directions.DOWN)   this.switchAnimation("IDLE_DOWN");
+                if(this.faceDir == this.directions.LEFT)   this.switchAnimation("IDLE_LEFT");
+                if(this.faceDir == this.directions.RIGHT)  this.switchAnimation("IDLE_RIGHT");
+                if(this.faceDir == this.directions.UP)     this.switchAnimation("IDLE_UP");
+            }
         }
 
         drawImageSprite(this.gameController.currentScene.backBuffer,
