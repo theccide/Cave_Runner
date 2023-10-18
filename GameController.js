@@ -5,6 +5,7 @@ class GameController {
     scripts = {};
     entities = [];
     enemies = [];
+    bullets = [];
     resouncesReady = false;
     levelMap = {};
     camera = null;
@@ -23,6 +24,7 @@ class GameController {
         loadImages([
             "Images/spritemaps/skeleton.png",
             "Images/spritemaps/complete_hero.png",
+            "Images/spritemaps/complete_hero_hit.png",
             "Images/spritemaps/torch.png",
             "Images/spritemaps/torch2.png",
             "Images/spritemaps/miniboss.png",
@@ -120,13 +122,21 @@ class GameController {
     _instatiate=(entityInfo)=>{
         if(entityInfo.className==="Gem") this.entities.push(new Gem(this, entityInfo.type, entityInfo.position));
         if(entityInfo.className==="Fx") this.entities.push(new Fx(this, entityInfo.params, entityInfo.position));        
-        if(entityInfo.className==="Bullet") this.entities.push(new Bullet(this, entityInfo.params, entityInfo.position));
+        if(entityInfo.className==="Bullet"){
+            let bullet = new Bullet(this, entityInfo.params, entityInfo.position);
+            this.entities.push(bullet);
+            this.bullets.push(bullet);
+        } 
     }
 
     update = (deltaTime) => {        
         if(!this.resouncesReady) return;
 
         if(this.entitiesToRemove.length != 0){
+            this.entitiesToRemove.forEach(entity=>{
+                if(entity instanceof Enemy) this.enemies = this.enemies.filter(obj => !this.entitiesToRemove.includes(obj));
+                if(entity instanceof Bullet) this.bullets = this.bullets.filter(obj => !this.entitiesToRemove.includes(obj));
+            });          
             this.entities = this.entities.filter(obj => !this.entitiesToRemove.includes(obj));
             this.entitiesToRemove = [];
         }

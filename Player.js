@@ -2,6 +2,9 @@ class Player extends MoveableEntity {
     camera = null;    
     showPlayerDebug = false;
     hitForce = 15;
+    takingDamage = false;
+    damageTime = 2000;
+    damageStartTime = 0;
 
     getMouseInput = (event) => {}
     getMouseMoveInput = (event) => {}
@@ -21,6 +24,11 @@ class Player extends MoveableEntity {
                         enemy.hit(this.faceDir, this.hitForce);
                     }
                 });
+                this.gameController.bullets.forEach (bullet=>{
+                    if(Collision.testBoxOnBox(this.swingBoxBounds,bullet.collisionBounds)){
+                        bullet.hit(this.faceDir, this.hitForce);
+                    }
+                });                
             }
         } else if (event.type === "up") {
             if (event.key === "w" || event.key === "s") this.moveDirection.y = 0;
@@ -66,6 +74,14 @@ class Player extends MoveableEntity {
         this.moveDirection = {x:0, y:0};
         this.camera = gameController.camera;
         this.id="player";
+        this.frameChangeCallback=(frame)=>{
+            this.spriteSheet.sprite=this.gameController.images["Images/spritemaps/complete_hero.png"];
+            if(this.takingDamage){
+                const currentTime = (new Date()).getTime();
+                (frame%2==0)?this.spriteSheet.sprite=this.gameController.images["Images/spritemaps/complete_hero_hit.png"]:this.spriteSheet.sprite=this.gameController.images["Images/spritemaps/complete_hero.png"];
+                if(currentTime > this.damageStartTime+this.damageTime) this.takingDamage=false;
+            }
+        }
     }
 
     swingBoxBounds= {x:-50,y:0,width:100,height:50};
@@ -104,5 +120,16 @@ class Player extends MoveableEntity {
             if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*25)}).col === 0) 
                 this.position.y += this.speed * this.moveDirection.y * deltaTime;
         }
+
+        this.collisionBounds.x = this.position.x - this.spriteSheet.spriteSize.width*.6;
+        this.collisionBounds.y = this.position.y - this.spriteSheet.spriteSize.height*.8;
+        this.collisionBounds.width = (this.spriteSheet.spriteSize.width*.6)*2;
+        this.collisionBounds.height = (this.spriteSheet.spriteSize.height*.8)*2;
+    }
+
+    hit(direction, force){
+        this.takingDamage = true;
+        this.damageStartTime=(new Date()).getTime();
+        console.log("hit");
     }
 }

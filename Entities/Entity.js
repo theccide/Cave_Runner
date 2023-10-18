@@ -15,7 +15,7 @@ class Entity {
     bobbingStrength = 0;
     showDebug = false;
     endAnimationCallback=null;
-    
+    frameChangeCallback=null;    
     position = {x:0, y:0};
     
     constructor (gameController, spriteSheet, position) {
@@ -60,6 +60,7 @@ class Entity {
         if (this.elapsedTime >= this.frameChangeInterval) {
             this.frame += 1;
             this.frame %= this.spriteSheet.animations[this.currentAnimation].length;
+            if(this.frameChangeCallback) this.frameChangeCallback(this.frame);
             if(this.frame == 0 ){
                  this.forcePlaying = false;// this has played at least 1 time
                  if(this.endAnimationCallback) this.endAnimationCallback();
