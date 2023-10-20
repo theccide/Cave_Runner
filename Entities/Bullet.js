@@ -20,11 +20,24 @@ class Bullet extends Entity{
                 return;
             }
         }
-        this.position.x += this.dir.x * this.speed * dt;
-        this.position.y += this.dir.y * this.speed * dt;
+
+        const dist={
+            x: this.dir.x * this.speed * dt,
+            y: this.dir.y * this.speed * dt
+        }
+
+        if(this.gameController.levelMap.findCellFrom({x:this.position.x+dist.x, y:this.position.y+dist.y}).col === 1) {
+            this.gameController.instatiate({className:"Fx", params:{fxType:fxTypes.SMOKE_POOF, destroyOnFinishAnim:true}, position:{...this.position}});
+            this.gameController.destroy(this);
+            return;
+        }
+
+        this.position.x += dist.x;
+        this.position.y += dist.y;
         this.bulletEntity.position = {...this.position}; 
         this.collisionBounds = this.bulletEntity.collisionBounds;   
         
+        // check to see if the player was hit
         if(Collision.testBoxOnBox(this.gameController.player.collisionBounds,this.collisionBounds)){
             this.gameController.player.hit(this.faceDir, this.hitForce);
             this.gameController.destroy(this);

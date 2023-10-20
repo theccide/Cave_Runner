@@ -40,6 +40,7 @@ class LargeMap extends Scene {
         screenBuffer = this.screenBufferCanvas.getContext('2d');  
 
         this.gameController.start(this);
+        this.HUD = new HUD(this.gameController);
     }
 
     drawTransition(dt){
@@ -88,7 +89,7 @@ class LargeMap extends Scene {
                 this.camera.screenWindow.width, this.camera.screenWindow.height
             );
         }
-
-        if(this.isTransitioning) this.drawTransition(dt);     
+        
+        if(this.isTransitioning) this.drawTransition(dt); else this.HUD.update(dt);
     }
 }

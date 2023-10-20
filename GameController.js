@@ -31,7 +31,11 @@ class GameController {
             "Images/spritemaps/fx.png",
             "Images/map1.png",
             "Images/lightsource.png",
-            "Images/gems.png"
+            "Images/gems.png",
+            "Images/hud.png",
+            "Images/heatlhback.png",
+            "Images/heatlhgreen.png",
+            "Images/heatlhred.png",
         ],this.imagesFinished);
 
         loadSounds(["Sounds/noise.wav"],this.soundsFinished);

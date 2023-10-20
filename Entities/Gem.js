@@ -34,8 +34,9 @@ class Gem extends Entity{
 
     brain=(dt)=>{
         if(Collision.testCircleOnCircle(this.gameController.player.position,8,this.position,8)){
+            this.gameController.player.score +=(4 - (this.gemType + 1)) * 10;
             this.gameController.destroy(this);
-            this.gameController.score+=(4 - (this.gemsType + 1));
+            // this.gameController.score+=;
         }        
     }
 }

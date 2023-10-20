@@ -96,10 +96,21 @@ class Enemy extends MoveableEntity{
         this.hitDirection = direction;
         this.autoControlAnimation = false;
         this.hitTime = (new Date()).getTime();
-        if (direction == this.directions.UP) this.hitForce.y-=force;
-        if (direction == this.directions.DOWN) this.hitForce.y+=force;
-        if (direction == this.directions.LEFT) this.hitForce.x-=force;
-        if (direction == this.directions.RIGHT) this.hitForce.x+=force;
+        if (direction == this.directions.UP) this.hitForce.y=-force;
+        if (direction == this.directions.DOWN) this.hitForce.y=force;
+        if (direction == this.directions.LEFT) this.hitForce.x=-force;
+        if (direction == this.directions.RIGHT) this.hitForce.x=force;        
+        this.forceDir={
+            x: Math.sign(this.hitForce.x),
+            y: Math.sign(this.hitForce.y)
+        }
+        this.forceDist = {
+            x: Math.abs(this.hitForce.x),
+            y: Math.abs(this.hitForce.y)
+        }   
+
+        // console.log({force, forceDir:this.forceDir, forceDist:this.forceDist});
+             
         this.hitPoints -= (force*2);
         if(this.hitPoints <= 0){
             this.gameController.destroy(this);
@@ -112,7 +123,7 @@ class Enemy extends MoveableEntity{
     runHitState=(deltaTime)=>{
         this.switchAnimation("HIT");
         const currentTime = (new Date()).getTime();
-        if(this.hitForce.x==0 && this.hitForce.y==0){
+        if(this.forceDist.x==0 && this.forceDist.y==0){
             if(currentTime > this.hitTime + 500){
                 this.state = this.states.PATROLLING;
                 this.target = null;this.path = [];
@@ -120,27 +131,20 @@ class Enemy extends MoveableEntity{
             }            
             return;
         }
-        
+
         deltaTime = 1;
-        if(this.hitForce.x > 0){
-            this.hitForce.x -= this.dragFriction * deltaTime;
-            if(this.hitForce.x < this.dragFriction) this.hitForce.x = 0;
-        }
-        if(this.hitForce.x < 0){
-            this.hitForce.x += this.dragFriction * deltaTime;
-            if(this.hitForce.x > 0 - this.dragFriction) this.hitForce.x = 0;
-        }
-        if(this.hitForce.y > 0){
-            this.hitForce.y -= this.dragFriction * deltaTime;
-            if(this.hitForce.y < this.dragFriction) this.hitForce.y = 0;
-        }
-        if(this.hitForce.y < 0){
-            this.hitForce.y += this.dragFriction * deltaTime;
-            if(this.hitForce.y > 0 - this.dragFriction) this.hitForce.y = 0;
+        this.forceDist.x = Math.max(0, this.forceDist.x-this.dragFriction);
+        this.forceDist.y = Math.max(0, this.forceDist.y-this.dragFriction);
+        const newLocation ={
+            x: this.forceDist.x * this.forceDir.x,
+            y: this.forceDist.y * this.forceDir.y
         }
 
-        this.position.x += this.hitForce.x;
-        this.position.y += this.hitForce.y;        
+        // console.log({x:this.forceDist.x,y:this.forceDist.y});
+        if(this.gameController.levelMap.findCellFrom({x:this.position.x+newLocation.x, y:this.position.y+newLocation.y}).col === 0) {
+            this.position.x += newLocation.x;
+            this.position.y += newLocation.y;    
+        }
     }
 
     runChasingState=(deltaTime)=>{

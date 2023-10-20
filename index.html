@@ -23,6 +23,7 @@
     <script src="Player.js"></script>
     <script src="LevelMap.js"></script>
     <script src="Camera.js"></script>
+    <script src="HUD.js"></script>
     <script src="GameController.js"></script>
     <script src="Scences/MainGame.js"></script>
     <script src="Scences/Logo.js"></script>
@@ -44,8 +45,8 @@
         screenBuffer.canvas.height = window.innerHeight;        
         screenBuffer.imageSmoothingEnabled= false;
 
-        let currentScene = new Logo();  
-        // let currentScene = new LargeMap();
+        // let currentScene = new Logo();  
+        let currentScene = new LargeMap();
         let lastTimestamp = 0; // Store the timestamp of the previous frame
 
         function changeScene (scene) {

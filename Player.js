@@ -5,6 +5,8 @@ class Player extends MoveableEntity {
     takingDamage = false;
     damageTime = 2000;
     damageStartTime = 0;
+    score = 0;
+    hp = 5;
 
     getMouseInput = (event) => {}
     getMouseMoveInput = (event) => {}
@@ -130,6 +132,10 @@ class Player extends MoveableEntity {
     hit(direction, force){
         this.takingDamage = true;
         this.damageStartTime=(new Date()).getTime();
+        this.hp -= 1;
+        if(this.hp <= 0){
+            this.hp = 0;
+        }
         console.log("hit");
     }
 }
