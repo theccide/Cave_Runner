@@ -126,7 +126,8 @@ class Player extends MoveableEntity {
         let triggerID = this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y}).col;
         if(triggerID !=0 && triggerID != 1){
             let trigger = this.gameController.triggers.find(trigger=>trigger.id == triggerID);
-            console.log("trigger",trigger.name);
+            this.gameController.runTrigger(trigger);
+            // console.log("trigger",trigger.code);
         }
 
         this.collisionBounds.x = this.position.x - this.spriteSheet.spriteSize.width*.6;
@@ -136,6 +137,7 @@ class Player extends MoveableEntity {
     }
 
     hit(direction, force){
+        if(this.takingDamage) return;
         this.takingDamage = true;
         this.damageStartTime=(new Date()).getTime();
         this.hp -= 1;

@@ -58,7 +58,8 @@
                     "x": 782,
                     "y": 290
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "H4HplZms",
@@ -78,7 +79,8 @@
                     "x": 212,
                     "y": 1187
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "0wyaO5aH",
@@ -98,7 +100,8 @@
                     "x": 1937,
                     "y": 1103
                 }
-            ]
+            ],
+            "hidden": false
         }
     ],
     "torches": [
@@ -112,7 +115,8 @@
                     "x": 253,
                     "y": 164
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "pDqFczpl",
@@ -124,7 +128,8 @@
                     "x": 222,
                     "y": 294
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "aNNPurjb",
@@ -136,7 +141,8 @@
                     "x": 386,
                     "y": 387
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "TnEX9BdS",
@@ -148,7 +154,8 @@
                     "x": 1891,
                     "y": 759
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "axDSp8xD",
@@ -160,7 +167,8 @@
                     "x": 1968,
                     "y": 889
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "U5K4CblP",
@@ -172,7 +180,8 @@
                     "x": 357,
                     "y": 104
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "OqAJmmFi",
@@ -184,7 +193,8 @@
                     "x": 362,
                     "y": 248
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "fmo3hxGr",
@@ -196,7 +206,8 @@
                     "x": 465,
                     "y": 252
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "WbpTI68S",
@@ -208,7 +219,8 @@
                     "x": 602,
                     "y": 314
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "vBixMehN",
@@ -220,7 +232,8 @@
                     "x": 1966,
                     "y": 1234
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "RqwVXqq7",
@@ -232,7 +245,8 @@
                     "x": 1960,
                     "y": 1300
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "g9Qav7A8",
@@ -244,7 +258,8 @@
                     "x": 2734,
                     "y": 1314
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "7Wft3zp6",
@@ -256,7 +271,8 @@
                     "x": 2737,
                     "y": 757
                 }
-            ]
+            ],
+            "hidden": false
         }
     ],
     "gems": [
@@ -270,7 +286,8 @@
                     "x": 1062,
                     "y": 115
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "WgKp4Op8",
@@ -282,7 +299,8 @@
                     "x": 1172,
                     "y": 110
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "5AM0w7cB",
@@ -294,7 +312,8 @@
                     "x": 761,
                     "y": 299
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "DNx6CMUh",
@@ -306,7 +325,8 @@
                     "x": 752,
                     "y": 376
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "DRlzvsSS",
@@ -318,7 +338,8 @@
                     "x": 962,
                     "y": 668
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "KV8NGEqa",
@@ -330,7 +351,8 @@
                     "x": 1043,
                     "y": 678
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "4oZyLq12",
@@ -342,7 +364,8 @@
                     "x": 768,
                     "y": 60
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "eWA4iqvd",
@@ -354,7 +377,8 @@
                     "x": 755,
                     "y": 94
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "j419PKf4",
@@ -366,7 +390,8 @@
                     "x": 792,
                     "y": 125
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "aVLwMiKb",
@@ -378,7 +403,8 @@
                     "x": 793,
                     "y": 83
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "WOTKgiPG",
@@ -390,7 +416,8 @@
                     "x": 757,
                     "y": 123
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "EywQUQDb",
@@ -402,7 +429,8 @@
                     "x": 446,
                     "y": 60
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "E3bkjQG7",
@@ -414,7 +442,8 @@
                     "x": 437,
                     "y": 133
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "7kU6YOpf",
@@ -426,7 +455,8 @@
                     "x": 486,
                     "y": 137
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "XqXbBTYx",
@@ -438,7 +468,8 @@
                     "x": 478,
                     "y": 94
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "zqHthZUe",
@@ -450,7 +481,8 @@
                     "x": 489,
                     "y": 63
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "r2iNBZha",
@@ -462,7 +494,8 @@
                     "x": 1274,
                     "y": 75
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "mfLnNire",
@@ -474,7 +507,8 @@
                     "x": 1346,
                     "y": 73
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "wS1HRYnq",
@@ -486,7 +520,8 @@
                     "x": 1387,
                     "y": 74
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "duJVocmC",
@@ -498,7 +533,8 @@
                     "x": 1464,
                     "y": 57
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "c3Y8fEvz",
@@ -510,7 +546,8 @@
                     "x": 1517,
                     "y": 57
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "SflK56E4",
@@ -522,7 +559,8 @@
                     "x": 1547,
                     "y": 60
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "mbHhTfqW",
@@ -534,7 +572,8 @@
                     "x": 1562,
                     "y": 134
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "NavVYU88",
@@ -546,7 +585,8 @@
                     "x": 1553,
                     "y": 191
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "jKQIkbR9",
@@ -558,7 +598,8 @@
                     "x": 1497,
                     "y": 200
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "eh1x8qas",
@@ -570,7 +611,8 @@
                     "x": 1467,
                     "y": 158
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "TTVrAzjR",
@@ -582,7 +624,8 @@
                     "x": 1388,
                     "y": 120
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "ayPt8dQJ",
@@ -594,7 +637,8 @@
                     "x": 1382,
                     "y": 173
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "APz2j4r6",
@@ -606,7 +650,8 @@
                     "x": 1337,
                     "y": 195
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "aO5LPLHw",
@@ -618,7 +663,8 @@
                     "x": 1284,
                     "y": 195
                 }
-            ]
+            ],
+            "hidden": false
         },
         {
             "id": "iEJz087s",
@@ -630,7 +676,21 @@
                     "x": 1277,
                     "y": 134
                 }
-            ]
+            ],
+            "hidden": false
+        },
+        {
+            "id": "Qdm3Sewn",
+            "x": 680,
+            "y": 54,
+            "type": 0,
+            "wp": [
+                {
+                    "x": 680,
+                    "y": 54
+                }
+            ],
+            "hidden": true
         }
     ]
 }

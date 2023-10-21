@@ -5,6 +5,7 @@ class GameController {
     scripts = {};
     entities = [];
     enemies = [];
+    spikeTraps = [];
     bullets = [];
     resouncesReady = false;
     levelMap = {};
@@ -13,6 +14,8 @@ class GameController {
     entitiesToRemove = [];
     entitiesToInstatiate = [];
     triggers = [];
+    triggerEntityMap = {};
+    hiddenObjectDef = {};
 
     getMouseInput=(event)=>{if(this.player) this.player.getMouseInput(event);}    
     getMouseMoveInput=(event)=>{if(this.player) this.player.getMouseMoveInput(event);}
@@ -104,19 +107,73 @@ class GameController {
                 );                
             }            
         }
+
+        const removeHiddenObjects=(objs,entityType)=> {        
+            return objs.filter(obj => {                
+                if (obj?.hidden) {
+                    obj["entityType"]=entityType;
+                    obj["type"]=obj.type;
+                    this.hiddenObjectDef[obj.id] = obj;
+                    return false;
+                }
+                return true;
+            });        
+        }
+
         this.triggers = this.scripts["resources/scripts/triggers.json"];
+        this.triggers.forEach(trigger=>{
+            if(trigger.entity)
+                this.triggerEntityMap[trigger.id]=trigger;
+        });
+        
         const objLocations = this.scripts["resources/scripts/objects.json"];
-        objLocations.gems.forEach(obj=>this.entities.push(new Gem(this, obj.type,{x:obj.x,y:obj.y})));
-        objLocations.torches.forEach(obj=>this.entities.push(new Torch(this, ["thin","thick"][obj.type],{x:obj.x,y:obj.y})));
-        objLocations.enemies.forEach(obj=>{
+        removeHiddenObjects(objLocations.gems, "Gem").forEach(obj=>this.entities.push(new Gem(this, obj.type,{x:obj.x,y:obj.y})));
+        removeHiddenObjects(objLocations.torches, "Torch").forEach(obj=>this.entities.push(new Torch(this, ["thin","thick"][obj.type],{x:obj.x,y:obj.y})));
+        removeHiddenObjects(objLocations.enemies, "Enemy").forEach(obj=>{
             let enemy = buildEnemy(obj);
             this.entities.push(enemy);
             this.enemies.push(enemy);
-        });
+        });        
         // this.entities.push(new MiniBoss(this, {x:400,y:200}));
 
         this.player = new Player(this);
+        this.addTriggerEntities()
         this.resouncesReady = true;
+    }
+
+    addTriggerEntities(){
+        const createSpikes=(x,y)=>{
+            const trap = new SpikeTrap(this, {x, y});
+            this.spikeTraps.push(trap);
+            this.entities.push(trap);
+        }
+
+        for(let i_row=0; i_row<this.levelMap.grid.numRows; i_row++){
+            for(let i_col=0; i_col<this.levelMap.grid.numCols; i_col++){
+                const col = this.levelMap.grid.matrix[i_row][i_col];
+                if(col in this.triggerEntityMap){
+                    if(this.triggerEntityMap[col].entity=="spikes") createSpikes((i_col*32)+16,(i_row*32)+16);
+                }
+            }
+        }
+    }
+
+    runTrigger(trigger){ eval(trigger.code); }
+
+    runSpikes(self){ if(self.spikeTraps[0].isUP) this.player.hit(0,0); }
+    
+    spawn(self, id, removeTrigger){
+        if(removeTrigger){
+            self.levelMap.switchCellValue({x:self.player.position.x, y:self.player.position.y},0);
+        }
+        let obj = self.hiddenObjectDef[id];
+        if(obj.entityType == "Gem") self.entities.push(new Gem(self, obj.type,{x:obj.x,y:obj.y}));
+        if(obj.entityType == "Torch") self.entities.push(new Torch(self, ["thin","thick"][obj.type],{x:obj.x,y:obj.y}));
+        if(obj.entityType == "Enemy") {
+            let enemy = buildEnemy(obj);
+            self.entities.push(enemy);
+            self.enemies.push(enemy);            
+        }
     }
 
     destroy=(entity)=>{

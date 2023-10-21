@@ -20,6 +20,14 @@ class LevelMap{
         "#FF00007F"
     ];
 
+    switchCellValue(pos, value){
+        let pointX = pos.x - this.bounds.x;
+        let pointY = pos.y - this.bounds.y;
+        let x =  Math.floor((pointX/this.bounds.width)*this.grid.numCols);
+        let y =  Math.floor((pointY/this.bounds.height)*this.grid.numRows);
+        this.grid.matrix[y][x] = value;
+    }
+
     findCellFrom=(pos)=>{
         let pointX = pos.x - this.bounds.x;
         let pointY = pos.y - this.bounds.y;

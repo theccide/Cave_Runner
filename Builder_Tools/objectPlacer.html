@@ -20,6 +20,9 @@
         <select id="objectDropdown"></select>
         <select id="typeDropdown"></select>
         <label class="large-font">
+            <input type="checkbox" id="hideCheckbox"> Hide In Game
+        </label>        
+        <label class="large-font">
             <input type="checkbox" id="eraseCheckbox"> Erase Mode
         </label>
         <label class="large-font">
@@ -110,6 +113,7 @@
         }
         // Populate the object dropdown
         const objectDropdown = document.getElementById('objectDropdown');
+        const hiddenCheckbox = document.getElementById('hideCheckbox');
         for (let objectName in objectTypes) {
             const option = document.createElement('option');
             option.value = objectName;
@@ -142,7 +146,8 @@
                 objectName: objectDropdown.value, 
                 objectID: objectDropdown.selectedIndex,
                 typeName: typeDropdown.value, 
-                typeID: typeDropdown.selectedIndex                
+                typeID: typeDropdown.selectedIndex,
+                isHidden: hiddenCheckbox.checked
             };
             currentObject = null;
         }
@@ -213,6 +218,9 @@
             let dropdownType = document.getElementById('typeDropdown'); 
             dropdownType.addEventListener('change', updateTypeDropdown);
 
+            hiddenCheckbox.addEventListener('change', function() {
+                workingObject.isHidden = this.checked;
+            });
             document.getElementById('saveFileButton').addEventListener('click', function() {
                 saveAsJSONFile();
             });            
@@ -233,6 +241,7 @@
 
         const getMouseInput=(event)=>{ 
             let type = workingObject.typeID;
+            let hidden = workingObject.isHidden;
             if(event.type === "down"){                        
                 if(eraseMode){ // Find objects at or near the event's position and remove them
                     if(!waypointMode){ // remove an object
@@ -256,7 +265,7 @@
                 if(!eraseMode) {
                     if(!waypointMode){
                         if(!selectionMode){ // add an object
-                            let obj = {id: generateRandomId(8), x: Math.round(event.position.x), y:Math.round(event.position.y), type, wp:[{x: Math.round(event.position.x), y:Math.round(event.position.y)}]};
+                            let obj = {id: generateRandomId(8), x: Math.round(event.position.x), y:Math.round(event.position.y), type, wp:[{x: Math.round(event.position.x), y:Math.round(event.position.y)}], hidden};
                             currentObject = obj;                        
                             objectList[workingObject.objectName].push(obj);
                         }
@@ -265,6 +274,7 @@
                                 const objPosition = objectList[workingObject.objectName][i];
                                 if (isCloseEnough(event.position, objPosition)) {
                                     currentObject = objectList[workingObject.objectName][i];
+                                    hiddenCheckbox.checked = currentObject.hidden;
                                 }
                             }
                         }
