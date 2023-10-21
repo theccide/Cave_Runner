@@ -11,12 +11,78 @@
     <script src="../Jam_Engine/Grid.js"></script>
     <script src="../Jam_Engine/AStar.js"></script>
     <script src="CollisionBuilder.js"></script>
+
+    <style>
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 9999;
+        }
+        .modal-content {
+            background-color: #f4f4f4;
+            margin: 15% auto;
+            padding: 20px;
+            width: 30%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+    </style>    
 </head>
 <body>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <label for="textInput">Name:</label> <input type="text" id="nameInput" placeholder="Trigger Name">
+            <p>
+                <label for="textInput">Enter Text:</label> <input type="text" id="codeInput" placeholder="Trigger Code">
+                <input type="hidden" id="id">
+                <label for="dropdown">Use Entity:</label>
+                <select id="dropdown">
+                    <option value="NONE">None</option>
+                    <option value="button">Button</option>
+                    <option value="spikes">Spikes</option>
+                </select>
+            </p>
+            
+            <p>Choose Color: <input id="colorPicker" type="color" value="#ff0000" /></p>
+            <p>Letter: <input id="letterPicker" type="text" /></p>
+
+            <p><button onclick="saveModal()">Save</button> <button onclick="closeModal()">Close</button></p>
+        </div>
+    </div>
+
     <canvas id="myCanvas" width="2200" height="1000"></canvas>
-    <button id="playButton"></button>
 
     <script>
+        function saveModal() {
+            id = (worldMap.triggers.length+1)+4;
+            
+            if(document.getElementById('id').value != "-1")
+                id = Number(document.getElementById('id').value);
+
+            console.log("id",id);
+
+            worldMap.addTrigger({
+                id,
+                name: document.getElementById('nameInput').value,
+                color: document.getElementById("colorPicker").value,
+                code: document.getElementById('codeInput').value,
+                entity: document.getElementById('dropdown').value,
+                letter: document.getElementById('letterPicker').value
+            },
+                document.getElementById('id').value == "-1"
+            );
+            document.getElementById('myModal').style.display = 'none';
+            requestAnimationFrame(gameLoop);
+        }
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+            requestAnimationFrame(gameLoop);
+        }
         const canvas = document.getElementById('myCanvas');
         const ctx = canvas.getContext('2d');
         const backBuffer = canvas.getContext('2d');
@@ -42,15 +108,18 @@
 
             ctx.clearRect(0, 0, WIDTH, HEIGHT);
             drawBox(backBuffer, 0,0, WIDTH, HEIGHT,'black'); 
-            drawImageFrom00(backBuffer, images["Images/map1Grid.png"],200,0,1888,928);
+            drawImageFrom00(backBuffer, images["Images/map1.png"],200,0,1888,928);
             update(dt);
 
-            requestAnimationFrame(gameLoop);
+            //requestAnimationFrame(gameLoop);
         }
 
-        const getMouseInput=(event)=>{ worldMap.getMouseInput(event);}    
-        const getMouseMoveInput=(event)=>{worldMap.getMouseMoveInput(event);}
-        const getKeyboardInput=(event)=>{console.log(event);}
+        const getMouseInput=(event)=>{ worldMap.getMouseInput(event);requestAnimationFrame(gameLoop);}    
+        const getMouseMoveInput=(event)=>{
+            worldMap.getMouseMoveInput(event);
+            
+        }
+        const getKeyboardInput=(event)=>{}
 
         const finishedLoading = (loadedImages) => {
             console.log('loaded');
@@ -58,9 +127,9 @@
             requestAnimationFrame(gameLoop);
         }
 
-        loadImages(["Images/map1Grid.png"],finishedLoading);
+        loadImages(["Images/map1.png"],finishedLoading);
         
     </script>
-    <script src="Jam_Engine/InputHandler.js"></script>
+    <script src="../Jam_Engine/InputHandler.js"></script>
 </body>
 </html>

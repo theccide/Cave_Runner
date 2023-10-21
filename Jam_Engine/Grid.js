@@ -1,10 +1,11 @@
 class Grid{
     colors=['black','blue']
+    letters=[""];
     bounds = {x:0,y:0,width:0,height:0}
     matrix = [];
     cellWidth = 0; 
     cellHeight= 0;
-    showBorders = false;
+    showBorders = false;    
 
     getMouseInput(position){
         if(position.x < this.bounds.x || position.x > this.bounds.x+this.bounds.width ||
@@ -52,17 +53,32 @@ class Grid{
             }
         }
     }
+    overlayMatrix(other){
+        for(let i_row=0; i_row<this.numRows; i_row++){
+            for(let i_col=0; i_col<this.numCols; i_col++){
+                if(other[i_row][i_col]!=0)
+                this.matrix[i_row][i_col] = other[i_row][i_col];
+            }
+        }
+    }
 
     update(delta){
         for(let i_row=0; i_row<this.numRows; i_row++){
             for(let i_col=0; i_col<this.numCols; i_col++){
                 drawBox(
-                    (typeof backbuffer !== 'undefined')?backbuffer:currentScene.backBuffer, 
+                    (typeof backBuffer !== 'undefined')?backBuffer:currentScene.backBuffer, 
                     Math.floor(this.bounds.x+(i_col*this.cellWidth)), 
                     Math.floor(this.bounds.y+(i_row*this.cellHeight)), 
                     Math.ceil(this.cellWidth), 
                     Math.ceil(this.cellHeight), 
                     this.colors[this.matrix[i_row][i_col]]);
+                if(this.letters[this.matrix[i_row][i_col]])
+                    drawText(
+                        (typeof backBuffer !== 'undefined')?backBuffer:currentScene.backBuffer, 
+                        Math.floor(this.bounds.x+(i_col*this.cellWidth)-5+this.cellWidth/2), 
+                        Math.floor(this.bounds.y+(i_row*this.cellHeight)+5+this.cellHeight/2), 
+                        this.letters[this.matrix[i_row][i_col]],10, "white"
+                    )
                 if(this.showBorders)
                     drawBox(backBuffer, this.bounds.x+(i_col*this.cellWidth), this.bounds.y+i_row*this.cellHeight, this.cellWidth, this.cellHeight, 'grey',{outline:true, thickness:1});
             }

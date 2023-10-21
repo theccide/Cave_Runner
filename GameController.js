@@ -12,6 +12,7 @@ class GameController {
     currentScene = null;
     entitiesToRemove = [];
     entitiesToInstatiate = [];
+    triggers = [];
 
     getMouseInput=(event)=>{if(this.player) this.player.getMouseInput(event);}    
     getMouseMoveInput=(event)=>{if(this.player) this.player.getMouseMoveInput(event);}
@@ -40,10 +41,13 @@ class GameController {
 
         loadSounds(["Sounds/noise.wav"],this.soundsFinished);
         if(localStorage.getItem('objectModel')){
-            this.jsonsFinished({"resources/scripts/objects.json":JSON.parse(localStorage.getItem('objectModel'))});
+            this.jsonsFinished({
+                "resources/scripts/objects.json":JSON.parse(localStorage.getItem('objectModel')),
+                "resources/scripts/triggers.json":JSON.parse(localStorage.getItem('triggers'))
+            });
         }
         else
-        loadJSONs(["resources/scripts/objects.json"], this.jsonsFinished);
+        loadJSONs(["resources/scripts/objects.json","resources/scripts/triggers.json"], this.jsonsFinished);
     }
 
     imagesFinished=(loadedImages)=>{
@@ -100,7 +104,7 @@ class GameController {
                 );                
             }            
         }
-                   
+        this.triggers = this.scripts["resources/scripts/triggers.json"];
         const objLocations = this.scripts["resources/scripts/objects.json"];
         objLocations.gems.forEach(obj=>this.entities.push(new Gem(this, obj.type,{x:obj.x,y:obj.y})));
         objLocations.torches.forEach(obj=>this.entities.push(new Torch(this, ["thin","thick"][obj.type],{x:obj.x,y:obj.y})));

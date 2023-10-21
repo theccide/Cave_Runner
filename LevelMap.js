@@ -2,7 +2,8 @@ let mapData={
     map4:"eJztzUEJAAAIBLBCPuwj17+GYAk/YwE20/Ug5fV6vV6v1+v1er3ee7Ml43xn",
     map2:"eJzNlk0OhSAMhC/EQs5juP81NG4etJ3+YepLFyQI/aZTUM+ztw9itJt7lMc/ct/21l8v2rVV6ZPL4/O7dD935ddzae1dnLM6TLneEzFrWMdcvXEHETdab9xpeSbOtVb/Rs1DTMZc7GVvFtXWpXFXfZTr77rWI5k7Z8hyrfskcztTUcPl1Vdw597WcdcMe+fKz2XPCdd7j7SbfDAuVp97b8hkykWeWHnQak1j/Xffz91mqD5XBeJqnZP+NzzrhAhzmXKhmgw37Fhu78P9IMa4AHSNfxY=",
     map3:"eJyLjjbUGQAYqwO014DucNTeUXsHxl7auGrU3sFjLwLS017awFF7R+0dtXfU3lF7R+0dtXcg+kexAA+mfR0=",
-    map1:"eJztmEsOgzAMRC/EIjkPyv2v0QpUlQT/JqGRXUVelGDjPEZ0cLvvaUtbjhNlO4hP6lRFu7bUZPKY6kSdzcyq6noQ525iWx4lbnnuxPE0/h/iT1D7eSSWKXwTS0HXtkdIX2XPN3H9DZVCr+itttdaNPZHHE/jRbyIKeKrG9G+ZXG2b11q8viE1l5HayzdtXUqGnmDGKsGiLWr/BH71Fh+Zn0SU7lFjBPfvYVf8RMZ51M9vsb34zXW71fzZ8u8jccYcR+JX+J4Gmu/aeIQW7K/Iday/ohjaIy4mUbc9zRjxBihpS/O/DyxPPHrXWYQo++8+cS5+eT2XsQjxE94xVxi23mbu0UixnZdxDGJsToPxDM1DhWX/+iDRCkvyCWStA=="
+    map1:"eJztmEsOgzAMRC/EIjkPyv2v0QpUlQT/JqGRXUVelGDjPEZ0cLvvaUtbjhNlO4hP6lRFu7bUZPKY6kSdzcyq6noQ525iWx4lbnnuxPE0/h/iT1D7eSSWKXwTS0HXtkdIX2XPN3H9DZVCr+itttdaNPZHHE/jRbyIKeKrG9G+ZXG2b11q8viE1l5HayzdtXUqGnmDGKsGiLWr/BH71Fh+Zn0SU7lFjBPfvYVf8RMZ51M9vsb34zXW71fzZ8u8jccYcR+JX+J4Gmu/aeIQW7K/Iday/ohjaIy4mUbc9zRjxBihpS/O/DyxPPHrXWYQo++8+cS5+eT2XsQjxE94xVxi23mbu0UixnZdxDGJsToPxDM1DhWX/+iDRCkvyCWStA==",
+    map1Extras: "eJztzsEJgEAMAMGG8jCgNhPSfxuCCD7MwwPjXY5l/8uYqagsdXKxP7xrEGLEiBFXFUfOuNnFWV7EiOcSf3pFXFK8nSHOFN8hzhen9EK89zY2iwcLMWLEiJPEeoUY8dOMOFPcNcSIESNGPEbuB2/hk7k="
 };
 
 class LevelMap{
@@ -58,6 +59,7 @@ class LevelMap{
         this.grid = new Grid(this, 44, 88, {...this.bounds});
         this.grid.colors = this.colors;
         this.grid.matrix = Tools.decompressArray(mapData.map1);
+        this.grid.overlayMatrix(Tools.decompressArray(mapData.map1Extras));
         this.aStar = new AStarGrid();
 
         this.mob={x:2,y:2};

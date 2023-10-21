@@ -112,15 +112,21 @@ class Player extends MoveableEntity {
             this.camera.offWindow.y = this.position.y - this.camera.screenWindow.height / 2;
         
         // collison detection
-        if(this.gameController.levelMap.findCellFrom({x:this.position.x+(this.moveDirection.x*10), y:this.position.y}).col === 0) 
+        if(this.gameController.levelMap.findCellFrom({x:this.position.x+(this.moveDirection.x*10), y:this.position.y}).col !== 1) 
             this.position.x += this.speed * this.moveDirection.x * deltaTime;
         if(this.moveDirection.y < 0) {
-            if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*15)}).col === 0) 
+            if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*15)}).col !== 1) 
                 this.position.y += this.speed * this.moveDirection.y * deltaTime;
         }
         else {
-            if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*25)}).col === 0) 
+            if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*25)}).col !== 1) 
                 this.position.y += this.speed * this.moveDirection.y * deltaTime;
+        }
+
+        let triggerID = this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y}).col;
+        if(triggerID !=0 && triggerID != 1){
+            let trigger = this.gameController.triggers.find(trigger=>trigger.id == triggerID);
+            console.log("trigger",trigger.name);
         }
 
         this.collisionBounds.x = this.position.x - this.spriteSheet.spriteSize.width*.6;
