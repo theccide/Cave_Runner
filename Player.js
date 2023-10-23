@@ -103,8 +103,8 @@ class Player extends MoveableEntity {
 
         this.drawSprite(deltaTime);
 
-        const halfScreenWidth = (screenBuffer.canvas.width/2);
-        const halfScreenHeight = (screenBuffer.canvas.height/2);
+        const halfScreenWidth = (screenBuffer.canvas.width/(this.gameController.camera.zoom*2));
+        const halfScreenHeight = (screenBuffer.canvas.height/(this.gameController.camera.zoom*2));
 
         if(this.position.x>halfScreenWidth && this.position.x<(this.camera.offWindow.width-halfScreenWidth))
         this.camera.offWindow.x = this.position.x - this.camera.screenWindow.width / 2;

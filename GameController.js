@@ -16,6 +16,7 @@ class GameController {
     triggers = [];
     triggerEntityMap = {};
     hiddenObjectDef = {};
+    sequencer=null;
 
     getMouseInput=(event)=>{if(this.player) this.player.getMouseInput(event);}    
     getMouseMoveInput=(event)=>{if(this.player) this.player.getMouseMoveInput(event);}
@@ -32,6 +33,7 @@ class GameController {
             "Images/spritemaps/torch.png",
             "Images/spritemaps/torch2.png",
             "Images/spritemaps/miniboss.png",
+            "Images/spritemaps/boss.png",
             "Images/spritemaps/fx.png",
             "Images/map1.png",
             "Images/lightsource.png",
@@ -134,10 +136,13 @@ class GameController {
             this.entities.push(enemy);
             this.enemies.push(enemy);
         });        
-        // this.entities.push(new MiniBoss(this, {x:400,y:200}));
+        
+        // this.entities.push(new Boss(this, {x:400,y:800}));
 
         this.player = new Player(this);
-        this.addTriggerEntities()
+        this.addTriggerEntities();
+
+        this.sequencer = new Sequencer(this);        
         this.resouncesReady = true;
     }
 
@@ -162,17 +167,52 @@ class GameController {
 
     runSpikes(self){ if(self.spikeTraps[0].isUP) this.player.hit(0,0); }
     
-    spawn(self, id, removeTrigger){
+
+    triggerPlaySequence(self, sequenceName, removeTrigger){
         if(removeTrigger){
             self.levelMap.switchCellValue({x:self.player.position.x, y:self.player.position.y},0);
         }
-        let obj = self.hiddenObjectDef[id];
-        if(obj.entityType == "Gem") self.entities.push(new Gem(self, obj.type,{x:obj.x,y:obj.y}));
-        if(obj.entityType == "Torch") self.entities.push(new Torch(self, ["thin","thick"][obj.type],{x:obj.x,y:obj.y}));
-        if(obj.entityType == "Enemy") {
-            let enemy = buildEnemy(obj);
+        this.playSequence(self, sequenceName);
+    }
+
+    playSequence(self, sequenceName){
+        console.log("playing sequence: "+sequenceName);
+        self.sequencer.startSequence(sequenceName);
+    }
+
+    triggerSpawn(self, id, removeTrigger){
+        if(removeTrigger){
+            self.levelMap.switchCellValue({x:self.player.position.x, y:self.player.position.y},0);
+        }
+        this.spawnFromOjectDefID(self, id);
+    }
+
+    spawnFromOjectDefID(self, id){
+        let objdef = self.hiddenObjectDef[id];
+        this.spawn(objdef)
+    }
+
+    spawn(self, objDef){
+        if(objDef.entityType == "Gem"){ 
+            let gem = (objDef.pos) ? new Gem(self, obj.type,{x:objDef.pos.x,y:objDef.pos.y}) : new Gem(self, obj.type,{x:objDef.x,y:objDef.y});
+            self.entities.push(gem);
+            return gem;
+        };
+        if(objDef.entityType == "Torch") {
+            let torch = (objDef.pos) ? new Torch(self, objDef.type,{x:objDef.pos.x,y:objDef.pos.y}) : new Torch(self, ["thin","thick"][objDef.type],{x:objDef.x,y:objDef.y});
+            self.entities.push(torch);
+            return torch;
+        }
+        if(objDef.entityType == "Boss") {
+            let boss = (objDef.pos) ? new Boss(self, {x:objDef.pos.x,y:objDef.pos.y}) : new Boss(self, {x:objDef.x,y:objDef.y});
+            self.entities.push(boss);
+            return boss;
+        }
+        if(objDef.entityType == "Enemy") {
+            let enemy = buildEnemy(objDef);
             self.entities.push(enemy);
-            self.enemies.push(enemy);            
+            self.enemies.push(enemy);
+            return enemy;
         }
     }
 
@@ -196,6 +236,8 @@ class GameController {
 
     update = (deltaTime) => {        
         if(!this.resouncesReady) return;
+
+        this.sequencer.update(deltaTime);
 
         if(this.entitiesToRemove.length != 0){
             this.entitiesToRemove.forEach(entity=>{

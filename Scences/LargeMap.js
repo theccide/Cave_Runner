@@ -36,26 +36,16 @@ class LargeMap extends Scene {
         this.blackCanvas = createBufferedImage(this.mapSize.width, this.mapSize.height);
         this.blackBuffer = this.blackCanvas.getContext('2d');  
         
-        this.screenBufferCanvas = createBufferedImage(canvas.width, canvas.height);
-        screenBuffer = this.screenBufferCanvas.getContext('2d');  
-
         this.gameController.start(this);
         this.HUD = new HUD(this.gameController);
     }
 
     drawTransition(dt){
-        if(this.transitionCrop > 0) this.transitionCrop-=4;
-
-        drawImageSpriteFrom00(copyScreenBuffer, this.screenBufferCanvas,
-           this.transitionCrop,this.transitionCrop/2,
-            this.screenBufferCanvas.width-(this.transitionCrop*2), this.screenBufferCanvas.height-(this.transitionCrop),
-            0,0,canvas.width, canvas.height
-        ); 
-
-        if(this.transitionCrop <= 0){
+        this.gameController.camera.setZoom(this.gameController.camera.zoom - 2*dt);
+        if(this.gameController.camera.zoom <= 1){
+            this.gameController.camera.zoom = 1;
             this.isTransitioning = false;
-            screenBuffer = copyScreenBuffer;
-        }        
+        }
     }
     
     update(dt){
@@ -83,13 +73,14 @@ class LargeMap extends Scene {
             });
 
             drawImageSpriteFrom00(screenBuffer, this.blackCanvas,
-                this.camera.offWindow.x, this.camera.offWindow.y,
-                this.camera.screenWindow.width, this.camera.screenWindow.height,
+                this.camera.offWindow.x+this.camera.scaledWindow.x, this.camera.offWindow.y+this.camera.scaledWindow.y,
+                this.camera.scaledWindow.width, this.camera.scaledWindow.height,
                 this.camera.screenWindow.x, this.camera.screenWindow.y, 
                 this.camera.screenWindow.width, this.camera.screenWindow.height
             );
         }
         
-        if(this.isTransitioning) this.drawTransition(dt); else this.HUD.update(dt);
+        if(this.isTransitioning) this.drawTransition(dt);
+        this.HUD.update(dt);
     }
 }
