@@ -22,8 +22,7 @@ class Enemy extends MoveableEntity{
     dragFriction = 1;
     
     constructor(gameController, id, spriteSheet, position, searchingWaypoints) {
-        super(gameController, spriteSheet, position);
-        this.id = id;
+        super(gameController, id, spriteSheet, position);
         this.searchingWaypoints = searchingWaypoints;
     }
 

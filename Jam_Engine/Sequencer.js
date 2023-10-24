@@ -1,45 +1,60 @@
 const testSequence = [
-    {command:"Camera", params:{zoom:3}},
+    {command:"Player", params:{controls:false}},
+    {command:"Camera", params:{zoom:2,time:1000}},
     {command:"Delay", params:{delayTime:10}},
     {command:"Camera", params:{detach:"Player"}},
-    {command:"Player", params:{controls:false}},
     {command:"Player", params:{keyPressed:"s",time:500}},
     {command:"Spawn", params:{entityType:"Fx", fxType:"5", destroyOnFinishAnim: true, pos:{x: 525, y: 692}}},
+    {command:"Delay", params:{delayTime:1000}},
 
+    {command:"Spawn", params:{entityType:"Torch", id:"torch1", type:"thick",pos:{"x":54,"y":740}}},
     {command:"Camera", params:{moveTo:{"x":54,"y":740}}},
-    {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":54,"y":740}}},
+    // {command:"Camera", params:{attachToEnity:"torch1"}},
+    {command:"Delay", params:{delayTime:500}},
 
+    // {command:"Camera", params:{detach:"torch1"}},
+    // {command:"Delay", params:{delayTime:500}},
+    // {command:"Spawn", params:{entityType:"Torch", id:"torch2",type:"thick",pos:{"x":640,"y":730}}},
+    // {command:"Camera", params:{attachToEnity:"torch2"}},
+
+    // {command:"Camera", params:{detach:"torch2"}},
+    // {command:"Delay", params:{delayTime:500}},
+    // {command:"Spawn", params:{entityType:"Torch", id:"torch3",type:"thick",pos:{"x":818,"y":1096}}},
+    // {command:"Camera", params:{attachToEnity:"torch3"}},
+
+    // {command:"Camera", params:{detach:"torch3"}},
+    // {command:"Delay", params:{delayTime:500}},
+    // {command:"Spawn", params:{entityType:"Torch", id:"torch4",type:"thick",pos:{"x":235,"y":1324}}},
+    // {command:"Camera", params:{attachToEnity:"torch4"}},
+
+    // {command:"Camera", params:{detach:"torch4"}},
+    // {command:"Delay", params:{delayTime:500}},
+    // {command:"Spawn", params:{entityType:"Torch", id:"torch5",type:"thick",pos:{"x":59,"y":881}}},
+    // {command:"Camera", params:{attachToEnity:"torch5"}},
+
+    // {command:"Camera", params:{detach:"torch4"}},
+    // {command:"Delay", params:{delayTime:500}},
+    // {command:"Spawn", params:{entityType:"Boss", id:"Boss",pos:{"x":380,"y":1000}}},
+    // {command:"Camera", params:{attachToEnity:"Boss"}},
     
-    //{command:"Camera", params:{detach:"Player", zoom:3, time:1500}},
-    {command:"End"},
+    {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":413,"y":729}}},
+    {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":650,"y":936}}},
+    {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":715,"y":996}}},
+    {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":868,"y":994}}},
+    {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":873,"y":1101}}},
+    {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":740,"y":1149}}},
+    {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":742,"y":1327}}},
+    {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":444,"y":1327}}},
+    {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":48,"y":1317}}},
+    {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":48,"y":1107}}},
 
-    // {command:"Delay", params:{delayTime:500}},
-    // {command:"Camera", params:{moveTo:{"x":640,"y":730}, time:1000}},
-    // {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":640,"y":730}}},
-    // {command:"Delay", params:{delayTime:500}},
-    // {command:"Delay", params:{moveTo:{"x":818,"y":1096}, delayTime:500}},
-    // {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":818,"y":1096}}},
-    // {command:"Delay", params:{delayTime:500}},
-    // {command:"Delay", params:{moveTo:{"x":235,"y":1324}, delayTime:250}},
-    // {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":235,"y":1324}}},
-    // {command:"Delay", params:{delayTime:500}},
-    // {command:"Delay", params:{moveTo:{"x":59,"y":881}, delayTime:100}},
-    // {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":59,"y":881}}},
+    {command:"End"},
 
     // {command:"Delay", params:{delayTime:500}},
     // {command:"Spawn", params:{entityType:"Boss", pos:{"x":380,"y":1000}}},
     // {command:"Camera", params:{shake:true, time:1000, force:{x:10,y:10}}},
 
-    // {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":413,"y":729}}},
-    // {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":650,"y":936}}},
-    // {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":715,"y":996}}},
-    // {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":868,"y":994}}},
-    // {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":873,"y":1101}}},
-    // {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":740,"y":1149}}},
-    // {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":742,"y":1327}}},
-    // {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":444,"y":1327}}},
-    // {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":48,"y":1317}}},
-    // {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":48,"y":1107}}}
+
 
 ];
 // const testSequence = [
@@ -110,6 +125,8 @@ class Sequence{
                 return this.command_Camera(dt,command.params);
             case "Player":
                 return this.command_Player(dt,command.params);
+            case "End":
+                console.log("end");
             default:
                 console.log("Command Not Found!");
         }
@@ -124,7 +141,7 @@ class Sequence{
     }
 
     command_Spawn(dt,command){
-        this.gameController.spawn(this.gameController, command);
+        this.gameController.spawn(this.gameController, command, command.id);
     }
 
     command_Player(dt,command){ 
@@ -180,8 +197,8 @@ class Sequence{
         }
 
         if(command.moveTo){
-            this.gameController.camera.offWindow.x = command.moveTo.x;
-            this.gameController.camera.offWindow.y = command.moveTo.y;
+            this.gameController.camera.offWindow.x = command.moveTo.x - this.gameController.camera.screenWindow.width / 2;
+            this.gameController.camera.offWindow.y = command.moveTo.y - this.gameController.camera.screenWindow.height / 2;
         }
 
         if(command.detach){
@@ -189,6 +206,9 @@ class Sequence{
                 this.gameController.player.camera = null;
         }
         
+        if(command.attachToEnity){
+            this.gameController.entityMap[command.attachToEnity].camera = this.gameController.camera;
+        }
         this.scriptPtr++;
         return true;
     }

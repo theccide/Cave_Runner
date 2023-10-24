@@ -87,6 +87,16 @@ function saveCanvasToPNG(canvasId, filename) {
     document.body.removeChild(link);
 }
 
+const generateRandomId=(length)=> {
+    let result           = '';
+    let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let charactersLength = characters.length;
+    for ( let i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
 class Tools {
     static MIN=0;
     static MAX=1;
@@ -236,7 +246,7 @@ class Tools {
         if(number > max) return max;
         return number;
     }
-    static clampMinMax(number, min, max){
+    static clamp(number, min, max){
         if(number < min) return min;
         if(number > max) return max;
         return number;

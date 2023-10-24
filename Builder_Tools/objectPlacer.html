@@ -69,16 +69,6 @@
         let selectionMode = false;
         let currentType = 0;
         let currentObject = null;
-
-        const generateRandomId=(length)=> {
-            let result           = '';
-            let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let charactersLength = characters.length;
-            for ( let i = 0; i < length; i++ ) {
-                result += characters.charAt(Math.floor(Math.random() * charactersLength));
-            }
-            return result;
-        }
         
         const setCheckBox=(id, ischecked)=>{
             const sectionModeCheckbox = document.getElementById('sectionModeCheckbox');

@@ -1,7 +1,7 @@
 class SpikeTrap extends Entity{
 
-    constructor (gameController, position) {
-        super(gameController, null, position);
+    constructor (gameController, id, position) {
+        super(gameController, id, null, position);
         this.isUP = false;
         this.timeDelay = 2000;
         this.lastEventTime = (new Date()).getTime();

@@ -23,9 +23,11 @@ class Camera{
     }
 
     render(screenBuffer){
-
+        // console.log(this.offWindow);
+        const x = Tools.clamp(this.offWindow.x+this.scaledWindow.x,0,this.offWindow.width-this.scaledWindow.width);
+        const y = Tools.clamp(this.offWindow.y+this.scaledWindow.y,0,this.offWindow.height-this.scaledWindow.height);
         drawImageSpriteFrom00(screenBuffer, this.backCanvas,             
-            this.offWindow.x+this.scaledWindow.x, this.offWindow.y+this.scaledWindow.y, this.scaledWindow.width, this.scaledWindow.height,
+            x, y, this.scaledWindow.width, this.scaledWindow.height,
             this.screenWindow.x, this.screenWindow.y, this.screenWindow.width, this.screenWindow.height,
         );
     }

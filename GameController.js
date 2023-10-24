@@ -4,6 +4,7 @@ class GameController {
     sounds = {};
     scripts = {};
     entities = [];
+    entityMap = {};
     enemies = [];
     spikeTraps = [];
     bullets = [];
@@ -76,10 +77,19 @@ class GameController {
         if(this.resourceCounter >= 3) this.finishedLoadingResources();
     }
 
+    addEntity(self, entity){
+        let newID = (entity?.id)?entity.id:generateRandomId(8);
+        if(newID in self.entityMap) newID=generateRandomId(8);
+        entity.id = newID; 
+        self.entityMap[newID]=entity;
+        self.entities.push(entity);
+        return entity;
+    }
+
     finishedLoadingResources = () => {
-        const buildEnemy=(obj)=>{
+        const buildEnemy=(obj, id)=>{
             if (obj.type === enemyTypes.SKELITON){
-                return new Enemy(this,obj.id,{
+                return new Enemy(this, id,{
                     sprite:null, 
                     fileName: "Images/spritemaps/skeleton.png",            
                     cellSize: { width: 32, height: 32 },
@@ -103,7 +113,7 @@ class GameController {
                 );                
             }
             if (obj.type === enemyTypes.WIZARD){
-                return new MiniBoss(this, 
+                return new MiniBoss(this, "miniboss",
                     {x:obj.x, y:obj.y}, // position
                     obj.wp // spawn points
                 );                
@@ -129,14 +139,21 @@ class GameController {
         });
         
         const objLocations = this.scripts["resources/scripts/objects.json"];
-        removeHiddenObjects(objLocations.gems, "Gem").forEach(obj=>this.entities.push(new Gem(this, obj.type,{x:obj.x,y:obj.y})));
-        removeHiddenObjects(objLocations.torches, "Torch").forEach(obj=>this.entities.push(new Torch(this, ["thin","thick"][obj.type],{x:obj.x,y:obj.y})));
+        removeHiddenObjects(objLocations.gems, "Gem").forEach(obj=>this.entities.push(new Gem(this, obj.id, obj.type,{x:obj.x,y:obj.y})));
+        removeHiddenObjects(objLocations.torches, "Torch").forEach(obj=>this.entities.push(new Torch(this, obj.id, ["thin","thick"][obj.type],{x:obj.x,y:obj.y})));
         removeHiddenObjects(objLocations.enemies, "Enemy").forEach(obj=>{
-            let enemy = buildEnemy(obj);
+            let enemy = buildEnemy(obj, obj.id);
             this.entities.push(enemy);
             this.enemies.push(enemy);
         });        
         
+        this.entities.forEach(entity=>{
+            let newID = entity.id;
+            if(!newID) newID = generateRandomId(8);
+            if(newID in this.entityMap) newID = generateRandomId(8);
+            entity.id = newID;
+            this.entityMap[newID]=entity;
+        });
         // this.entities.push(new Boss(this, {x:400,y:800}));
 
         this.player = new Player(this);
@@ -148,9 +165,9 @@ class GameController {
 
     addTriggerEntities(){
         const createSpikes=(x,y)=>{
-            const trap = new SpikeTrap(this, {x, y});
+            const trap = new SpikeTrap(this, generateRandomId(8), {x, y});
             this.spikeTraps.push(trap);
-            this.entities.push(trap);
+            this.addEntity(this, trap);
         }
 
         for(let i_row=0; i_row<this.levelMap.grid.numRows; i_row++){
@@ -167,7 +184,6 @@ class GameController {
 
     runSpikes(self){ if(self.spikeTraps[0].isUP) this.player.hit(0,0); }
     
-
     triggerPlaySequence(self, sequenceName, removeTrigger){
         if(removeTrigger){
             self.levelMap.switchCellValue({x:self.player.position.x, y:self.player.position.y},0);
@@ -192,36 +208,33 @@ class GameController {
         this.spawn(objdef)
     }
 
-    spawn(self, objDef){
+    spawn(self, objDef, id){
+
         if(objDef.entityType == "Gem"){ 
-            let gem = (objDef.pos) ? new Gem(self, obj.type,{x:objDef.pos.x,y:objDef.pos.y}) : new Gem(self, obj.type,{x:objDef.x,y:objDef.y});
-            self.entities.push(gem);
-            return gem;
+            let gem = (objDef.pos) ? new Gem(self, id, obj.type,{x:objDef.pos.x,y:objDef.pos.y}) : new Gem(self, id,obj.type,{x:objDef.x,y:objDef.y});
+            return self.addEntity(self, gem);
         };
         if(objDef.entityType == "Torch") {
-            let torch = (objDef.pos) ? new Torch(self, objDef.type,{x:objDef.pos.x,y:objDef.pos.y}) : new Torch(self, ["thin","thick"][objDef.type],{x:objDef.x,y:objDef.y});
-            self.entities.push(torch);
-            return torch;
+            let torch = (objDef.pos) ? new Torch(self, id, objDef.type,{x:objDef.pos.x,y:objDef.pos.y}) : new Torch(self, id,["thin","thick"][objDef.type],{x:objDef.x,y:objDef.y});
+            return self.addEntity(self, torch);
         }
         if(objDef.entityType == "Fx") {
-            let fx = (objDef.pos) ? new Fx(self, {fxType:objDef.fxType, destroyOnFinishAnim:objDef.destroyOnFinishAnim},{x:objDef.pos.x,y:objDef.pos.y}) : new Fx(self,{fxType:objDef.type, destroyOnFinishAnim:objDef.destroyOnFinishAnim},{x:objDef.x,y:objDef.y});
-            self.entities.push(fx);
-            return fx;
+            let fx = (objDef.pos) ? new Fx(self, id, {fxType:objDef.fxType, destroyOnFinishAnim:objDef.destroyOnFinishAnim},{x:objDef.pos.x,y:objDef.pos.y}) : new Fx(self,id,{fxType:objDef.type, destroyOnFinishAnim:objDef.destroyOnFinishAnim},{x:objDef.x,y:objDef.y});
+            return self.addEntity(self, fx);
         }        
         if(objDef.entityType == "Boss") {
-            let boss = (objDef.pos) ? new Boss(self, {x:objDef.pos.x,y:objDef.pos.y}) : new Boss(self, {x:objDef.x,y:objDef.y});
-            self.entities.push(boss);
-            return boss;
+            let boss = (objDef.pos) ? new Boss(self, id, {x:objDef.pos.x,y:objDef.pos.y}) : new Boss(self, {x:objDef.x,y:objDef.y});
+            boss.id = id;
+            return self.addEntity(self, boss);
         }
         if(objDef.entityType == "Enemy") {
-            let enemy = buildEnemy(objDef);
-            self.entities.push(enemy);
+            let enemy = buildEnemy(objDef, id);
             self.enemies.push(enemy);
-            return enemy;
+            return self.addEntity(self, enemy);
         }
     }
 
-    destroy=(entity)=>{
+    destroy=(entity)=>{        
         this.entitiesToRemove.push(entity);
     }
 
@@ -230,13 +243,14 @@ class GameController {
     }
 
     _instatiate=(entityInfo)=>{
-        if(entityInfo.className==="Gem") this.entities.push(new Gem(this, entityInfo.type, entityInfo.position));
-        if(entityInfo.className==="Fx") this.entities.push(new Fx(this, entityInfo.params, entityInfo.position));        
+        let newEntity = null;
+        if(entityInfo.className==="Gem") newEntity = new Gem(this, generateRandomId(8), entityInfo.type, entityInfo.position);
+        if(entityInfo.className==="Fx") newEntity = new Fx(this, generateRandomId(8), entityInfo.params, entityInfo.position);
         if(entityInfo.className==="Bullet"){
-            let bullet = new Bullet(this, entityInfo.params, entityInfo.position);
-            this.entities.push(bullet);
-            this.bullets.push(bullet);
+            newEntity = new Bullet(this, generateRandomId(8), entityInfo.params, entityInfo.position);
+            this.bullets.push(newEntity);
         } 
+        if(newEntity) this.addEntity(this, newEntity);        
     }
 
     update = (deltaTime) => {        
@@ -246,6 +260,7 @@ class GameController {
 
         if(this.entitiesToRemove.length != 0){
             this.entitiesToRemove.forEach(entity=>{
+                delete this.entityMap[entity.id];
                 if(entity instanceof Enemy) this.enemies = this.enemies.filter(obj => !this.entitiesToRemove.includes(obj));
                 if(entity instanceof Bullet) this.bullets = this.bullets.filter(obj => !this.entitiesToRemove.includes(obj));
             });          

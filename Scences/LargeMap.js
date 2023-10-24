@@ -1,3 +1,11 @@
+
+function clearRingCircles(ctx, x, y, radius, alpha){
+    for(let i=0; i<3; i++){
+        clearCircle(ctx, x, y, radius-(i * radius*0.2), alpha);
+        //clearCircle(ctx, x, y, radius-(i * radius*0.2), alpha*((3-i)/3));
+    }
+}
+
 function clearCircle(ctx, x, y, radius, alpha) {
     ctx.globalCompositeOperation = 'destination-out';
     ctx.globalAlpha = alpha;
@@ -63,17 +71,19 @@ class LargeMap extends Scene {
         if(this.gameController.player && this.useDarkOverlay){
             this.blackBuffer.clearRect(0, 0,this.camera.offWindow.width, this.camera.offWindow.height);         
             drawBox(this.blackBuffer,0,0,this.camera.offWindow.width, this.camera.offWindow.height,"rgba(0, 0, 0, 0.9)");
-            clearCircle(this.blackBuffer, this.gameController.player.position.x, this.gameController.player.position.y, 100+getFlicker(this.gameController.player.brightness), 0.8);
+            clearRingCircles(this.blackBuffer, this.gameController.player.position.x, this.gameController.player.position.y, 100+getFlicker(this.gameController.player.brightness), 0.8);
 
             this.gameController.entities.forEach(entity => {
                 if(entity.isLightSource){
 
-                    clearCircle(this.blackBuffer, entity.position.x, entity.position.y, 50+(entity.brightness*50)+getFlicker(entity.brightness), entity.brightness);
+                    clearRingCircles(this.blackBuffer, entity.position.x, entity.position.y, 50+(entity.brightness*50)+getFlicker(entity.brightness), entity.brightness);
                 }
             });
 
+            const x = Tools.clamp(this.camera.offWindow.x+this.camera.scaledWindow.x,0,this.camera.offWindow.width-this.camera.scaledWindow.width);
+            const y = Tools.clamp(this.camera.offWindow.y+this.camera.scaledWindow.y,0,this.camera.offWindow.height-this.camera.scaledWindow.height);    
             drawImageSpriteFrom00(screenBuffer, this.blackCanvas,
-                this.camera.offWindow.x+this.camera.scaledWindow.x, this.camera.offWindow.y+this.camera.scaledWindow.y,
+                x, y,
                 this.camera.scaledWindow.width, this.camera.scaledWindow.height,
                 this.camera.screenWindow.x, this.camera.screenWindow.y, 
                 this.camera.screenWindow.width, this.camera.screenWindow.height

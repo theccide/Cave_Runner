@@ -4,10 +4,10 @@ class Bullet extends Entity{
     bulletEntity = null;
     ttl = 2000;
     lastTime = (new Date()).getTime();
-    constructor (gameController, {fxType, destroyOnFinishAnim}, position) {
-        super(gameController, null, position);
+    constructor (gameController, id, {fxType, destroyOnFinishAnim}, position) {
+        super(gameController, id, null, position);
         this.brightness = 0.9;
-        this.bulletEntity = new Fx(gameController, {fxType, destroyOnFinishAnim: false}, position)
+        this.bulletEntity = new Fx(gameController, generateRandomId(8), {fxType, destroyOnFinishAnim: false}, position)
     }
 
     brain=(dt)=>{

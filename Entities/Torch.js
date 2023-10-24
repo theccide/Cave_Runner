@@ -1,6 +1,6 @@
 class Torch extends Entity{
-    constructor (gameController, type, position) {
-        super(gameController, null, position);
+    constructor (gameController, id, type, position) {
+        super(gameController, id, null, position);
         // this.isLightSource = false;
         if(type=="thin"){
             this.initSpriteSheet( {

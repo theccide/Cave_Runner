@@ -12,8 +12,8 @@ const GEM_NAMES = {
 
 class Gem extends Entity{
     gemType="";
-    constructor (gameController, gemType, position) {
-        super(gameController, null, position);
+    constructor (gameController, id, gemType, position) {
+        super(gameController, id, null, position);
         this.gemType = gemType;
         this.initSpriteSheet( {
             sprite: null,

@@ -5,8 +5,8 @@ class Boss extends Entity{
     lastTimeEvent=0;
     nextTimeEvent=0;
 
-    constructor (gameController, position, spawnPoints) {
-        super(gameController, null, position);
+    constructor (gameController, id, position, spawnPoints) {
+        super(gameController, id, null, position);
         this.spawnPoints = spawnPoints;
         this.initSpriteSheet( {
             sprite: null,

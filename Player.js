@@ -7,6 +7,9 @@ class Player extends MoveableEntity {
     score = 0;
     hp = 5;
     isPlayerControlled = true;
+    inventory={
+        questItems:{Maguffin:1},
+    };
 
     setPlayerControlled(playerControlled){
         this.isPlayerControlled = playerControlled;
@@ -55,7 +58,7 @@ class Player extends MoveableEntity {
     }
 
     constructor(gameController) {
-        super(gameController, {
+        super(gameController, "Player",{
             sprite: null,
             fileName: "Images/spritemaps/complete_hero.png",
             cellSize: { width: 64, height: 64 },
@@ -131,8 +134,12 @@ class Player extends MoveableEntity {
 
         let triggerID = this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y}).col;
         if(triggerID !=0 && triggerID != 1){
+            if(triggerID === 4){
+                this.overWater(deltaTime);
+                return;
+            }
             let trigger = this.gameController.triggers.find(trigger=>trigger.id == triggerID);
-            this.gameController.runTrigger(trigger);
+            if(trigger) this.gameController.runTrigger(trigger);
             // console.log("trigger",trigger.code);
         }
 
@@ -140,6 +147,21 @@ class Player extends MoveableEntity {
         this.collisionBounds.y = this.position.y - this.spriteSheet.spriteSize.height*.8;
         this.collisionBounds.width = (this.spriteSheet.spriteSize.width*.6)*2;
         this.collisionBounds.height = (this.spriteSheet.spriteSize.height*.8)*2;
+    }
+
+    waterDelay = 250;
+    lastWaterTime = 0;
+    overWater(deltaTime){
+        if(this.inventory.questItems["Maguffin"]==0) {
+            this.hit(0,0);
+            return;
+        }
+        const currentTime = (new Date()).getTime();
+        if(currentTime > this.lastWaterTime+this.waterDelay){
+            this.lastWaterTime = currentTime;
+            this.gameController.spawn(this.gameController, {entityType:"Fx", fxType:"0", destroyOnFinishAnim: true, pos:this.position});
+        }
+        // console.log("over water");
     }
 
     hit(direction, force){

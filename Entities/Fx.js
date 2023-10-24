@@ -18,8 +18,8 @@ const FX_NAMES = {
 
 class Fx extends Entity{
 
-    constructor (gameController, {fxType, destroyOnFinishAnim}, position) {
-        super(gameController, null, position);
+    constructor (gameController, id, {fxType, destroyOnFinishAnim}, position) {
+        super(gameController, id, null, position);
         this.fxType = fxType;
 
         this.initSpriteSheet( {
