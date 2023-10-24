@@ -1,5 +1,4 @@
 class Player extends MoveableEntity {
-    camera = null;    
     showPlayerDebug = false;
     hitForce = 15;
     takingDamage = false;
@@ -7,10 +6,23 @@ class Player extends MoveableEntity {
     damageStartTime = 0;
     score = 0;
     hp = 5;
+    isPlayerControlled = true;
 
+    setPlayerControlled(playerControlled){
+        this.isPlayerControlled = playerControlled;
+        if(!this.playerControlled){
+            this.moveDirection.x = 0;
+            this.moveDirection.y = 0;
+        }
+    }
     getMouseInput = (event) => {}
     getMouseMoveInput = (event) => {}
     getKeyboardInput = (event) => {
+        if(!this.isPlayerControlled) return;
+        this.processInput(event);
+    }
+
+    processInput(event){        
         if (event.type === "down") {
             if (event.key === "w") this.moveDirection.y = -1;
             else if (event.key === "s") this.moveDirection.y = 1;
@@ -103,13 +115,7 @@ class Player extends MoveableEntity {
 
         this.drawSprite(deltaTime);
 
-        const halfScreenWidth = (screenBuffer.canvas.width/(this.gameController.camera.zoom*2));
-        const halfScreenHeight = (screenBuffer.canvas.height/(this.gameController.camera.zoom*2));
-
-        if(this.position.x>halfScreenWidth && this.position.x<(this.camera.offWindow.width-halfScreenWidth))
-        this.camera.offWindow.x = this.position.x - this.camera.screenWindow.width / 2;
-        if(this.position.y>halfScreenHeight && this.position.y<(this.camera.offWindow.height-halfScreenHeight))
-            this.camera.offWindow.y = this.position.y - this.camera.screenWindow.height / 2;
+        this.processCamera();
         
         // collison detection
         if(this.gameController.levelMap.findCellFrom({x:this.position.x+(this.moveDirection.x*10), y:this.position.y}).col !== 1) 

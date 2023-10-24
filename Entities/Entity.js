@@ -17,6 +17,7 @@ class Entity {
     endAnimationCallback=null;
     frameChangeCallback=null;    
     position = {x:0, y:0};
+    camera = null;
     
     constructor (gameController, spriteSheet, position) {
         this.gameController = gameController;
@@ -104,6 +105,18 @@ class Entity {
         if(this.showDebug) drawBox(this.gameController.currentScene.backBuffer, this.collisionBounds.x, this.collisionBounds.y , this.collisionBounds.width, this.collisionBounds.height, "red");
         this.drawSprite(deltaTime);
         if(this.showDebug) drawCircle(this.gameController.currentScene.backBuffer, this.position.x, this.position.y, 4, "red");
+    }
+
+    processCamera(){
+        if(this.camera){
+            const halfScreenWidth = (screenBuffer.canvas.width/(this.gameController.camera.zoom*2));
+            const halfScreenHeight = (screenBuffer.canvas.height/(this.gameController.camera.zoom*2));
+    
+            if(this.position.x>halfScreenWidth && this.position.x<(this.camera.offWindow.width-halfScreenWidth))
+            this.camera.offWindow.x = this.position.x - this.camera.screenWindow.width / 2;
+            if(this.position.y>halfScreenHeight && this.position.y<(this.camera.offWindow.height-halfScreenHeight))
+                this.camera.offWindow.y = this.position.y - this.camera.screenWindow.height / 2;
+        }        
     }
 
     hit(direction, force){}

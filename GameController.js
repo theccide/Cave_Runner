@@ -203,6 +203,11 @@ class GameController {
             self.entities.push(torch);
             return torch;
         }
+        if(objDef.entityType == "Fx") {
+            let fx = (objDef.pos) ? new Fx(self, {fxType:objDef.fxType, destroyOnFinishAnim:objDef.destroyOnFinishAnim},{x:objDef.pos.x,y:objDef.pos.y}) : new Fx(self,{fxType:objDef.type, destroyOnFinishAnim:objDef.destroyOnFinishAnim},{x:objDef.x,y:objDef.y});
+            self.entities.push(fx);
+            return fx;
+        }        
         if(objDef.entityType == "Boss") {
             let boss = (objDef.pos) ? new Boss(self, {x:objDef.pos.x,y:objDef.pos.y}) : new Boss(self, {x:objDef.x,y:objDef.y});
             self.entities.push(boss);
