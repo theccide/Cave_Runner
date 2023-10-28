@@ -1,4 +1,22 @@
 
+function clearRingRect(ctx, x, y, width, height, alpha, flicker){
+    const layer1 = 3*(flicker+6);
+    const layer2 = 1*(flicker+6);
+    clearRectAlpha(ctx, x-layer1, y-layer1, width+layer1*2, height+layer1*2, alpha/4);
+    clearRectAlpha(ctx, x-layer2, y-layer2, width+layer2*2, height+layer2*2, alpha/3);
+    clearRectAlpha(ctx, x, y, width, height, alpha);
+}
+
+function clearRectAlpha(ctx, x, y, width, height, alpha){
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.globalAlpha = alpha;
+    ctx.beginPath();
+    ctx.rect(x, y, width, height);
+    ctx.fill();
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 1;
+}
+
 function clearRingCircles(ctx, x, y, radius, alpha){
     for(let i=0; i<3; i++){
         clearCircle(ctx, x, y, radius-(i * radius*0.2), alpha);
@@ -19,7 +37,6 @@ function clearCircle(ctx, x, y, radius, alpha) {
 class LargeMap extends Scene {
     first = true;
     gameController = null;
-    useDarkOverlay = true;
     isTransitioning = true;
     transitionCrop = 500;
 
@@ -62,21 +79,24 @@ class LargeMap extends Scene {
         this.camera.render(screenBuffer);
 
         const elapsed = (new Date()).getTime();
-        const getFlicker=(brightness)=>{
+        const getFlicker=(brightness, frequency)=>{
             const amplitude = brightness*3; 
-            const frequency = 0.005; 
             return amplitude * Math.sin(frequency * elapsed);
         }
 
-        if(this.gameController.player && this.useDarkOverlay){
+        if(this.gameController.player && this.gameController.useDarkOverlay){
             this.blackBuffer.clearRect(0, 0,this.camera.offWindow.width, this.camera.offWindow.height);         
-            drawBox(this.blackBuffer,0,0,this.camera.offWindow.width, this.camera.offWindow.height,"rgba(0, 0, 0, 0.9)");
-            clearRingCircles(this.blackBuffer, this.gameController.player.position.x, this.gameController.player.position.y, 100+getFlicker(this.gameController.player.brightness), 0.8);
+            drawBox(this.blackBuffer,0,0,this.camera.offWindow.width, this.camera.offWindow.height,`rgba(0, 0, 0, ${this.gameController.darkOverlayLevel})`);
+            clearRingCircles(this.blackBuffer, this.gameController.player.position.x, this.gameController.player.position.y, 100+getFlicker(this.gameController.player.brightness, 0.005), 0.8);
+
+            clearRingRect(this.blackBuffer, 1435,260,135,417,0.9,getFlicker(0.9,0.002));
+            clearRingRect(this.blackBuffer, 1570,40,350,405+8,0.9,getFlicker(0.9,0.002));
+            clearRingRect(this.blackBuffer, 1570+350,270,190,180,0.9,getFlicker(0.9,0.002));
 
             this.gameController.entities.forEach(entity => {
                 if(entity.isLightSource){
 
-                    clearRingCircles(this.blackBuffer, entity.position.x, entity.position.y, 50+(entity.brightness*50)+getFlicker(entity.brightness), entity.brightness);
+                    clearRingCircles(this.blackBuffer, entity.position.x, entity.position.y, 50+(entity.brightness*50)+getFlicker(entity.brightness,0.005), entity.brightness);
                 }
             });
 

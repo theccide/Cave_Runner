@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axios POST Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+
+    <h1>AI Examples</h1>
+    <div>
+        <label for="dataInputChat">Enter text for chat:</label>
+        <input type="text" id="dataInputChat">
+        <button onclick="postChatData()">Send Text</button>
+    </div>
+    <div id="responseChat"></div>
+    <div>
+        <label for="dataInputSound">Enter text to voice:</label>
+        <input type="text" id="dataInputSound">
+        <button onclick="postSoundData()">Send Text</button>
+    </div>
+    <div id="responseSound"></div>
+
+    <div>
+        <label for="dataInputImage">Enter text to image:</label>
+        <input type="text" id="dataInputImage">
+        <button onclick="postImageData()">Send Text</button>
+    </div>
+    <div id="responseImage"></div>
+    <img id="displayedImage" src="" alt="Loaded Image" style="max-width: 100%; height: auto;">
+
+    <script>
+
+        function postChatData() {
+            const inputDataChat = document.getElementById('dataInputChat').value;
+
+            axios.post(localStorage.getItem("GPT_ENDPOINT"), {
+                token: localStorage.getItem("GPT_TOKEN"),
+                messages: [
+                    {
+                        "role": "system",
+                        "content": "You will be provided with a sentence in English, and your task is to translate it into French."
+                    },
+                    {
+                        "role": "user",
+                        "content": inputDataChat
+                    }
+                ]
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(function (response) {
+                console.log("Chat Response from server: " + JSON.stringify(response.data));
+                document.getElementById('responseChat').innerHTML = response.data[0].message.content;
+            })
+            .catch(function (error) {
+                document.getElementById('responseChat').innerHTML = "Error: " + error;
+            });
+        }
+
+        function postImageData() {
+            const inputDataImage = document.getElementById('dataInputImage').value;
+
+            axios.post(localStorage.getItem("GPT_IMAGE_ENDPOINT"), {
+                token: localStorage.getItem("GPT_IMAGE_TOKEN"),
+                description: inputDataImage
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(function (response) {
+                // document.getElementById('responseImage').innerHTML = "Response from server: " + JSON.stringify(response.data);
+                console.log("Image Response from server: " + JSON.stringify(response.data));
+                const imageUrl = response.data.imageUrl;
+                if (imageUrl) {
+                    const displayedImage = document.getElementById('displayedImage');
+                    displayedImage.src = imageUrl;
+                }
+            })
+            .catch(function (error) {
+                document.getElementById('responseImage').innerHTML = "Error: " + error;
+            });
+        }
+
+        function postSoundData() {
+            const inputDataSound = document.getElementById('dataInputSound').value;
+
+            axios.post(localStorage.getItem("ELEVENLABS_ENDPOINT"), {
+                token: localStorage.getItem("ELEVENLABS_TOKEN"),
+                textToConvert: inputDataSound
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(function (response) {
+                // document.getElementById('responseSound').innerHTML = "Response from server: " + JSON.stringify(response.data);
+                console.log("Sound Response from server: " + JSON.stringify(response.data));
+                // Play the sound file
+                const soundUrl = response.data.soundUrl;
+                if (soundUrl) {
+                    const audio = new Audio(soundUrl);
+                    audio.play();
+                }                
+            })
+            .catch(function (error) {
+                document.getElementById('responseSound').innerHTML = "Error: " + error;
+            });
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,9 +1,12 @@
 class Boss extends Entity{
-    states = { IDLE : 0, SHOOTING : 1, HIT : 2 };
+    states = { IDLE : 0, ATTACKING : 1, CHASING: 2, HIT : 3 };
     state = this.states.IDLE;
 
     lastTimeEvent=0;
     nextTimeEvent=0;
+    speed = 30;
+    pauseAtDistance = 50;
+    hitDistance = 100;
 
     constructor (gameController, id, position, spawnPoints) {
         super(gameController, id, null, position);
@@ -27,12 +30,35 @@ class Boss extends Entity{
         this.lastTimeEvent = (new Date()).getTime();
     }
 
-    brain=(dt)=>{
-        const currentTime = (new Date()).getTime();
+    // const {hit, dist, angle} = Tools2D.moveTowards_CloseEnough(dt,this.position,this.gameController.player.position, this.speed, this.hitDistance, this.pauseAtDistance);
+    // this.spriteAngle = Tools.toDegrees(angle);
+    // if(hit){
+    //     this.switchAnimation("Attack1");
+    // }
+    // if(dist < this.pauseAtDistance+10){
+    //     this.gameController.player.hit(0,0);
+    // }
+
+
+    chasing(dt){
+        const {hit, dist, angle} = Tools2D.moveTowards_CloseEnough(dt,this.position,this.gameController.player.position, this.speed, this.hitDistance, this.pauseAtDistance);
+        this.spriteAngle = Tools.toDegrees(angle);
+        if(dist < this.pauseAtDistance+10){
+            this.gameController.player.hit(0,0);
+        }        
+        if(hit){
+            this.switchAnimation("Attack1");
+        }
+        else{this.switchAnimation("Idle")}
+    }   
+    brain=(dt)=>{        const currentTime = (new Date()).getTime();
         switch (this.state) {
             case this.states.IDLE:
             break;
-            case this.states.SHOOTING:
+            case this.states.CHASING:
+                this.chasing(dt);
+            break;
+            case this.states.ATTACKING:
             break;
             case this.states.HIT:
             break;

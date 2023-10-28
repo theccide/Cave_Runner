@@ -1,9 +1,11 @@
 class MiniBoss extends Entity{
-    states = { IDLE : 0, TELEPORTING : 1, SHOOTING : 2, HIT : 3 };
+    states = { IDLE : 0, TELEPORTING : 1, SHOOTING : 2, HIT : 3 , DIE : 4 };
     state = this.states.IDLE;
     spawnPoints = [];
     lastTimeEvent=0;
     nextTimeEvent=0;
+    hp = 3;
+    deathAnimation = "Idle";
 
     constructor (gameController, id, position, spawnPoints) {
         super(gameController, id, null, position);
@@ -52,13 +54,40 @@ class MiniBoss extends Entity{
                 this.switchAnimation("Attack01");
                 this.endAnimationCallback=()=>{
                     this.lastTimeEvent = currentTime;
-                    this.state = this.states.IDLE;                    
+                    this.state = this.states.IDLE;
                     this.gameController.instatiate({className:"Bullet", params:{fxType:fxTypes.POOF}, position:{...this.position}});
                     this.endAnimationCallback = null;
                 }
                 break;
             case this.states.HIT:
+                this.switchAnimation("PowerUp01");
+                this.endAnimationCallback=()=>{
+                    this.state = this.states.IDLE;
+                }
                 break;
+            case this.states.DIE:                
+                this.switchAnimation(this.deathAnimation);
+                this.endAnimationCallback=()=>{
+                    if(this.deathAnimation === "Attack02"){
+                        this.gameController.player.inventory.questItems.Maguffin=1,
+                        this.pauseAnimation = true;
+                        this.endAnimationCallback=null;
+                        this.gameController.destroy(this);
+                    }
+                    if(this.deathAnimation === "Idle") this.deathAnimation = "Attack02";
+                }
+                break;    
         }  
     }
+
+    hit(direction, force){
+        this.state = this.states.HIT;
+        this.hp=0;
+        // this.hp--;
+        if(this.hp <= 0){
+            this.gameController.sequencer.startSequence("miniBossDeath");
+            this.deathAnimation = "Idle";
+            this.state = this.states.DIE;
+        }
+    }    
 }

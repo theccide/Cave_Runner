@@ -44,7 +44,8 @@ class Logo extends Scene{
                 this.fadeIn = false; 
             }
             else if (this.alpha <= 0) {
-                changeScene(new Title())
+                //changeScene(new Title())
+                changeScene(titleScreen);
                 // this.fadeIn = true;
             }
         }

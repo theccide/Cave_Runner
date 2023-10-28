@@ -182,6 +182,10 @@ class Tools {
     static toRadians(degrees){
         return degrees * (Math.PI/180);
     }
+    static toDegrees(radians)
+    {
+      return radians * (180/Math.PI);
+    }    
 
     static distanceBetweenPoints(pointA, pointB){
         let a = pointA.x - pointB.x;
@@ -357,7 +361,7 @@ class Tools {
     }      
     static distToLineSegment(p, v, w) { 
         return Math.sqrt(Tools.distToSegmentSquared(p, v, w));
-    }       
+    } 
 }
 
 class Tools2D{
@@ -394,16 +398,24 @@ class Tools2D{
     static multVectors(vector1, vector2){return {x: vector1.x*vector2.x, y: vector1.y*vector2.y};}    
     static divVectors(vector1, vector2){return {x: vector1.x/vector2.x, y: vector1.y/vector2.y};}      
 
-    static moveTowards_CloseEnough(delta, pos, target, speed, hitDist){
+    static moveTowards_CloseEnough(delta, pos, target, speed, hitDist, pauseAtDistance=0){
         if(target == null) return;
         let normal = Tools2D.normalize({x: (target.x - pos.x), y: (target.y - pos.y)});
+        const dist = Tools.distanceBetweenPoints(pos, target);
+        const hit = dist < hitDist;
+
+        if(pauseAtDistance && dist < pauseAtDistance)
+            return {
+                angle:Math.atan2(target.y - pos.y, target.x - pos.x),
+                hit, dist
+            };
 
         pos.x += normal.x * speed * delta;
         pos.y += normal.y * speed * delta;
        
         return {
             angle:Math.atan2(target.y - pos.y, target.x - pos.x),
-            hit:Tools.distanceBetweenPoints(pos, target) < hitDist
+            hit, dist
         };
     }
 

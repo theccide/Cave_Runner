@@ -8,7 +8,7 @@ class Player extends MoveableEntity {
     hp = 5;
     isPlayerControlled = true;
     inventory={
-        questItems:{Maguffin:1},
+        questItems:{Maguffin:0},
     };
 
     setPlayerControlled(playerControlled){
@@ -171,6 +171,7 @@ class Player extends MoveableEntity {
         this.hp -= 1;
         if(this.hp <= 0){
             this.hp = 0;
+            changeScene(new GameOver(this.score));
         }
         console.log("hit");
     }

@@ -89,48 +89,51 @@ const buildDetailedMatrix=()=>{
 const drawWalls=({detailedMatrix,breakMatrix},tileName, faceName)=>{
     wallBuffer.clearRect(0, 0, mapSize.width, mapSize.height); //clear canvas
 
-    // draw shadows
-    detailedMatrix.forEach((row,y) => { 
-        row.forEach((cell, x)=>{
-            if(
-                cell==WALL_PARTS.HOR || cell==WALL_PARTS.BOTTOM_T || cell==WALL_PARTS.RIGHT || cell==WALL_PARTS.LEFT ||
-                cell==WALL_PARTS.LEFT_BOTTOM_CORNER || cell==WALL_PARTS.RIGHT_BOTTOM_CORNER || cell==WALL_PARTS.BOTTOM
-            ){
-                drawImageFrom00(wallBuffer, images[`Images/builder/bot_shadow.png`],x*32,(y*32)+32,32,32);
-                drawImageFrom00(wallBuffer, images[`Images/builder/top_shadow.png`],x*32,(y*32)+64,32,32);
-            }
-            if(
-                cell==WALL_PARTS.VER || cell==WALL_PARTS.TOP || cell==WALL_PARTS.BOTTOM || cell==WALL_PARTS.RIGHT_T ||
-                cell==WALL_PARTS.RIGHT_BOTTOM_CORNER || cell==WALL_PARTS.RIGHT_TOP_CONRER
-            ){
-                drawImageFrom00(wallBuffer, images[`Images/builder/right_shadow.png`],(x*32),y*32,32,32);
-                drawImageFrom00(wallBuffer, images[`Images/builder/shadow.png`],(x*32)+32,y*32,32,32);
-            }
-            if(
-                cell==WALL_PARTS.RIGHT_BOTTOM_CORNER
-            ){
-                drawImageFrom00(wallBuffer, images[`Images/builder/shadow.png`],(x*32)+32,(y*32)+32,32,32);
-                drawImageFrom00(wallBuffer, images[`Images/builder/top_shadow.png`],(x*32)+32,(y*32)+64,32,32);
-            }            
-        })
-    });
+    // // draw shadows
+    // detailedMatrix.forEach((row,y) => { 
+    //     row.forEach((cell, x)=>{
+    //         if(
+    //             cell==WALL_PARTS.HOR || cell==WALL_PARTS.BOTTOM_T || cell==WALL_PARTS.RIGHT || cell==WALL_PARTS.LEFT ||
+    //             cell==WALL_PARTS.LEFT_BOTTOM_CORNER || cell==WALL_PARTS.RIGHT_BOTTOM_CORNER || cell==WALL_PARTS.BOTTOM
+    //         ){
+    //             drawImageFrom00(wallBuffer, images[`Images/builder/bot_shadow.png`],x*32,(y*32)+32,32,32);
+    //             drawImageFrom00(wallBuffer, images[`Images/builder/top_shadow.png`],x*32,(y*32)+64,32,32);
+    //         }
+    //         if(
+    //             cell==WALL_PARTS.VER || cell==WALL_PARTS.TOP || cell==WALL_PARTS.BOTTOM || cell==WALL_PARTS.RIGHT_T ||
+    //             cell==WALL_PARTS.RIGHT_BOTTOM_CORNER || cell==WALL_PARTS.RIGHT_TOP_CONRER
+    //         ){
+    //             drawImageFrom00(wallBuffer, images[`Images/builder/right_shadow.png`],(x*32),y*32,32,32);
+    //             drawImageFrom00(wallBuffer, images[`Images/builder/shadow.png`],(x*32)+32,y*32,32,32);
+    //         }
+    //         if(
+    //             cell==WALL_PARTS.RIGHT_BOTTOM_CORNER
+    //         ){
+    //             drawImageFrom00(wallBuffer, images[`Images/builder/shadow.png`],(x*32)+32,(y*32)+32,32,32);
+    //             drawImageFrom00(wallBuffer, images[`Images/builder/top_shadow.png`],(x*32)+32,(y*32)+64,32,32);
+    //         }            
+    //     })
+    // });
     
-    // draw wall faces
-    detailedMatrix.forEach((row,y) => { 
-        row.forEach((cell, x)=>{
-            if(
-                cell==WALL_PARTS.HOR || cell==WALL_PARTS.BOTTOM_T || cell==WALL_PARTS.RIGHT || cell==WALL_PARTS.LEFT ||
-                cell==WALL_PARTS.LEFT_BOTTOM_CORNER || cell==WALL_PARTS.RIGHT_BOTTOM_CORNER || cell==WALL_PARTS.BOTTOM
-            )
-                drawImageFrom00(wallBuffer, images[`Images/builder/wall_faces/${faceName}/HOR.png`],x*32,(y*32)+25,32,32);
-        })
-    });
+    // // draw wall faces
+    // detailedMatrix.forEach((row,y) => { 
+    //     row.forEach((cell, x)=>{
+    //         if(
+    //             cell==WALL_PARTS.HOR || cell==WALL_PARTS.BOTTOM_T || cell==WALL_PARTS.RIGHT || cell==WALL_PARTS.LEFT ||
+    //             cell==WALL_PARTS.LEFT_BOTTOM_CORNER || cell==WALL_PARTS.RIGHT_BOTTOM_CORNER || cell==WALL_PARTS.BOTTOM
+    //         )
+    //             drawImageFrom00(wallBuffer, images[`Images/builder/wall_faces/${faceName}/HOR.png`],x*32,(y*32)+25,32,32);
+    //     })
+    // });
 
     // draw wall edges
     detailedMatrix.forEach((row,y) => { 
         row.forEach((cell, x)=>{
-            if(cell!=0)
-                drawImageFrom00(wallBuffer, images[`Images/builder/wall_types/${tileName}/${WALL_NAMES[cell]}.png`],x*32,y*32,32,32);
+            if(cell!=0){
+                const cellImage = images[`Images/builder/wall_types/${tileName}/${WALL_NAMES[cell]}.png`];
+                drawImageFrom00(wallBuffer, cellImage,x*32,y*32,cellImage.width,cellImage.height);
+                // drawImageFrom00(wallBuffer, images[`Images/builder/wall_types/${tileName}/${WALL_NAMES[cell]}.png`],x*32,y*32,32,32);
+            }
         })
     });
 

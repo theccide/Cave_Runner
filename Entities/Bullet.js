@@ -4,10 +4,13 @@ class Bullet extends Entity{
     bulletEntity = null;
     ttl = 2000;
     lastTime = (new Date()).getTime();
+    target = null;
+
     constructor (gameController, id, {fxType, destroyOnFinishAnim}, position) {
         super(gameController, id, null, position);
         this.brightness = 0.9;
         this.bulletEntity = new Fx(gameController, generateRandomId(8), {fxType, destroyOnFinishAnim: false}, position)
+        this.target = this.gameController.player;
     }
 
     brain=(dt)=>{
@@ -38,13 +41,15 @@ class Bullet extends Entity{
         this.collisionBounds = this.bulletEntity.collisionBounds;   
         
         // check to see if the player was hit
-        if(Collision.testBoxOnBox(this.gameController.player.collisionBounds,this.collisionBounds)){
-            this.gameController.player.hit(this.faceDir, this.hitForce);
+        if(Collision.testBoxOnBox(this.target.collisionBounds,this.collisionBounds)){
+            this.target.hit(this.faceDir, this.hitForce);
             this.gameController.destroy(this);
         }
     }
 
     hit(direction, force){
+        if("miniboss" in this.gameController.entityMap) 
+            this.target = this.gameController.entityMap["miniboss"];
         this.dir.x = -2;
     }
     update = (deltaTime) => {

@@ -19,7 +19,8 @@
     <script>
         const tiles = [
             {tileName:"tile1",extraFiles:["VER_BREAK","HOR_BREAK"], breakSpacing: {range:[1,2]}},
-            {tileName:"tile2",extraFiles:["VER_BREAK","HOR_BREAK"], breakSpacing: {range:[1,2]}}
+            {tileName:"tile2",extraFiles:["VER_BREAK","HOR_BREAK"], breakSpacing: {range:[1,2]}},
+            {tileName:"tile3",extraFiles:["VER_BREAK","HOR_BREAK"], breakSpacing: {range:[1,2]}}
         ];
         const faces = [
             {tileName:"type1"}
@@ -49,11 +50,11 @@
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 //drawImageFrom00(backBuffer, images["Images/map1b.png"],0,0,mapSize.width,mapSize.height);
                 //drawImageFrom00(backBuffer, images["Images/builder/grid.png"],0,0,mapSize.width,mapSize.height);
-                drawImageFrom00(backBuffer, images["Images/builder/floor1.png"],0,0,mapSize.width,mapSize.height);
+                // drawImageFrom00(backBuffer, images["Images/builder/floor1.png"],0,0,mapSize.width,mapSize.height);
                 worldMap.update();
                 matrix = worldMap.grid.matrix;
 
-                drawWalls(buildDetailedMatrix(),"tile2","type1"); 
+                drawWalls(buildDetailedMatrix(),"tile3","type1"); 
                 isDirty = false;
             }
 
@@ -78,7 +79,7 @@
             "Images/builder/grid.png", "Images/map1b.png", "Images/builder/floor1.png",
             "Images/builder/shadow.png","Images/builder/bot_shadow.png","Images/builder/right_shadow.png","Images/builder/top_shadow.png"
         ];
-        let imagesToLoad = setupTilesToLoad(tiles[1]);
+        let imagesToLoad = setupTilesToLoad(tiles[2]);
         imagesToLoad = [...imagesToLoad, ...otherImagesToLoad];
         let facesToLoad = setupFacesToLoad(faces[0]);
         imagesToLoad = [...imagesToLoad, ...facesToLoad];

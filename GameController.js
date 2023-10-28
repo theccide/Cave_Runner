@@ -18,6 +18,8 @@ class GameController {
     triggerEntityMap = {};
     hiddenObjectDef = {};
     sequencer=null;
+    useDarkOverlay = true;
+    darkOverlayLevel = 0.99;
 
     getMouseInput=(event)=>{if(this.player) this.player.getMouseInput(event);}    
     getMouseMoveInput=(event)=>{if(this.player) this.player.getMouseMoveInput(event);}
@@ -40,6 +42,8 @@ class GameController {
             "Images/lightsource.png",
             "Images/gems.png",
             "Images/hud.png",
+            "Images/lava1.png",
+            "Images/lava2.png",
             "Images/heatlhback.png",
             "Images/heatlhgreen.png",
             "Images/heatlhred.png",
@@ -253,6 +257,18 @@ class GameController {
         if(newEntity) this.addEntity(this, newEntity);        
     }
 
+    startTime = Date.now();
+    getFadeValue() {
+        const duration = 5000;  // Duration for a complete cycle (fade in and fade out) in milliseconds
+        const elapsed = (Date.now() - this.startTime) % duration;
+        const progress = elapsed / duration;
+        
+        // Use a sine wave to calculate the fade value
+        const fadeValue = (Math.sin(progress * 2 * Math.PI) + 1) / 2;
+        
+        return fadeValue;
+    }
+
     update = (deltaTime) => {        
         if(!this.resouncesReady) return;
 
@@ -273,6 +289,12 @@ class GameController {
             this.entitiesToInstatiate = [];
         }
 
+        drawImageFrom00(this.currentScene.backBuffer, this.images["Images/lava2.png"],
+                        1385,23,this.images["Images/lava1.png"].width,this.images["Images/lava2.png"].height);
+        this.currentScene.backBuffer.globalAlpha = this.getFadeValue();
+        drawImageFrom00(this.currentScene.backBuffer, this.images["Images/lava1.png"],
+                        1385,23,this.images["Images/lava1.png"].width,this.images["Images/lava1.png"].height);
+        this.currentScene.backBuffer.globalAlpha = 1;
         drawImageFrom00(this.currentScene.backBuffer, this.images["Images/map1.png"],
                         0,0,this.currentScene.offBounds.width,this.currentScene.offBounds.height);
 

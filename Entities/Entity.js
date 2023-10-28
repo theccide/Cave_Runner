@@ -18,6 +18,8 @@ class Entity {
     frameChangeCallback=null;    
     position = {x:0, y:0};
     camera = null;
+    pauseAnimation = false;
+    spriteAngle = 0;
     
     constructor (gameController, id, spriteSheet, position) {
         this.id = id;
@@ -57,15 +59,19 @@ class Entity {
     }
 
     nextFrame = (deltaTime) => {
+        // if(this.id=="miniboss") console.log("paused",this.pauseAnimation);
+        if(this.pauseAnimation) return;
+
         this.elapsedTime += deltaTime;
 
         if (this.elapsedTime >= this.frameChangeInterval) {
             this.frame += 1;
             this.frame %= this.spriteSheet.animations[this.currentAnimation].length;
             if(this.frameChangeCallback) this.frameChangeCallback(this.frame);
-            if(this.frame == 0 ){
+            if(this.frame == this.spriteSheet.animations[this.currentAnimation].length-1 ){
                  this.forcePlaying = false;// this has played at least 1 time
                  if(this.endAnimationCallback) this.endAnimationCallback();
+                //  if(this.id=="miniboss") console.log("endAnimationCallback paused",this.pauseAnimation);
             }
             this.elapsedTime = 0; // Reset the elapsed time
         }
@@ -89,7 +95,8 @@ class Entity {
             this.position.x,
             this.position.y+getBob(this.bobbingStrength,0.005),
             this.spriteSheet.spriteSize.width,
-            this.spriteSheet.spriteSize.height            
+            this.spriteSheet.spriteSize.height,
+            this.spriteAngle
         );
     }
 

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Cave Runner</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.3/pako.min.js"></script>
     <script src="Jam_Engine/Graphics.js"></script>
     <script src="Jam_Engine/Tools.js"></script>
@@ -34,6 +35,9 @@
     <script src="Scences/LargeMap.js"></script>
     <script src="Jam_Engine/Sequencer.js"></script>
 
+    <script src="Scences/Story.js"></script>
+    <script src="storyGenerator.js"></script>
+
 </head>
 <body style="background-color: black;">
     <div class="parent-container"> -->
@@ -42,6 +46,7 @@
     <button id="playButton"></button> -->
 
     <script>
+        const skipStory = true;
         const canvas = document.getElementById('myCanvas');
         // let copyScreenBuffer = screenBuffer = canvas.getContext('2d');
         let screenBuffer = canvas.getContext('2d');
@@ -49,18 +54,48 @@
         screenBuffer.canvas.height = window.innerHeight;        
         screenBuffer.imageSmoothingEnabled= false;
 
-        // let currentScene = new Logo();  
-        let currentScene = new LargeMap();
+        let currentScene = null;
+        if(!skipStory){
+            let titleScreen = new Title();
+            let storyContent = "";
+            let storyGenerator = new StoryGenerator();
+            storyGenerator.generateStory(titleScreen.readyCallback, titleScreen);       
+            currentScene = new Logo();  
+        }
+        else {currentScene = new LargeMap();}
+        // let currentScene = new LargeMap();
         let lastTimestamp = 0; // Store the timestamp of the previous frame
 
         function changeScene (scene) {
             currentScene = scene;
         }
 
+        let fpslastTime = 0;
+        let frameCount = 0;
+        let fps = 0;
+
+        function drawFPS(){            
+            const time = (new Date()).getTime();
+            const deltaTime =  time - fpslastTime;            
+            frameCount++;
+
+            // Calculate FPS every 1000ms (1 second)
+            if (deltaTime > 1000) {
+                fps = frameCount;
+                frameCount = 0;
+                fpslastTime = time;
+            }            
+            // Draw the FPS
+            screenBuffer.font = '24px Arial';
+            screenBuffer.fillStyle = 'white';
+            screenBuffer.fillText(`FPS: ${fps}`, 10, 30);            
+        }
+
         function gameLoop(timestamp) {            
             const dt = (timestamp - lastTimestamp) / 1000; // Calculate delta time
             lastTimestamp = timestamp;            
-            currentScene.update(dt); // Update and render the game            
+            currentScene.update(dt); // Update and render the game  
+            // drawFPS(timestamp);          
             requestAnimationFrame(gameLoop);
         }
 

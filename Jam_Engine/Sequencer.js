@@ -1,4 +1,4 @@
-const testSequence = [
+const startBossBattleSequence = [
     {command:"Player", params:{controls:false}},
     {command:"Camera", params:{zoom:2,time:1000}},
     {command:"Delay", params:{delayTime:10}},
@@ -27,7 +27,7 @@ const testSequence = [
 
     {command:"Camera", params:{from:{"x":59,"y":881}, moveTo:{"x":380,"y":1000}, time:2000}},
 
-    {command:"Spawn", params:{entityType:"Boss", pos:{"x":380,"y":1000}}},
+    {command:"Spawn", params:{id:"Boss", entityType:"Boss", pos:{"x":380,"y":1000}}},
     {command:"Camera", params:{shake:true,shakeIntensity:{x:5, y:5}}},
     {command:"Camera", params:{zoom:4,time:1000}},
     {command:"Delay", params:{delayTime:1000}},
@@ -35,18 +35,42 @@ const testSequence = [
     {command:"Camera", params:{shake:false}},
 
     {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":413,"y":729}, delayTime:100}},
+    {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.89}]}},
     {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":650,"y":936}, delayTime:100}},
+    {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.79}]}},
     {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":715,"y":996}, delayTime:100}},
+    {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.69}]}},
     {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":868,"y":994}, delayTime:100}},
+    {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.59}]}},
     {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":873,"y":1101}, delayTime:100}},
+    {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.49}]}},
     {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":740,"y":1149}, delayTime:100}},
+    {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.39}]}},
     {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":742,"y":1327}, delayTime:100}},
+    {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.29}]}},
     {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":444,"y":1327}, delayTime:100}},
+    {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.19}]}},
     {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":48,"y":1317}, delayTime:100}},
+    {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.09}]}},
     {command:"Spawn", params:{entityType:"Torch",type:"thick",pos:{"x":48,"y":1107}, delayTime:100}},
     {command:"Delay", params:{delayTime:500}},
+    {command:"GameController", params:{fields:[{key:"useDarkOverlay",value:false}]}},
+    {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.99}]}},
 
     {command:"Camera", params:{from:{"x":380,"y":1000}, moveToEntity:"Player", time:1500}},
+    {command:"Camera", params:{attach:"Player"}},
+    {command:"Player", params:{controls:true}},
+    {command:"State", params:{entity:"Boss", state:2}},
+    {command:"End"}
+];
+
+const miniBossDeathSequence = [
+    {command:"Player", params:{controls:false}},
+    {command:"Camera", params:{detach:"Player"}},
+    {command:"Camera", params:{attachToEnity:"miniboss"}},
+    {command:"Camera", params:{zoom:3}},
+    {command:"Delay", params:{delayTime:1000}},
+    {command:"Camera", params:{zoom:1}},
     {command:"Camera", params:{attach:"Player"}},
     {command:"Player", params:{controls:true}},
     {command:"End"}
@@ -84,6 +108,10 @@ class Sequence{
                 return this.command_Camera(dt,command.params);
             case "Player":
                 return this.command_Player(dt,command.params);
+            case "State":
+                return this.command_State(dt,command.params);
+            case "GameController":
+                return this.command_GameController(dt,command.params);
             case "End":
                 console.log("end");
             default:
@@ -99,6 +127,15 @@ class Sequence{
         while(this.scriptPtr < this.script.length && this.runCommand(dt,this.script[this.scriptPtr])){}
     }
 
+    command_GameController(dt,command){
+        if(command.fields){
+            command.fields.forEach(field=>{
+                this.gameController[field.key]=field.value;
+            });
+            this.scriptPtr++;
+            return true;                        
+        }
+    }
     command_Spawn(dt,command){
         if(command.delayTime){
             const currentTime = (new Date()).getTime();
@@ -145,6 +182,11 @@ class Sequence{
         
         this.scriptPtr++;
         return true;
+    }
+
+    command_State(dt,command){
+        this.gameController.entityMap[command.entity].state = command.state;
+        this.scriptPtr++;
     }
     
     command_Camera(dt,command){
@@ -273,7 +315,8 @@ class Sequencer{
 
     constructor(gameController){
         this.gameController = gameController;
-        this.addSequence(new Sequence("startBossBattle",gameController,testSequence));
+        this.addSequence(new Sequence("startBossBattle",gameController,startBossBattleSequence));
+        this.addSequence(new Sequence("miniBossDeath",gameController,miniBossDeathSequence));
     }
 
     addSequence(sequence){

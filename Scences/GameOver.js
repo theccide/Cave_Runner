@@ -9,7 +9,7 @@ class GameOver extends Scene{
             viewBounds:{x:0,y:0,width: canvas.width,height: canvas.height},
             offBounds:{x:0,y:0,width: canvas.width,height: canvas.height}            
         });
-        loadImages(["Images/game_over_placehold.png"],this.finishedLoading(this));
+        loadImages(["Images/gameover.png"],this.finishedLoading(this));
     }
     finishedLoading = (self) => (images) => {
         self.images = images;
@@ -18,7 +18,12 @@ class GameOver extends Scene{
     update(dt){
         super.update(dt);
         if(!this.loaded) return;
-        drawImageFrom00(screenBuffer, this.images["Images/game_over_placehold.png"],0,0,canvas.width,canvas.height);
-        drawText(screenBuffer, 750, 60,"SCORE : "+this.score,30,"blue");
+        drawBox(screenBuffer,0,0,canvas.width, canvas.height, 'black');
+        drawImage(screenBuffer, this.images["Images/gameover.png"],canvas.height,canvas.height/2,canvas.height/2,canvas.height/2);
+        // drawText(screenBuffer, 750, 60,"SCORE : "+this.score,30,"yellow");
     }
+
+    getMouseInput=(event)=>{ }    
+    getMouseMoveInput=(event)=>{}
+    getKeyboardInput=(event)=>{}
 }
