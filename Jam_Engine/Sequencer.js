@@ -3,7 +3,7 @@ const startBossBattleSequence = [
     {command:"Camera", params:{zoom:2,time:1000}},
     {command:"Delay", params:{delayTime:10}},
     {command:"Camera", params:{detach:"Player"}},
-    {command:"Player", params:{keyPressed:"s",time:500}},
+    {command:"Player", params:{keyPressed:"s",time:1000}},
     {command:"Spawn", params:{entityType:"Fx", fxType:"5", destroyOnFinishAnim: true, pos:{x: 525, y: 692}}},
     {command:"Delay", params:{delayTime:1000}},
 

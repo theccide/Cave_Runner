@@ -38,6 +38,9 @@ class GameController {
             "Images/spritemaps/miniboss.png",
             "Images/spritemaps/boss.png",
             "Images/spritemaps/fx.png",
+            "Images/spritemaps/hor_door.png",
+            "Images/spritemaps/ver_door.png",
+            "Images/spritemaps/bubble.png",
             "Images/map1.png",
             "Images/lightsource.png",
             "Images/gems.png",
@@ -151,6 +154,24 @@ class GameController {
             this.enemies.push(enemy);
         });        
         
+        this.doors = [
+            new Door(this, "midbossOutdoor", {type:"hor"}, {x:287, y:696}), 
+            new Door(this, "midbossINdoor", {type:"hor"}, {x:543, y:696}, this.enemies),
+            new Door(this, "door3", {type:"hor"}, {x:833, y:696}, this.enemies),
+            new Door(this, "spikesdoor", {type:"hor"}, {x:1312, y:470}), 
+            new Door(this, "To lavadoortop", {type:"hor"}, {x:1345, y:245}), 
+            new Door(this, "lavadoorbot", {type:"hor"}, {x:1505, y:696}), 
+            new Door(this, "dragondoor", {type:"hor"}, {x:2016, y:696}), 
+            new Door(this, "lavadoortop", {type:"hor"}, {x:1505, y:245}), 
+            new Door(this, "lavadoorright", {type:"ver"}, {x:1936, y:95}),
+            new Door(this, "rubydoor", {type:"ver"}, {x:976, y:95}),
+            new Door(this, "door6", {type:"ver"}, {x:912, y:543}),
+            new Door(this, "door7", {type:"ver"}, {x:912, y:863}, this.enemies),
+            new Door(this, "door8", {type:"ver"}, {x:1168, y:1280}, this.enemies),
+            new Door(this, "door9", {type:"ver"}, {x:1424, y:768}, this.enemies)
+        ];
+        this.entities = this.entities.concat(this.doors);
+
         this.entities.forEach(entity=>{
             let newID = entity.id;
             if(!newID) newID = generateRandomId(8);
@@ -163,7 +184,8 @@ class GameController {
         this.player = new Player(this);
         this.addTriggerEntities();
 
-        this.sequencer = new Sequencer(this);        
+        this.sequencer = new Sequencer(this);
+        this.lavaManager = new LavaManager(this);
         this.resouncesReady = true;
     }
 
@@ -223,7 +245,7 @@ class GameController {
             return self.addEntity(self, torch);
         }
         if(objDef.entityType == "Fx") {
-            let fx = (objDef.pos) ? new Fx(self, id, {fxType:objDef.fxType, destroyOnFinishAnim:objDef.destroyOnFinishAnim},{x:objDef.pos.x,y:objDef.pos.y}) : new Fx(self,id,{fxType:objDef.type, destroyOnFinishAnim:objDef.destroyOnFinishAnim},{x:objDef.x,y:objDef.y});
+            let fx = (objDef.pos) ? new Fx(self, id, {fxType:objDef.fxType, destroyOnFinishAnim:objDef.destroyOnFinishAnim, spriteMap:objDef.spriteMap},{x:objDef.pos.x,y:objDef.pos.y}) : new Fx(self,id,{fxType:objDef.type, destroyOnFinishAnim:objDef.destroyOnFinishAnim, spriteMap:objDef.spriteMap},{x:objDef.x,y:objDef.y});
             return self.addEntity(self, fx);
         }        
         if(objDef.entityType == "Boss") {
@@ -303,6 +325,8 @@ class GameController {
         this.entities.forEach(entity => {
             entity.update(deltaTime);
         });
+
+        this.lavaManager.update(deltaTime);
         
         this.player.update(deltaTime);
     }

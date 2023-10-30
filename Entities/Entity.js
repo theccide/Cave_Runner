@@ -20,11 +20,12 @@ class Entity {
     camera = null;
     pauseAnimation = false;
     spriteAngle = 0;
+    visible = true;
     
     constructor (gameController, id, spriteSheet, position) {
         this.id = id;
         this.gameController = gameController;
-        this.position = position;
+        this.position = position;        
         if(spriteSheet) this.initSpriteSheet(spriteSheet);
     }
 
@@ -70,7 +71,7 @@ class Entity {
             if(this.frameChangeCallback) this.frameChangeCallback(this.frame);
             if(this.frame == this.spriteSheet.animations[this.currentAnimation].length-1 ){
                  this.forcePlaying = false;// this has played at least 1 time
-                 if(this.endAnimationCallback) this.endAnimationCallback();
+                 if(this.endAnimationCallback) {this.endAnimationCallback(); this.endAnimationCallback=null;}
                 //  if(this.id=="miniboss") console.log("endAnimationCallback paused",this.pauseAnimation);
             }
             this.elapsedTime = 0; // Reset the elapsed time
@@ -110,9 +111,11 @@ class Entity {
         this.collisionBounds.width = this.spriteSheet.spriteSize.width*2;
         this.collisionBounds.height = this.spriteSheet.spriteSize.height*2;
 
-        if(this.showDebug) drawBox(this.gameController.currentScene.backBuffer, this.collisionBounds.x, this.collisionBounds.y , this.collisionBounds.width, this.collisionBounds.height, "red");
-        this.drawSprite(deltaTime);
-        if(this.showDebug) drawCircle(this.gameController.currentScene.backBuffer, this.position.x, this.position.y, 4, "red");
+        if(this.visible){
+            if(this.showDebug) drawBox(this.gameController.currentScene.backBuffer, this.collisionBounds.x, this.collisionBounds.y , this.collisionBounds.width, this.collisionBounds.height, "red");
+            this.drawSprite(deltaTime);
+            if(this.showDebug) drawCircle(this.gameController.currentScene.backBuffer, this.position.x, this.position.y, 4, "red");
+        }
         this.processCamera();
     }
 

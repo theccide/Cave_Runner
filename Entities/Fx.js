@@ -18,27 +18,42 @@ const FX_NAMES = {
 
 class Fx extends Entity{
 
-    constructor (gameController, id, {fxType, destroyOnFinishAnim}, position) {
+    constructor (gameController, id, {fxType, destroyOnFinishAnim, spriteMap}, position) {
         super(gameController, id, null, position);
         this.fxType = fxType;
 
-        this.initSpriteSheet( {
-            sprite: null,
-            fileName: "Images/spritemaps/fx.png",
-            cellSize: { width: 16, height: 16 },
-            spriteSize: { width: 32, height: 32 },
-            grid: { rows: 3, columns: 6 },
-            startAnimation: FX_NAMES[fxType],
-            animations:{
-                "EXPLODE": [[0,0],[1,0],[2,0],[3,0]],   // 0
-                "FIREBALL": [[0,1]],                    // 1
-                "FIREBALL_EXPLODE": [[1,1],[2,1]],      // 1
-                "RINGFIRE": [[0,2],[1,2]],              // 2
-                "POOF": [[0,3],[1,3],[2,3]],            // 3
-                "SMOKE_POOF": [[0,4],[1,4],[2,4],[3,4]] // 4
-            }
-        });
-        this.frameChangeInterval = 0.2;
+        if(!spriteMap){
+            this.initSpriteSheet( {
+                sprite: null,
+                fileName: "Images/spritemaps/fx.png",
+                cellSize: { width: 16, height: 16 },
+                spriteSize: { width: 32, height: 32 },
+                grid: { rows: 3, columns: 6 },
+                startAnimation: FX_NAMES[fxType],
+                animations:{
+                    "EXPLODE": [[0,0],[1,0],[2,0],[3,0]],   // 0
+                    "FIREBALL": [[0,1]],                    // 1
+                    "FIREBALL_EXPLODE": [[1,1],[2,1]],      // 1
+                    "RINGFIRE": [[0,2],[1,2]],              // 2
+                    "POOF": [[0,3],[1,3],[2,3]],            // 3
+                    "SMOKE_POOF": [[0,4],[1,4],[2,4],[3,4]] // 4
+                }
+            });
+        }
+        if(spriteMap == "BUBBLE"){
+            this.initSpriteSheet( {
+                sprite: null,
+                fileName: "Images/spritemaps/bubble.png",
+                cellSize: { width: 27, height: 21 },
+                spriteSize: { width: 27/2, height: 21/2 },
+                grid: { rows: 1, columns: 4 },
+                startAnimation: "BUBBLE",
+                animations:{
+                    "BUBBLE": [[3,0],[1,0],[2,0],[0,0],[3,0],[3,0]]   // 0
+                }
+            });            
+        }
+        this.frameChangeInterval = 0.4;
         this.bobbingStrength = 0;
         if(destroyOnFinishAnim) this.endAnimationCallback = this.endAnimation;
     }

@@ -23,6 +23,8 @@
     <script src="Entities/MiniBoss.js"></script>
     <script src="Entities/Boss.js"></script>
     <script src="Entities/SpikeTrap.js"></script>
+    <script src="Entities/Door.js"></script>
+    <script src="Entities/LavaManager.js"></script>
     <script src="Player.js"></script>
     <script src="LevelMap.js"></script>
     <script src="Camera.js"></script>
@@ -46,7 +48,7 @@
     <button id="playButton"></button> -->
 
     <script>
-        const skipStory = true;
+        const skipStory = false;
         const canvas = document.getElementById('myCanvas');
         // let copyScreenBuffer = screenBuffer = canvas.getContext('2d');
         let screenBuffer = canvas.getContext('2d');
@@ -55,14 +57,16 @@
         screenBuffer.imageSmoothingEnabled= false;
 
         let currentScene = null;
+        let storyContent = "";
+        let titleScreen = null;
         if(!skipStory){
-            let titleScreen = new Title();
-            let storyContent = "";
+            titleScreen = new Title();
             let storyGenerator = new StoryGenerator();
             storyGenerator.generateStory(titleScreen.readyCallback, titleScreen);       
             currentScene = new Logo();  
         }
         else {currentScene = new LargeMap();}
+        // else {currentScene = new GameOver();}
         // let currentScene = new LargeMap();
         let lastTimestamp = 0; // Store the timestamp of the previous frame
 
