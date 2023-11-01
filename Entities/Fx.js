@@ -53,8 +53,21 @@ class Fx extends Entity{
                 }
             });            
         }
+        if(spriteMap == "KEY"){
+            this.initSpriteSheet( {
+                sprite: null,
+                fileName: "Images/spritemaps/key.png",
+                cellSize: { width: 16, height: 16 },
+                spriteSize: { width: 24, height: 24 },
+                grid: { rows: 2, columns: 4 },
+                startAnimation: "SILVER",
+                animations:{
+                    "GOLD":   [[0,0],[1,0],[3,0],[2,0],[3,0],[1,0]],   // 0
+                    "SILVER": [[0,1],[1,1],[3,1],[2,1],[3,1],[1,1]]    // 1
+                }
+            });            
+        }        
         this.frameChangeInterval = 0.4;
-        this.bobbingStrength = 0;
         if(destroyOnFinishAnim) this.endAnimationCallback = this.endAnimation;
     }
 

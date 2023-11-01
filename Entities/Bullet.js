@@ -30,7 +30,7 @@ class Bullet extends Entity{
         }
 
         if(this.gameController.levelMap.findCellFrom({x:this.position.x+dist.x, y:this.position.y+dist.y}).col === 1) {
-            this.gameController.instatiate({className:"Fx", params:{fxType:fxTypes.SMOKE_POOF, destroyOnFinishAnim:true}, position:{...this.position}});
+            this.gameController.instatiate({entityType:"Fx", params:{fxType:fxTypes.SMOKE_POOF, destroyOnFinishAnim:true}, pos:{...this.position}});
             this.gameController.destroy(this);
             return;
         }

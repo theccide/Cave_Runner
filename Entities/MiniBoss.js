@@ -55,7 +55,7 @@ class MiniBoss extends Entity{
                 this.endAnimationCallback=()=>{
                     this.lastTimeEvent = currentTime;
                     this.state = this.states.IDLE;
-                    this.gameController.instatiate({className:"Bullet", params:{fxType:fxTypes.POOF}, position:{...this.position}});
+                    this.gameController.instatiate({entityType:"Bullet", params:{fxType:fxTypes.POOF}, pos:{...this.position}});
                     this.endAnimationCallback = null;
                 }
                 break;

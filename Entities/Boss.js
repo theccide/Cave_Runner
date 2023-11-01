@@ -8,7 +8,7 @@ class Boss extends Entity{
     pauseAtDistance = 50;
     hitDistance = 100;
 
-    constructor (gameController, id, position, spawnPoints) {
+    constructor (gameController, id, {spawnPoints}, position) {
         super(gameController, id, null, position);
         this.spawnPoints = spawnPoints;
         this.initSpriteSheet( {

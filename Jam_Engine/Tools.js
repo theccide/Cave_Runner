@@ -101,6 +101,12 @@ class Tools {
     static MIN=0;
     static MAX=1;
 
+    static getBob(amplitude,frequency){
+        if(amplitude == 0) return 0;
+        const elapsed = (new Date()).getTime();
+        return amplitude * Math.sin(frequency * elapsed);
+    }
+
     static compressArray(array) {
         const jsonString = JSON.stringify(array);
         const compressedData = pako.deflate(jsonString);

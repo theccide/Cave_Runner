@@ -1,6 +1,7 @@
 class Torch extends Entity{
-    constructor (gameController, id, type, position) {
+    constructor (gameController, id, {type, isInteractable}, position) {
         super(gameController, id, null, position);
+        this.playerInteractable = isInteractable;
         // this.isLightSource = false;
         if(type=="thin"){
             this.initSpriteSheet( {
@@ -35,4 +36,11 @@ class Torch extends Entity{
     }
 
     brain=(dt)=>{}
+
+    hit(direction, force){        
+        this.gameController.instatiate({
+            entityType:"Fx", params:{fxType:"5", destroyOnFinishAnim: true}, pos:{...this.position}
+        });
+        this.gameController.destroy(this);
+    }
 }

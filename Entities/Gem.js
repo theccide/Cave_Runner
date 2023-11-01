@@ -12,7 +12,7 @@ const GEM_NAMES = {
 
 class Gem extends Entity{
     gemType="";
-    constructor (gameController, id, gemType, position) {
+    constructor (gameController, id, {gemType}, position) {
         super(gameController, id, null, position);
         this.gemType = gemType;
         this.initSpriteSheet( {
@@ -29,7 +29,7 @@ class Gem extends Entity{
             }
         });
         this.frameChangeInterval = 0.2;
-        this.bobbingStrength = 3;
+        this.bobbingStrength.y=3;
     }
 
     brain=(dt)=>{

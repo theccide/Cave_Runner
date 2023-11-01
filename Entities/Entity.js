@@ -12,7 +12,7 @@ class Entity {
     brightness = 0.25;
     collisionBounds = {x:0, y:0, width:0, height:0};
     id="";
-    bobbingStrength = 0;
+    bobbingStrength={x: 0, y:0, fx:0.005, fy:0.005};
     showDebug = false;
     endAnimationCallback=null;
     frameChangeCallback=null;    
@@ -21,6 +21,7 @@ class Entity {
     pauseAnimation = false;
     spriteAngle = 0;
     visible = true;
+    playerInteractable = false;
     
     constructor (gameController, id, spriteSheet, position) {
         this.id = id;
@@ -79,11 +80,6 @@ class Entity {
     }
     
     drawSprite=(deltaTime)=>{
-        const getBob=(amplitude,frequency)=>{
-            if(amplitude == 0) return 0;
-            const elapsed = (new Date()).getTime();
-            return amplitude * Math.sin(frequency * elapsed);
-        }
 
         this.nextFrame(deltaTime);
 
@@ -93,8 +89,8 @@ class Entity {
             this.spriteSheet.animations[this.currentAnimation][this.frame][1]*this.spriteSheet.cellSize.height,
             this.spriteSheet.cellSize.width,
             this.spriteSheet.cellSize.height,
-            this.position.x,
-            this.position.y+getBob(this.bobbingStrength,0.005),
+            this.position.x+Tools.getBob(this.bobbingStrength.x,this.bobbingStrength.fx),
+            this.position.y+Tools.getBob(this.bobbingStrength.y,this.bobbingStrength.fy),
             this.spriteSheet.spriteSize.width,
             this.spriteSheet.spriteSize.height,
             this.spriteAngle

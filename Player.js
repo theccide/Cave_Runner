@@ -45,7 +45,12 @@ class Player extends MoveableEntity {
                     if(Collision.testBoxOnBox(this.swingBoxBounds,bullet.collisionBounds)){
                         bullet.hit(this.faceDir, this.hitForce);
                     }
-                });                
+                });
+                this.gameController.interactableObjects.forEach (interactableObject=>{
+                    if(Collision.testBoxOnBox(this.swingBoxBounds,interactableObject.collisionBounds)){
+                        interactableObject.hit(this.faceDir, this.hitForce);
+                    }
+                });                   
             }
         } else if (event.type === "up") {
             if (event.key === "w" || event.key === "s") this.moveDirection.y = 0;
@@ -159,7 +164,7 @@ class Player extends MoveableEntity {
         const currentTime = (new Date()).getTime();
         if(currentTime > this.lastWaterTime+this.waterDelay){
             this.lastWaterTime = currentTime;
-            this.gameController.spawn(this.gameController, {entityType:"Fx", fxType:"0", destroyOnFinishAnim: true, pos:this.position});
+            this.gameController.spawn(this.gameController, {entityType:"Fx", params:{fxType:"0", destroyOnFinishAnim: true}, pos:{...this.position}});
         }
         // console.log("over water");
     }
