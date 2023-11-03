@@ -47,10 +47,14 @@ class GameController {
             "Images/spritemaps/flamethrower1.png",
             "Images/spritemaps/flamethrower2.png",
             "Images/spritemaps/pots.png",
+            "Images/spritemaps/skull.png",
+            "Images/spritemaps/golem.png",
+            "Images/spritemaps/obelisk.png",
             "Images/map1.png",
             "Images/lightsource.png",
             "Images/gems.png",
             "Images/hud.png",
+            "Images/arrow.png",
             "Images/lava1.png",
             "Images/lava2.png",
             "Images/heatlhback.png",
@@ -183,10 +187,13 @@ class GameController {
         this.entities.push(new Fx(this, "key", {fxType:"0", destroyOnFinishAnim: false, spriteMap:"KEY"}, {x:220,y:420}));
         this.entities.push(new Saw(this, "SAW", {x:800,y:400}));
 
-        this.entities.push(new Pot(this, "Pot", "ONE", {x:800,y:500}));
-        this.entities.push(new Pot(this, "Pot", "TWO", {x:750,y:500}));
-        this.entities.push(new Pot(this, "Pot", "THREE", {x:700,y:500}));
-        this.entities.push(new Pot(this, "Pot", "FOUR", {x:850,y:500}));
+        this.entities.push(new Golem(this, "Golem", {x:2600,y:1200}));
+        this.entities.push(new Obelisk(this, "Obelisk", {x:2400,y:1000}));
+
+        this.entities.push(new Pot(this, "Pot", {type:"ONE"}, {x:800,y:500}));
+        this.entities.push(new Pot(this, "Pot", {type:"TWO"}, {x:750,y:500}));
+        this.entities.push(new Pot(this, "Pot", {type:"THREE"}, {x:700,y:500}));
+        this.entities.push(new Pot(this, "Pot", {type:"FOUR"}, {x:850,y:500}));
 
         this.interactableObjects = this.entities.filter(entity=>entity.playerInteractable);
         this.entities = this.entities.concat(this.interactableObjects);
@@ -202,6 +209,7 @@ class GameController {
         // this.entities.push(new Boss(this, {x:400,y:800}));
 
         this.player = new Player(this);
+        this.player.addChild(new Skull(this,"skull", {x:45, y:45}));
         this.addTriggerEntities();
 
         this.sequencer = new Sequencer(this);
@@ -229,6 +237,20 @@ class GameController {
     runTrigger(trigger){ eval(trigger.code); }
 
     runSpikes(self){ if(self.spikeTraps[0].isUP) this.player.hit(0,0); }
+    
+    arrowReloadTime = 500;
+    lastArrowTime = 0;
+    shootArrow(self){
+        const currentTime = (new Date).getTime();
+        if(this.lastArrowTime == 0){
+            this.spawn(self, {entityType:"Arrow", params:{}, pos:{x:self.player.position.x, y:self.player.position.y-400}}, "arrow");
+            this.lastArrowTime = currentTime;
+        }
+        if(currentTime > this.lastArrowTime+this.arrowReloadTime){
+            this.lastArrowTime = 0;
+        }
+
+    }
     
     triggerPlaySequence(self, sequenceName, removeTrigger){
         if(removeTrigger){
@@ -263,11 +285,11 @@ class GameController {
         }
 
         const createInstance=(className, context, id, params, pos)=>{
-            const classes = { Bullet, Gem, Fx, Torch, Boss };
+            const classes = { Bullet, Gem, Fx, Torch, Boss, Arrow, FallingRock };
             return new classes[className](context, id, params, pos);
         }
         
-        let entity = createInstance(objDef.entityType, this, (objDef.id)?objDef.id:id, objDef.params, objDef.pos);
+        let entity = createInstance(objDef.entityType, this, (objDef.id)?objDef.id:id, objDef.params, {...objDef.pos});
         this.addEntity(self, entity, entity.playerInteractable);
         return entity;
     }

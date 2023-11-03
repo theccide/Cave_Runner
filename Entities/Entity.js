@@ -22,6 +22,9 @@ class Entity {
     spriteAngle = 0;
     visible = true;
     playerInteractable = false;
+    parent = { position:{x:0,y:0} };
+    children=[];
+    globalAlpha = 1;
     
     constructor (gameController, id, spriteSheet, position) {
         this.id = id;
@@ -34,6 +37,12 @@ class Entity {
         this.spriteSheet = spriteSheet;
         this.spriteSheet.sprite = this.gameController.images[spriteSheet.fileName];
         this.currentAnimation = this.spriteSheet.startAnimation;
+        this.setupCollisionBounds();
+    }
+
+    addChild(entity){
+        entity.parent = this;
+        this.children.push(entity);
     }
 
     forceAnimation(name){
@@ -47,6 +56,7 @@ class Entity {
     }    
     
     switchAnimation(name){
+        if(!(name in this.spriteSheet.animations)) return;
         if(this.nonInteruptable && this.forcePlaying) return; // dont play another animation if not allowed
         if(this.currentAnimation == name) return;
         // if(this.id=="player") console.log("switch",name);
@@ -83,34 +93,42 @@ class Entity {
 
         this.nextFrame(deltaTime);
 
+        this.gameController.currentScene.backBuffer.globalAlpha = this.globalAlpha;
+        //this.gameController.currentScene.backBuffer.scale(-1, 1);
         drawImageSprite(this.gameController.currentScene.backBuffer,
             this.spriteSheet.sprite,
             this.spriteSheet.animations[this.currentAnimation][this.frame][0]*this.spriteSheet.cellSize.width,
             this.spriteSheet.animations[this.currentAnimation][this.frame][1]*this.spriteSheet.cellSize.height,
             this.spriteSheet.cellSize.width,
             this.spriteSheet.cellSize.height,
-            this.position.x+Tools.getBob(this.bobbingStrength.x,this.bobbingStrength.fx),
-            this.position.y+Tools.getBob(this.bobbingStrength.y,this.bobbingStrength.fy),
+            this.position.x+this.parent.position.x+Tools.getBob(this.bobbingStrength.x,this.bobbingStrength.fx),
+            this.position.y+this.parent.position.y+Tools.getBob(this.bobbingStrength.y,this.bobbingStrength.fy),
             this.spriteSheet.spriteSize.width,
             this.spriteSheet.spriteSize.height,
             this.spriteAngle
         );
+        this.gameController.currentScene.backBuffer.globalAlpha = 1;
     }
 
-    brain = (deltaTime) => {}
+    brain(deltaTime){}
+
+    setupCollisionBounds(){
+        this.collisionBounds.x = this.parent.position.x+this.position.x - this.spriteSheet.spriteSize.width;
+        this.collisionBounds.y = this.parent.position.y+this.position.y - this.spriteSheet.spriteSize.height;        
+        this.collisionBounds.width = this.spriteSheet.spriteSize.width*2;
+        this.collisionBounds.height = this.spriteSheet.spriteSize.height*2;
+    }
 
     update = (deltaTime) => {
         this.nextFrame(deltaTime);
         this.brain(deltaTime);
-        this.collisionBounds.x = this.position.x - this.spriteSheet.spriteSize.width;
-        this.collisionBounds.y = this.position.y - this.spriteSheet.spriteSize.height;        
-        this.collisionBounds.width = this.spriteSheet.spriteSize.width*2;
-        this.collisionBounds.height = this.spriteSheet.spriteSize.height*2;
+        this.setupCollisionBounds();
+        this.children.forEach(child=>child.update(deltaTime));
 
         if(this.visible){
             if(this.showDebug) drawBox(this.gameController.currentScene.backBuffer, this.collisionBounds.x, this.collisionBounds.y , this.collisionBounds.width, this.collisionBounds.height, "red");
             this.drawSprite(deltaTime);
-            if(this.showDebug) drawCircle(this.gameController.currentScene.backBuffer, this.position.x, this.position.y, 4, "red");
+            if(this.showDebug) drawCircle(this.gameController.currentScene.backBuffer, this.parent.position.x+this.position.x, this.parent.position.y+this.position.y, 4, "red");
         }
         this.processCamera();
     }
@@ -119,10 +137,17 @@ class Entity {
         if(this.camera){
             // const halfScreenWidth = (screenBuffer.canvas.width/(this.gameController.camera.zoom*2));
             // const halfScreenHeight = (screenBuffer.canvas.height/(this.gameController.camera.zoom*2));
-            this.camera.offWindow.x = this.position.x - this.camera.screenWindow.width / 2;
-            this.camera.offWindow.y = this.position.y - this.camera.screenWindow.height / 2;
+            this.camera.offWindow.x = this.parent.position.x+this.position.x - this.camera.screenWindow.width / 2;
+            this.camera.offWindow.y = this.parent.position.y+this.position.y - this.camera.screenWindow.height / 2;
         }        
     }
 
     hit(direction, force){}
+}
+
+class EmptyEntity extends Entity{   
+    constructor (gameController, id, position) {
+        super(gameController, id, null, position);
+    }
+    update = (deltaTime) => {}
 }

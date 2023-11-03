@@ -75,6 +75,18 @@ const miniBossDeathSequence = [
     {command:"End"}
 ];
 
+const golemAttackSequence = [
+    {command:"Camera", params:{shake:true,shakeIntensity:{x:5, y:5}}},
+    {command:"Delay", params:{delayTime:1000}},
+    {command:"Camera", params:{shake:false}},
+    {command:"Spawn", params:{entityType:"FallingRock",params:{type:"ONE", ground:{x:2293,y:1200}},pos:{x:2293,y:900}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"FallingRock",params:{type:"ONE", ground:{x:2550,y:1300}},pos:{x:2550,y:860}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"FallingRock",params:{type:"ONE", ground:{x:2550,y:900}},pos:{x:2600,y:800}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"FallingRock",params:{type:"ONE", ground:{x:2000,y:1250}},pos:{x:2000,y:900}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"FallingRock",params:{type:"ONE", ground:{x:2600,y:970}},pos:{x:2700,y:830}, delayTime:100}},
+    {command:"End"}
+];
+
 class Sequence{
     gameController = null;
     script = null;
@@ -316,6 +328,7 @@ class Sequencer{
         this.gameController = gameController;
         this.addSequence(new Sequence("startBossBattle",gameController,startBossBattleSequence));
         this.addSequence(new Sequence("miniBossDeath",gameController,miniBossDeathSequence));
+        this.addSequence(new Sequence("golemAttack",gameController,golemAttackSequence));
     }
 
     addSequence(sequence){

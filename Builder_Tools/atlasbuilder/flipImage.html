@@ -1,0 +1,58 @@
+<script>
+function flipCell(ctx, imageData, x, y, width, height) {
+  // Create a new canvas element to draw the flipped cell
+  const offscreenCanvas = document.createElement('canvas');
+  const offscreenCtx = offscreenCanvas.getContext('2d');
+  offscreenCanvas.width = width;
+  offscreenCanvas.height = height;
+  
+  // Put the image data of the cell onto the offscreen canvas
+  offscreenCtx.putImageData(imageData, 0, 0);
+  
+  // Flip the offscreen canvas content horizontally
+  ctx.save();
+  ctx.scale(-1, 1);
+  ctx.drawImage(offscreenCanvas, -x - width, y, width, height);
+  ctx.restore();
+}
+
+function processImage(url) {
+  const img = new Image();
+  img.crossOrigin = 'Anonymous';
+  img.onload = function() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    
+    ctx.drawImage(img, 0, 0);
+    
+    const cellWidth = 158;
+    const cellHeight = 125;
+    
+    // Iterate over the canvas grid
+    for (let y = 0; y < canvas.height; y += cellHeight) {
+      for (let x = 0; x < canvas.width; x += cellWidth) {
+        // Get the image data for the cell
+        const imageData = ctx.getImageData(x, y, cellWidth, cellHeight);
+        // Clear the cell to avoid duplicating content
+        ctx.clearRect(x, y, cellWidth, cellHeight);
+        // Flip the cell and draw it back to the main canvas
+        flipCell(ctx, imageData, x, y, cellWidth, cellHeight);
+      }
+    }
+    
+    // Save or process the new image as required
+    const newImg = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.download = 'flipped_image.png';
+    link.href = newImg;
+    link.click();
+  };
+  img.src = url;
+}
+
+processImage('golem.png'); // Replace with the path to your image
+
+
+</script>

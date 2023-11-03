@@ -3,7 +3,7 @@ class Pot extends Entity{
     type = "";
     takingDamage = false;
     
-    constructor (gameController, id,  type, position) {
+    constructor (gameController, id,  {type}, position) {
         super(gameController, id, null, position);
         this.type = type;
         this.initSpriteSheet( {
@@ -57,5 +57,33 @@ class Pot extends Entity{
             return;
         }
     }
+}
 
+class FallingRock extends Pot{
+    fallSpeed = 1;
+    landed = false;
+    ground = {x:0,y:0};
+    light = null;
+    constructor (gameController, id, {type, ground}, position) {
+        super(gameController, id, {type}, position);
+        this.ground = ground;
+        this.isLightSource = true;
+        //this.light = new EmptyEntity(gameController,"",{x: ground.x - position.x, y:ground.y - position.y})
+        this.light = new Fx(gameController,"",{fxType:3},{x: ground.x - position.x, y:ground.y - position.y});
+        this.light.globalAlpha = 0.1;
+        this.addChild(this.light);
+    }
+    brain=(dt)=>{
+        if(this.landed) return;
+        this.fallSpeed+=this.fallSpeed*dt;
+        this.position.y+= this.fallSpeed;
+        this.light.position.y-= this.fallSpeed;
+        if(this.position.y >= this.ground.y){
+            this.landed = true;
+            this.switchAnimation("BREAK"+this.type);
+            this.endAnimationCallback=()=>{
+                this.gameController.destroy(this);
+            }
+        }
+    }    
 }

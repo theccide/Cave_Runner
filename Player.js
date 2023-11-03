@@ -6,6 +6,7 @@ class Player extends MoveableEntity {
     damageStartTime = 0;
     score = 0;
     hp = 5;
+    dragFriction = 1;    
     isPlayerControlled = true;
     inventory={
         questItems:{Maguffin:0},
@@ -108,50 +109,75 @@ class Player extends MoveableEntity {
 
     swingBoxBounds= {x:-50,y:0,width:100,height:50};
     update = (deltaTime) => {
-        if(this.faceDir == this.directions.DOWN) this.swingBoxBounds= {x: this.position.x -50,y: this.position.y, width:100,height:75};
-        if(this.faceDir == this.directions.UP) this.swingBoxBounds= {x: this.position.x -50,y: this.position.y-75, width:100,height: 75};
-        if(this.faceDir == this.directions.RIGHT) this.swingBoxBounds= {x: this.position.x, y: this.position.y-50, width:75,height: 100};
-        if(this.faceDir == this.directions.LEFT) this.swingBoxBounds= {x: this.position.x-75, y: this.position.y-50, width:75,height: 100};
-        
-        if(this.showPlayerDebug)
+        const setupBounds=()=>{
+            if(this.faceDir == this.directions.DOWN) this.swingBoxBounds= {x: this.position.x -50,y: this.position.y, width:100,height:75};
+            if(this.faceDir == this.directions.UP) this.swingBoxBounds= {x: this.position.x -50,y: this.position.y-75, width:100,height: 75};
+            if(this.faceDir == this.directions.RIGHT) this.swingBoxBounds= {x: this.position.x, y: this.position.y-50, width:75,height: 100};
+            if(this.faceDir == this.directions.LEFT) this.swingBoxBounds= {x: this.position.x-75, y: this.position.y-50, width:75,height: 100};
+
+            this.collisionBounds.x = this.position.x - this.spriteSheet.spriteSize.width*.6;
+            this.collisionBounds.y = this.position.y - this.spriteSheet.spriteSize.height*.8;
+            this.collisionBounds.width = (this.spriteSheet.spriteSize.width*.6)*2;
+            this.collisionBounds.height = (this.spriteSheet.spriteSize.height*.8)*2;    
+
+            if(this.showPlayerDebug)
             drawBox(
                 this.gameController.currentScene.backBuffer,
                 this.swingBoxBounds.x, this.swingBoxBounds.y,
                 this.swingBoxBounds.width, this.swingBoxBounds.height,
                 "Black"
             )
-
-        this.drawSprite(deltaTime);
-
-        this.processCamera();
-        
-        // collison detection
-        if(this.gameController.levelMap.findCellFrom({x:this.position.x+(this.moveDirection.x*10), y:this.position.y}).col !== 1) 
-            this.position.x += this.speed * this.moveDirection.x * deltaTime;
-        if(this.moveDirection.y < 0) {
-            if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*15)}).col !== 1) 
-                this.position.y += this.speed * this.moveDirection.y * deltaTime;
-        }
-        else {
-            if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*25)}).col !== 1) 
-                this.position.y += this.speed * this.moveDirection.y * deltaTime;
         }
 
-        let triggerID = this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y}).col;
-        if(triggerID !=0 && triggerID != 1){
-            if(triggerID === 4){
-                this.overWater(deltaTime);
-                return;
+        const collisionDetection=()=>{
+            if(this.gameController.levelMap.findCellFrom({x:this.position.x+(this.moveDirection.x*10), y:this.position.y}).col !== 1) 
+                this.position.x += this.speed * this.moveDirection.x * deltaTime;
+            if(this.moveDirection.y < 0) {
+                if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*15)}).col !== 1) 
+                    this.position.y += this.speed * this.moveDirection.y * deltaTime;
             }
-            let trigger = this.gameController.triggers.find(trigger=>trigger.id == triggerID);
-            if(trigger) this.gameController.runTrigger(trigger);
-            // console.log("trigger",trigger.code);
+            else {
+                if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*25)}).col !== 1) 
+                    this.position.y += this.speed * this.moveDirection.y * deltaTime;
+            }
+            
+            // trigger Detection
+            let triggerID = this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y}).col;
+            if(triggerID !=0 && triggerID != 1){
+                if(triggerID === 4){
+                    this.overWater(deltaTime);
+                    return;
+                }
+                let trigger = this.gameController.triggers.find(trigger=>trigger.id == triggerID);
+                if(trigger) this.gameController.runTrigger(trigger);
+                // console.log("trigger",trigger.code);
+            }
         }
 
-        this.collisionBounds.x = this.position.x - this.spriteSheet.spriteSize.width*.6;
-        this.collisionBounds.y = this.position.y - this.spriteSheet.spriteSize.height*.8;
-        this.collisionBounds.width = (this.spriteSheet.spriteSize.width*.6)*2;
-        this.collisionBounds.height = (this.spriteSheet.spriteSize.height*.8)*2;
+        const runHit=()=>{
+   
+            this.forceHitDist.x = Math.max(0, this.forceHitDist.x-this.dragFriction);
+            this.forceHitDist.y = Math.max(0, this.forceHitDist.y-this.dragFriction);
+            const newLocation ={
+                x: this.forceHitDist.x * this.forceDir.x,
+                y: this.forceHitDist.y * this.forceDir.y
+            }
+    
+            // console.log({x:this.forceHitDist.x,y:this.forceHitDist.y});
+            if(this.gameController.levelMap.findCellFrom({x:this.position.x+newLocation.x, y:this.position.y+newLocation.y}).col === 0) {
+                this.position.x += newLocation.x;
+                this.position.y += newLocation.y;    
+            }            
+        }
+
+        if(this.forceHitDist.x!=0 || this.forceHitDist.y!=0) runHit();
+        
+        this.drawSprite(deltaTime);
+        this.processCamera();       
+        setupBounds();
+        collisionDetection();
+        this.children.forEach(child=>child.update(deltaTime));
+
     }
 
     waterDelay = 250;
@@ -169,11 +195,19 @@ class Player extends MoveableEntity {
         // console.log("over water");
     }
 
+    hitTime = 0;
+    forceHitDist = {x:0, y:0};
+    forceDir = {x:0, y:0};
     hit(direction, force){
         if(this.takingDamage) return;
-        this.takingDamage = true;
+        this.takingDamage = true;        
         this.damageStartTime=(new Date()).getTime();
         this.hp -= 1;
+        if(force > 0){
+            this.hitTime = (new Date()).getTime();
+            this.forceDir= {x:direction.x, y:direction.y}
+            this.forceHitDist = {x:Math.abs(direction.x)*force, y:Math.abs(direction.y)*force}
+        }
         if(this.hp <= 0){
             this.hp = 0;
             changeScene(new GameOver(this.score));

@@ -20,20 +20,31 @@ class Saw extends Entity{
 
     yoyoAngle = 0;
     startTime = Date.now();
+    lastDist = 0;
     brain=(dt)=>{
         const easeInOutSine=(currentTime, startValue, changeInValue, duration)=> {
             return -changeInValue / 2 * (Math.cos(Math.PI * currentTime / duration) - 1) + startValue;
         }        
-        const calcYoYo=(angle, amplitude)=> {
-            let radians = angle * Math.PI / 180;
-            let sinValue = Math.sin(radians);
-            let movementInPixels = sinValue * amplitude;          
-            return movementInPixels;
+        const dist = easeInOutSine(Date.now() - this.startTime, 0, 250, 1000)
+        this.position.x = this.startPosition.x + dist;
+
+        // check to see if the player was hit
+        if(Collision.testBoxOnBox(this.gameController.player.collisionBounds,this.collisionBounds)){
+            this.gameController.player.hit({x: Math.sign(dist-this.lastDist),y:0}, 15);
         }
+        this.lastDist = dist; // find the direction the saw is going
+
+    }    
+}
+
+        // const calcYoYo=(angle, amplitude)=> {
+        //     let radians = angle * Math.PI / 180;
+        //     let sinValue = Math.sin(radians);
+        //     let movementInPixels = sinValue * amplitude;          
+        //     return movementInPixels;
+        // }
 
         // console.log(this.startPosition.x, Tools.tween1D(0, 200, (Date.now() - this.startTime)/2000));
         // this.position.x = this.startPosition.x + Tools.tween1D(0, 200, (Date.now() - this.startTime)/2000);
-        this.position.x = this.startPosition.x + easeInOutSine(Date.now() - this.startTime, 0, 250, 1000);
+
         // this.position.x = this.startPosition.x + calcYoYo(this.yoyoAngle+=10,3000)*dt;
-    }    
-}

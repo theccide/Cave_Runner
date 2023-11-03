@@ -29,7 +29,6 @@ class Enemy extends MoveableEntity{
     changeState = (state) => {this.state = state;}
     
     brain = (deltaTime) => {
-
         switch (this.state) {
             case this.states.IDLE:
                 this.autoControlAnimation = true;
@@ -48,9 +47,7 @@ class Enemy extends MoveableEntity{
             case this.states.HIT:
                 this.autoControlAnimation = false;
                 this.runHitState(deltaTime);
-                break;
-            default:
-              console.log("Yep, no state");          
+                break;     
         }          
     }
 

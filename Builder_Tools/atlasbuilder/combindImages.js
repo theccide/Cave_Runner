@@ -61,9 +61,13 @@ const imageDoubleArray = [
 
     //['sourseImages/peaks/peaks_1.png', 'sourseImages/peaks/peaks_2.png','sourseImages/peaks/peaks_3.png', 'sourseImages/peaks/peaks_4.png'],
     
-    ['sourseImages/key1/keys_1_1.png','sourseImages/key1/keys_1_2.png','sourseImages/key1/keys_1_3.png','sourseImages/key1/keys_1_4.png'],
-    ['sourseImages/key2/keys_2_1.png','sourseImages/key2/keys_2_2.png','sourseImages/key2/keys_2_3.png','sourseImages/key2/keys_2_4.png']
+    // ['sourseImages/key1/keys_1_1.png','sourseImages/key1/keys_1_2.png','sourseImages/key1/keys_1_3.png','sourseImages/key1/keys_1_4.png'],
+    // ['sourseImages/key2/keys_2_1.png','sourseImages/key2/keys_2_2.png','sourseImages/key2/keys_2_3.png','sourseImages/key2/keys_2_4.png']
 
+    // ['sourseImages/skull/skull_v2_1.png','sourseImages/skull/skull_v2_2.png','sourseImages/skull/skull_v2_3.png','sourseImages/skull/skull_v2_4.png']
+       ['sourseImages/death.png'],
+       ['sourseImages/hit.png'],
+       ['sourseImages/idle.png'],
 
     // ['sourseImages/Attack01/0.png', 'sourseImages/Attack01/1.png','sourseImages/Attack01/2.png', 'sourseImages/Attack01/3.png','sourseImages/Attack01/4.png','sourseImages/Attack01/5.png'],
     // ['sourseImages/Attack02/0.png', 'sourseImages/Attack02/1.png','sourseImages/Attack02/2.png', 'sourseImages/Attack02/3.png','sourseImages/Attack02/4.png'],

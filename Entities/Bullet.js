@@ -9,7 +9,24 @@ class Bullet extends Entity{
     constructor (gameController, id, {fxType, destroyOnFinishAnim}, position) {
         super(gameController, id, null, position);
         this.brightness = 0.9;
-        this.bulletEntity = new Fx(gameController, generateRandomId(8), {fxType, destroyOnFinishAnim: false}, position)
+
+        this.initSpriteSheet( {
+            sprite: null,
+            fileName: "Images/spritemaps/fx.png",
+            cellSize: { width: 16, height: 16 },
+            spriteSize: { width: 32, height: 32 },
+            grid: { rows: 3, columns: 6 },
+            startAnimation: FX_NAMES[fxType],
+            animations:{
+                "EXPLODE": [[0,0],[1,0],[2,0],[3,0]],   // 0
+                "FIREBALL": [[0,1]],                    // 1
+                "FIREBALL_EXPLODE": [[1,1],[2,1]],      // 1
+                "RINGFIRE": [[0,2],[1,2]],              // 2
+                "POOF": [[0,3],[1,3],[2,3]],            // 3
+                "SMOKE_POOF": [[0,4],[1,4],[2,4],[3,4]] // 4
+            }
+        });
+        this.frameChangeInterval = 0.2;
         this.target = this.gameController.player;
     }
 
@@ -37,8 +54,6 @@ class Bullet extends Entity{
 
         this.position.x += dist.x;
         this.position.y += dist.y;
-        this.bulletEntity.position = {...this.position}; 
-        this.collisionBounds = this.bulletEntity.collisionBounds;   
         
         // check to see if the player was hit
         if(Collision.testBoxOnBox(this.target.collisionBounds,this.collisionBounds)){
@@ -51,9 +66,5 @@ class Bullet extends Entity{
         if("miniboss" in this.gameController.entityMap) 
             this.target = this.gameController.entityMap["miniboss"];
         this.dir.x = -2;
-    }
-    update = (deltaTime) => {
-        this.brain(deltaTime);
-        this.bulletEntity.update(deltaTime);
-    }
+    } 
 }

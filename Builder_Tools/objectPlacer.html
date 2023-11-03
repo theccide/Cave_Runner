@@ -30,6 +30,7 @@
         </label>
         <button class="large-font" id="saveButton">Save</button>
         <button class="large-font" id="saveFileButton">Save To File</button>
+        <span class="large-font" id="location"></span>
     </p>
     <canvas id="myCanvas" width="2816" height="1408"></canvas>
     <style>
@@ -275,7 +276,8 @@
                 }
             }
         }
-        const getMouseMoveInput=(event)=>{}
+        const locationLabel = document.getElementById("location");
+        const getMouseMoveInput=(event)=>{locationLabel.innerHTML=`(${Math.floor(event.position.x)},${Math.floor(event.position.y)})`}
         const getKeyboardInput=(event)=>{}
 
         let imagesToLoad = [
