@@ -103,7 +103,7 @@ class Tools {
 
     static getBob(amplitude,frequency){
         if(amplitude == 0) return 0;
-        const elapsed = (new Date()).getTime();
+        const elapsed = gameTime;
         return amplitude * Math.sin(frequency * elapsed);
     }
 

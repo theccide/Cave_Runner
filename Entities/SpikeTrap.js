@@ -4,7 +4,7 @@ class SpikeTrap extends Entity{
         super(gameController, id, null, position);
         this.isUP = false;
         this.timeDelay = 2000;
-        this.lastEventTime = (new Date()).getTime();
+        this.lastEventTime = gameTime;
 
         this.initSpriteSheet( {
             sprite: null,
@@ -25,8 +25,8 @@ class SpikeTrap extends Entity{
 
     brain=({dt, currentTime, gameTime})=>{
 
-        if(currentTime > this.lastEventTime+this.timeDelay){
-            this.lastEventTime = currentTime;
+        if(gameTime > this.lastEventTime+this.timeDelay){
+            this.lastEventTime = gameTime;
             if(this.isUP) {
                 this.switchAnimation("LOWERING");
                 this.endAnimationCallback=()=>{

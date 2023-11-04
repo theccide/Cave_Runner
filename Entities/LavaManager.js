@@ -8,13 +8,13 @@ class LavaManager{
     constructor(gameController){
         this.gameController = gameController;
         this.timeDelay = 2000;
-        this.lastEventTime = (new Date()).getTime();        
+        this.lastEventTime = gameTime;        
     }
 
     update({dt, currentTime, gameTime}){
 
-        if(currentTime > this.lastEventTime+this.timeDelay){
-            this.lastEventTime = currentTime;
+        if(gameTime > this.lastEventTime+this.timeDelay){
+            this.lastEventTime = gameTime;
             const pos = {x: (Math.random() * this.lavaBounds[1].width)+this.lavaBounds[1].x,
                          y:(Math.random() * this.lavaBounds[1].height)+this.lavaBounds[1].y}
             this.gameController.spawn(

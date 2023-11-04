@@ -159,11 +159,11 @@ class Sequence{
     command_Spawn({dt, currentTime, gameTime},command){
         if(command.delayTime){
 
-            if(!this.isWaiting) this.lastEventTime = currentTime;
+            if(!this.isWaiting) this.lastEventTime = gameTime;
     
             this.isWaiting = true;
-            // console.log(currentTime, this.lastEventTime+command.params.delayTime)
-            if(currentTime > this.lastEventTime+command.delayTime){
+            // console.log(gameTime, this.lastEventTime+command.params.delayTime)
+            if(gameTime > this.lastEventTime+command.delayTime){
                 this.isWaiting = false;
                 this.gameController.spawn(this.gameController, command, command.id);
                 this.scriptPtr++;
@@ -186,10 +186,10 @@ class Sequence{
 
             if(command.time){
                 if(!this.isWaiting){
-                    this.lastEventTime = currentTime;
+                    this.lastEventTime = gameTime;
                 }
                 this.isWaiting = true;
-                if(currentTime > this.lastEventTime+command.time){
+                if(gameTime > this.lastEventTime+command.time){
                     this.gameController.player.processInput({type:"up",key:command.keyPressed});
                     this.scriptPtr++;
                     this.isWaiting = false;
@@ -222,10 +222,10 @@ class Sequence{
             if(command.time){
                 if(!this.isWaiting){
                     this.commandGlobals.startZoom = this.gameController.camera.zoom;
-                    this.lastEventTime = currentTime;
+                    this.lastEventTime = gameTime;
                 }
                 this.isWaiting = true;
-                const percent = (currentTime-this.lastEventTime)/command.time;
+                const percent = (gameTime-this.lastEventTime)/command.time;
                 let zoom = Tools.tween1D(this.commandGlobals.startZoom, command.zoom, percent);
                 if(percent>=1){
                     zoom = command.zoom;
@@ -278,10 +278,10 @@ class Sequence{
                         this.commandGlobals.to_x = command.moveTo.x;
                         this.commandGlobals.to_y = command.moveTo.y;
                     }
-                    this.lastEventTime = currentTime;
+                    this.lastEventTime = gameTime;
                 }
                 this.isWaiting = true;
-                const percent = (currentTime-this.lastEventTime)/command.time;
+                const percent = (gameTime-this.lastEventTime)/command.time;
                 let moveTo_x = Tools.tween1D(this.commandGlobals.from_x, this.commandGlobals.to_x, percent);
                 let moveTo_y = Tools.tween1D(this.commandGlobals.from_y, this.commandGlobals.to_y, percent);
                 if(percent>=1){
@@ -320,11 +320,11 @@ class Sequence{
 
     command_Delay({dt, currentTime, gameTime},command){
   
-        if(!this.isWaiting) this.lastEventTime = currentTime;
+        if(!this.isWaiting) this.lastEventTime = gameTime;
 
         this.isWaiting = true;
-        // console.log(currentTime, this.lastEventTime+command.params.delayTime)
-        if(currentTime > this.lastEventTime+command.delayTime){
+        // console.log(gameTime, this.lastEventTime+command.params.delayTime)
+        if(gameTime > this.lastEventTime+command.delayTime){
             this.isWaiting = false;
             this.scriptPtr++;
             return true;

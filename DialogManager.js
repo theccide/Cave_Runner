@@ -112,7 +112,7 @@ class Dialog{
         this.bounds.y = canvas.height/2;
         this.innerbounds = {x:0, y:0, width:0, height:0};
         // if(this.lastEventTime == 0)
-        this.lastEventTime = (new Date()).getTime();
+        this.lastEventTime = gameTime;
         this.isVisible = true;
         this.isGrowing = true;
         this.boxSize.width=0;
@@ -122,7 +122,7 @@ class Dialog{
 
     close(){
         // this.isVisible = false;
-        this.lastEventTime = (new Date()).getTime();
+        this.lastEventTime = gameTime;
         this.isShrinking = true;
     }
 
@@ -186,7 +186,7 @@ class Dialog{
 
         if(this.isGrowing){
             this.setupBounds();
-            let percentage = (currentTime-this.lastEventTime)/this.transitionTime;
+            let percentage = (gameTime-this.lastEventTime)/this.transitionTime;
             // if(this.lastEventTime == 0) percentage = 0;
             if(percentage>=1){
                 this.lastEventTime = 0;
@@ -199,7 +199,7 @@ class Dialog{
 
         if(this.isShrinking){
             this.setupBounds();
-            let percentage = (currentTime-this.lastEventTime)/this.transitionTime;
+            let percentage = (gameTime-this.lastEventTime)/this.transitionTime;
             // if(this.lastEventTime == 0) percentage = 0;
             if(percentage>=1){
                 this.lastEventTime = 0;

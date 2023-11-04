@@ -34,12 +34,12 @@ class Logo extends Scene{
 
         screenBuffer.clearRect(0, 0, canvas.width, canvas.height);
 
-        const deltaTime = currentTime - this.lastTime;
+        const deltaTime = gameTime - this.lastTime;
         if (deltaTime >= this.frameInterval) {
-            this.lastTime = currentTime;
+            this.lastTime = gameTime;
             if (this.fadeIn) this.alpha += 0.01; else this.alpha -= 0.01;
             if (this.alpha >= 1){ 
-                this.lastTime = currentTime+2000;
+                this.lastTime = gameTime+2000;
                 this.fadeIn = false; 
             }
             else if (this.alpha <= 0) {

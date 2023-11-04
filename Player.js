@@ -100,7 +100,7 @@ class Player extends MoveableEntity {
         this.frameChangeCallback=(frame)=>{
             this.spriteSheet.sprite=this.gameController.images["Images/spritemaps/complete_hero.png"];
             if(this.takingDamage){
-                const currentTime = (new Date()).getTime();
+                const currentTime = gameTime;
                 (frame%2==0)?this.spriteSheet.sprite=this.gameController.images["Images/spritemaps/complete_hero_hit.png"]:this.spriteSheet.sprite=this.gameController.images["Images/spritemaps/complete_hero.png"];
                 if(currentTime > this.damageStartTime+this.damageTime) this.takingDamage=false;
             }
@@ -188,8 +188,8 @@ class Player extends MoveableEntity {
             return;
         }
 
-        if(currentTime > this.lastWaterTime+this.waterDelay){
-            this.lastWaterTime = currentTime;
+        if(gameTime > this.lastWaterTime+this.waterDelay){
+            this.lastWaterTime = gameTime;
             this.gameController.spawn(this.gameController, {entityType:"Fx", params:{fxType:"0", destroyOnFinishAnim: true}, pos:{...this.position}});
         }
         // console.log("over water");
@@ -201,10 +201,10 @@ class Player extends MoveableEntity {
     hit(direction, force){
         if(this.takingDamage) return;
         this.takingDamage = true;        
-        this.damageStartTime=(new Date()).getTime();
+        this.damageStartTime=gameTime;
         this.hp -= 1;
         if(force > 0){
-            this.hitTime = (new Date()).getTime();
+            this.hitTime = gameTime;
             this.forceDir= {x:direction.x, y:direction.y}
             this.forceHitDist = {x:Math.abs(direction.x)*force, y:Math.abs(direction.y)*force}
         }

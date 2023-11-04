@@ -58,6 +58,7 @@
     <script>
         const skipStory = true;
         const canvas = document.getElementById('myCanvas');
+        let gameTime = 0;
         // let copyScreenBuffer = screenBuffer = canvas.getContext('2d');
         let screenBuffer = canvas.getContext('2d');
         screenBuffer.canvas.width  = window.innerWidth;
@@ -106,7 +107,7 @@
 
         function gameLoop(timestamp) {
             const currentTime = (new Date()).getTime();
-            const gameTime = currentTime - gameStartTime;           
+            gameTime = currentTime - gameStartTime;           
             const dt = (timestamp - lastTimestamp) / 1000; // Calculate delta time
             lastTimestamp = timestamp;            
             currentScene.update({dt, currentTime, gameTime}); // Update and render the game  

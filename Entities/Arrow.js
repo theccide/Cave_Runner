@@ -2,7 +2,7 @@ class Arrow extends Entity{
     speed = 150;
     dir={x:0,y:1};
     fadeOut = false;
-    lastTime = (new Date()).getTime();
+    lastTime = gameTime;
     ttl = 1000;
 
     constructor (gameController, id, params, position) {
@@ -25,7 +25,7 @@ class Arrow extends Entity{
 
     brain=({dt, currentTime, gameTime})=>{
 
-        if(this.fadeOut && currentTime > this.lastTime+this.ttl){
+        if(this.fadeOut && gameTime > this.lastTime+this.ttl){
             this.brightness -= 0.5*dt;
             if(this.brightness <=0){
                 this.brightness = 0;                
@@ -40,7 +40,7 @@ class Arrow extends Entity{
         }
 
         if(this.gameController.levelMap.findCellFrom({x:this.position.x+dist.x, y:this.position.y+dist.y}).col === 1) {            
-            if(!this.fadeOut) this.lastTime = (new Date()).getTime();
+            if(!this.fadeOut) this.lastTime = gameTime;
             this.fadeOut = true;
             // this.gameController.destroy(this);
             return;

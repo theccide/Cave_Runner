@@ -22,8 +22,8 @@ class Saw extends Entity{
     startTime = Date.now();
     lastDist = 0;
     brain=({dt, currentTime, gameTime})=>{
-        const easeInOutSine=(currentTime, startValue, changeInValue, duration)=> {
-            return -changeInValue / 2 * (Math.cos(Math.PI * currentTime / duration) - 1) + startValue;
+        const easeInOutSine=(gameTime, startValue, changeInValue, duration)=> {
+            return -changeInValue / 2 * (Math.cos(Math.PI * gameTime / duration) - 1) + startValue;
         }        
         //const dist = easeInOutSine(Date.now() - this.startTime, 0, 250, 1000)
         const dist = easeInOutSine(gameTime, 0, 250, 1000)

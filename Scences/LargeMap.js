@@ -78,7 +78,7 @@ class LargeMap extends Scene {
         this.gameController.update({dt, currentTime, gameTime});
         this.camera.render(screenBuffer);
 
-        const elapsed = (new Date()).getTime();
+        const elapsed = gameTime;
         const getFlicker=(brightness, frequency)=>{
             const amplitude = brightness*3; 
             return amplitude * Math.sin(frequency * elapsed);

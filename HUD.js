@@ -18,10 +18,10 @@ class HUD{
 
         for(let i=0; i<5; i++) drawImageFrom00(screenBuffer,this.gameController.images["Images/heatlhback.png"],153+(i*14),25,healthPillImage.width/2, healthPillImage.height/2);
         
-        if(this.gameController.player.hp == 1 && this.lastBarTime == 0) this.lastBarTime = currentTime;
+        if(this.gameController.player.hp == 1 && this.lastBarTime == 0) this.lastBarTime = gameTime;
 
-        if(this.gameController.player.hp == 1 && currentTime > this.lastBarTime+1000){ // make the last health bar flash after 1 second delay
-            const seconds = Math.floor(currentTime/500);
+        if(this.gameController.player.hp == 1 && gameTime > this.lastBarTime+1000){ // make the last health bar flash after 1 second delay
+            const seconds = Math.floor(gameTime/500);
             if(seconds%2==0)
                 drawImageFrom00(screenBuffer,healthPillImage,153,25,healthPillImage.width/2, healthPillImage.height/2);
         }

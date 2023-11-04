@@ -71,7 +71,7 @@ class Golem extends MoveableEntity{
 
     runAttackState({dt, currentTime, gameTime}){
         if(this.endAnimationCallback) return;
-        // this.attackStartTime = (new Date()).getTime();
+        // this.attackStartTime = gameTime;
 
         if(this.currentAnimation.endsWith("LEFT")){
             this.switchAnimation("ATTACK_LEFT");

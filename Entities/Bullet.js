@@ -3,7 +3,7 @@ class Bullet extends Entity{
     dir={x:1,y:0};
     bulletEntity = null;
     ttl = 2000;
-    lastTime = (new Date()).getTime();
+    lastTime = gameTime;
     target = null;
 
     constructor (gameController, id, {fxType, destroyOnFinishAnim}, position) {
@@ -32,7 +32,7 @@ class Bullet extends Entity{
 
     brain=({dt, currentTime, gameTime})=>{
 
-        if(currentTime > this.lastTime+this.ttl){
+        if(gameTime > this.lastTime+this.ttl){
             this.brightness -= 0.5*dt;
             if(this.brightness <=0){
                 this.brightness = 0;

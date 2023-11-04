@@ -14,14 +14,14 @@ class StarEntity extends Entity{
             }
         });
         this.timeDelay = (Math.random()*60000)+500;
-        this.lastEventTime = (new Date()).getTime();
+        this.lastEventTime = gameTime;
         this.visible = false;
         this.frameChangeInterval = 0.2
     }
     brain=({dt, currentTime, gameTime})=>{
 
-        if(currentTime > this.lastEventTime+this.timeDelay){
-            this.lastEventTime = currentTime;
+        if(gameTime > this.lastEventTime+this.timeDelay){
+            this.lastEventTime = gameTime;
             this.timeDelay = (Math.random()*60000)+500;
             this.visible = true;
             this.frame = 0;
@@ -82,7 +82,7 @@ class GameOver extends Scene{
         this.gameOverAlpha = 0;
         this.enities = [];
         this.timeDelayGO = 2000;
-        this.lastEventTimeGO = (new Date()).getTime();        
+        this.lastEventTimeGO = gameTime;        
     }
 
     convertRes(size){
@@ -106,12 +106,12 @@ class GameOver extends Scene{
         const label = this.images["Images/gameoverlabel.png"];
 
         screenBuffer.globalAlpha = 0;
-        if(currentTime > this.lastEventTimeGO+this.timeDelayGO){
+        if(gameTime > this.lastEventTimeGO+this.timeDelayGO){
             this.gameOverAlpha+=0.5*dt;
             if(this.gameOverAlpha > 1) this.gameOverAlpha = 1;
             screenBuffer.globalAlpha = this.gameOverAlpha;
         }
-        //console.log(screenBuffer.globalAlpha, currentTime, this.lastEventTimeGO+this.timeDelayGO);
+        //console.log(screenBuffer.globalAlpha, gameTime, this.lastEventTimeGO+this.timeDelayGO);
         drawImage(screenBuffer, label,canvas.height,(canvas.height/2)-200,
             this.convertRes(label.width),
             this.convertRes(label.height)

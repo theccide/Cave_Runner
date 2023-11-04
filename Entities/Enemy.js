@@ -91,7 +91,7 @@ class Enemy extends MoveableEntity{
         this.state = this.states.HIT;
         this.hitDirection = direction;
         this.autoControlAnimation = false;
-        this.hitTime = (new Date()).getTime();
+        this.hitTime = gameTime;
         if (direction == this.directions.UP) this.hitForce.y=-force;
         if (direction == this.directions.DOWN) this.hitForce.y=force;
         if (direction == this.directions.LEFT) this.hitForce.x=-force;
@@ -120,7 +120,7 @@ class Enemy extends MoveableEntity{
         this.switchAnimation("HIT");
 
         if(this.forceDist.x==0 && this.forceDist.y==0){
-            if(currentTime > this.hitTime + 500){
+            if(gameTime > this.hitTime + 500){
                 this.state = this.states.PATROLLING;
                 this.target = null;this.path = [];
                 this.frameChangeInterval = 0.1;

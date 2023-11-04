@@ -21,6 +21,7 @@ class GameController {
     sequencer=null;
     useDarkOverlay = true;
     darkOverlayLevel = 0.99;
+    gameTime = 0;
 
     getMouseInput=(event)=>{if(this.player) this.player.getMouseInput(event);}    
     getMouseMoveInput=(event)=>{if(this.player) this.player.getMouseMoveInput(event);}
@@ -243,12 +244,11 @@ class GameController {
     arrowReloadTime = 500;
     lastArrowTime = 0;
     shootArrow(self){
-        const currentTime = (new Date).getTime();
         if(this.lastArrowTime == 0){
             this.spawn(self, {entityType:"Arrow", params:{}, pos:{x:self.player.position.x, y:self.player.position.y-400}}, "arrow");
-            this.lastArrowTime = currentTime;
+            this.lastArrowTime = gameTime;
         }
-        if(currentTime > this.lastArrowTime+this.arrowReloadTime){
+        if(gameTime > this.lastArrowTime+this.arrowReloadTime){
             this.lastArrowTime = 0;
         }
 
@@ -320,7 +320,8 @@ class GameController {
         return fadeValue;
     }
 
-    update = ({dt, currentTime, gameTime}) => {        
+    update = ({dt, currentTime, gameTime}) => {
+
         if(!this.resouncesReady) return;
 
         this.sequencer.update({dt, currentTime, gameTime});

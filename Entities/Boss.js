@@ -27,7 +27,7 @@ class Boss extends Entity{
         });
         this.frameChangeInterval = 0.2;
         this.brightness=1;
-        this.lastTimeEvent = (new Date()).getTime();
+        this.lastTimeEvent = gameTime;
     }
 
     chasing({dt, currentTime, gameTime}){

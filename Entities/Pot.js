@@ -43,14 +43,14 @@ class Pot extends Entity{
             return;
         }
         this.takingDamage = true;
-        this.lastEventTime = (new Date()).getTime();
+        this.lastEventTime = gameTime;
         this.bobbingStrength.x = 3;
         this.bobbingStrength.fx = 0.1;
     }
 
     brain=({dt, currentTime, gameTime})=>{
         if(this.takingDamage) {
-            if(currentTime > this.lastEventTime+this.timeHitDelay){
+            if(gameTime > this.lastEventTime+this.timeHitDelay){
                 this.takingDamage = false;
                 this.bobbingStrength.x = 0;
                 this.bobbingStrength.fx = 0;        

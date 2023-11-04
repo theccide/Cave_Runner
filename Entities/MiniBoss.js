@@ -26,7 +26,7 @@ class MiniBoss extends Entity{
             }
         });
         this.frameChangeInterval = 0.2;
-        this.lastTimeEvent = (new Date()).getTime();
+        this.lastTimeEvent = gameTime;
     }
 
     brain=({dt, currentTime, gameTime})=>{
@@ -35,16 +35,16 @@ class MiniBoss extends Entity{
             case this.states.IDLE:
                 this.switchAnimation("Idle");
                 this.nextTimeEvent = 2000;
-                if(currentTime > this.lastTimeEvent+this.nextTimeEvent){
-                    this.lastTimeEvent = currentTime;
+                if(gameTime > this.lastTimeEvent+this.nextTimeEvent){
+                    this.lastTimeEvent = gameTime;
                     this.state = (Math.random()>= 0.5)?this.states.TELEPORTING:this.states.SHOOTING;
                 }
                 break;
             case this.states.TELEPORTING:
                 this.switchAnimation("PowerUp02");
                 this.nextTimeEvent = 1000;
-                if(currentTime > this.lastTimeEvent+this.nextTimeEvent){
-                    this.lastTimeEvent = currentTime;
+                if(gameTime > this.lastTimeEvent+this.nextTimeEvent){
+                    this.lastTimeEvent = gameTime;
                     this.state = this.states.IDLE;
                     const newSpawnPoint = Tools.getNumberBetween(0, this.spawnPoints.length-1);
                     this.position = this.spawnPoints[newSpawnPoint];
@@ -53,7 +53,7 @@ class MiniBoss extends Entity{
             case this.states.SHOOTING:
                 this.switchAnimation("Attack01");
                 this.endAnimationCallback=()=>{
-                    this.lastTimeEvent = currentTime;
+                    this.lastTimeEvent = gameTime;
                     this.state = this.states.IDLE;
                     this.gameController.instatiate({entityType:"Bullet", params:{fxType:fxTypes.POOF}, pos:{...this.position}});
                     this.endAnimationCallback = null;
