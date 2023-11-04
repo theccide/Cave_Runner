@@ -22,6 +22,8 @@ class Pot extends Entity{
                 "BREAKTHREE":  [[1,2],[2,2],[3,2]], // 0
                 "FOUR":        [[0,3]], // 0
                 "BREAKFOUR":   [[1,3],[2,3],[3,3]], // 0
+                "FIVE":        [[0,4]], // 0
+                "BREAKFIVE":   [[1,4],[2,4],[3,4]], // 0                
             }
         });
         this.frameChangeInterval = 0.2;

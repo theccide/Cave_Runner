@@ -28,6 +28,7 @@ class GameController {
 
     start = (scene) => {
         this.currentScene = scene;
+        this.currentScene.dialogManager = new Dialog(this);
         this.camera = scene.camera;
         this.levelMap = new LevelMap(this);
         loadImages([
@@ -60,6 +61,7 @@ class GameController {
             "Images/heatlhback.png",
             "Images/heatlhgreen.png",
             "Images/heatlhred.png",
+            "Images/dialog.png",
         ],this.imagesFinished);
 
         loadSounds(["Sounds/noise.wav"],this.soundsFinished);
@@ -289,7 +291,7 @@ class GameController {
             return new classes[className](context, id, params, pos);
         }
         
-        let entity = createInstance(objDef.entityType, this, (objDef.id)?objDef.id:id, objDef.params, {...objDef.pos});
+        let entity = createInstance(objDef.entityType, this, (objDef.id)?objDef.id:id, {...objDef.params}, {...objDef.pos});
         this.addEntity(self, entity, entity.playerInteractable);
         return entity;
     }

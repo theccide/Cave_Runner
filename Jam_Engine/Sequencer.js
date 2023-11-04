@@ -79,11 +79,18 @@ const golemAttackSequence = [
     {command:"Camera", params:{shake:true,shakeIntensity:{x:5, y:5}}},
     {command:"Delay", params:{delayTime:1000}},
     {command:"Camera", params:{shake:false}},
-    {command:"Spawn", params:{entityType:"FallingRock",params:{type:"ONE", ground:{x:2293,y:1200}},pos:{x:2293,y:900}, delayTime:100}},
-    {command:"Spawn", params:{entityType:"FallingRock",params:{type:"ONE", ground:{x:2550,y:1300}},pos:{x:2550,y:860}, delayTime:100}},
-    {command:"Spawn", params:{entityType:"FallingRock",params:{type:"ONE", ground:{x:2550,y:900}},pos:{x:2600,y:800}, delayTime:100}},
-    {command:"Spawn", params:{entityType:"FallingRock",params:{type:"ONE", ground:{x:2000,y:1250}},pos:{x:2000,y:900}, delayTime:100}},
-    {command:"Spawn", params:{entityType:"FallingRock",params:{type:"ONE", ground:{x:2600,y:970}},pos:{x:2700,y:830}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"FallingRock",params:{type:"FOUR", ground:{x:2293,y:1200}},pos:{x:2293,y:900}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"FallingRock",params:{type:"FIVE", ground:{x:2550,y:1300}},pos:{x:2550,y:860}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"FallingRock",params:{type:"FOUR", ground:{x:2550,y:900}},pos:{x:2600,y:800}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"FallingRock",params:{type:"FIVE", ground:{x:2000,y:1250}},pos:{x:2000,y:900}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"FallingRock",params:{type:"FOUR", ground:{x:2600,y:970}},pos:{x:2700,y:830}, delayTime:100}},
+    {command:"End"}
+];
+
+const rescueSpiritSequence = [
+    {command:"Dialog", params:{open:true, text:"To make the text wrap within the specified box dimensions, you'll need a more complex function. This function will not only reduce the font size if necessary but also break the text into lines that fit within the specified width. Here's how you could write such a function:"}},
+    {command:"Delay", params:{delayTime:1000}},
+    {command:"Dialog", params:{open:false}},
     {command:"End"}
 ];
 
@@ -113,6 +120,8 @@ class Sequence{
         switch(command.command){
             case "Spawn":
                 return this.command_Spawn(dt,command.params);
+            case "Dialog":
+                return this.command_Dialog(dt,command.params);                
             case "Delay":
                 return this.command_Delay(dt,command.params);
             case "Camera":
@@ -193,6 +202,14 @@ class Sequence{
         
         this.scriptPtr++;
         return true;
+    }
+
+    command_Dialog(dt,command){
+        if(command.open)
+            this.gameController.currentScene.dialogManager.setupDialog(command.text);
+        if(!command.open)
+            this.gameController.currentScene.dialogManager.close();
+        this.scriptPtr++;
     }
 
     command_State(dt,command){

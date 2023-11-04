@@ -121,6 +121,7 @@ class LargeMap extends Scene {
         }
         
         if(this.isTransitioning) this.drawTransition(dt);
+        this.dialogManager.update(dt);
         this.HUD.update(dt);
     }
 }
