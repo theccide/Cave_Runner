@@ -85,6 +85,7 @@
         let fpslastTime = 0;
         let frameCount = 0;
         let fps = 0;
+        let gameStartTime = (new Date()).getTime();
 
         function drawFPS(){            
             const time = (new Date()).getTime();
@@ -103,10 +104,12 @@
             screenBuffer.fillText(`FPS: ${fps}`, 10, 30);            
         }
 
-        function gameLoop(timestamp) {            
+        function gameLoop(timestamp) {
+            const currentTime = (new Date()).getTime();
+            const gameTime = currentTime - gameStartTime;           
             const dt = (timestamp - lastTimestamp) / 1000; // Calculate delta time
             lastTimestamp = timestamp;            
-            currentScene.update(dt); // Update and render the game  
+            currentScene.update({dt, currentTime, gameTime}); // Update and render the game  
             // drawFPS(timestamp);          
             requestAnimationFrame(gameLoop);
         }

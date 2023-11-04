@@ -23,8 +23,8 @@ class Arrow extends Entity{
         this.frameChangeInterval = 0.2;
     }
 
-    brain=(dt)=>{
-        const currentTime = (new Date()).getTime();
+    brain=({dt, currentTime, gameTime})=>{
+
         if(this.fadeOut && currentTime > this.lastTime+this.ttl){
             this.brightness -= 0.5*dt;
             if(this.brightness <=0){

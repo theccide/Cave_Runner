@@ -33,8 +33,8 @@ class Title extends Scene{
     buttonClicked (self, id) {
         console.log("clicked");
     }
-    update(dt){
-        super.update(dt);
+    update(dtPackage){
+        super.update(dtdtPackage);
         if(!this.loaded) return;
         drawImage(screenBuffer, this.images["Images/titlescreen.png"],canvas.height,canvas.height/2,canvas.height/2,canvas.height/2);
         if(this.readyToStart)

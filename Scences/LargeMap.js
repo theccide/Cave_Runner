@@ -65,7 +65,7 @@ class LargeMap extends Scene {
         this.HUD = new HUD(this.gameController);
     }
 
-    drawTransition(dt){
+    drawTransition({dt, currentTime, gameTime}){
         this.gameController.camera.setZoom(this.gameController.camera.zoom - 2*dt);
         if(this.gameController.camera.zoom <= 1){
             this.gameController.camera.zoom = 1;
@@ -73,9 +73,9 @@ class LargeMap extends Scene {
         }
     }
     
-    update(dt){
-        super.update(dt);
-        this.gameController.update(dt);
+    update({dt, currentTime, gameTime}){
+        super.update({dt, currentTime, gameTime});
+        this.gameController.update({dt, currentTime, gameTime});
         this.camera.render(screenBuffer);
 
         const elapsed = (new Date()).getTime();
@@ -120,8 +120,8 @@ class LargeMap extends Scene {
             );
         }
         
-        if(this.isTransitioning) this.drawTransition(dt);
-        this.dialogManager.update(dt);
-        this.HUD.update(dt);
+        if(this.isTransitioning) this.drawTransition({dt, currentTime, gameTime});
+        this.dialogManager.update({dt, currentTime, gameTime});
+        this.HUD.update({dt, currentTime, gameTime});
     }
 }

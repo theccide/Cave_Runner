@@ -11,8 +11,8 @@ class LavaManager{
         this.lastEventTime = (new Date()).getTime();        
     }
 
-    update(dt){
-        const currentTime = (new Date()).getTime();
+    update({dt, currentTime, gameTime}){
+
         if(currentTime > this.lastEventTime+this.timeDelay){
             this.lastEventTime = currentTime;
             const pos = {x: (Math.random() * this.lavaBounds[1].width)+this.lavaBounds[1].x,

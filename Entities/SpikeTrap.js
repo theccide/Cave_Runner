@@ -23,8 +23,8 @@ class SpikeTrap extends Entity{
         this.frameChangeInterval = 0.2;
     }
 
-    brain=(dt)=>{
-        const currentTime = (new Date()).getTime();
+    brain=({dt, currentTime, gameTime})=>{
+
         if(currentTime > this.lastEventTime+this.timeDelay){
             this.lastEventTime = currentTime;
             if(this.isUP) {

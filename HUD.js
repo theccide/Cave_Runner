@@ -6,8 +6,8 @@ class HUD{
     }
 
     lastBarTime = 0;
-    update(dt){
-        const currentTime = (new Date()).getTime();
+    update({dt, currentTime, gameTime}){
+
         if(!this.gameController.resouncesReady) return;
         const hudImage =this.gameController.images["Images/hud.png"];
         drawImageFrom00(screenBuffer,hudImage,10,10,hudImage.width/2, hudImage.height/2);

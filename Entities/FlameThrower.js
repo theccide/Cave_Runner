@@ -31,7 +31,7 @@ class FlameThrower extends Entity{
         this.frameChangeInterval = 0.2;
     }
 
-    brain=(dt)=>{
+    brain=({dt, currentTime, gameTime})=>{
  
     }    
 }

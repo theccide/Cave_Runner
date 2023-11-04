@@ -30,17 +30,7 @@ class Boss extends Entity{
         this.lastTimeEvent = (new Date()).getTime();
     }
 
-    // const {hit, dist, angle} = Tools2D.moveTowards_CloseEnough(dt,this.position,this.gameController.player.position, this.speed, this.hitDistance, this.pauseAtDistance);
-    // this.spriteAngle = Tools.toDegrees(angle);
-    // if(hit){
-    //     this.switchAnimation("Attack1");
-    // }
-    // if(dist < this.pauseAtDistance+10){
-    //     this.gameController.player.hit(0,0);
-    // }
-
-
-    chasing(dt){
+    chasing({dt, currentTime, gameTime}){
         const {hit, dist, angle} = Tools2D.moveTowards_CloseEnough(dt,this.position,this.gameController.player.position, this.speed, this.hitDistance, this.pauseAtDistance);
         this.spriteAngle = Tools.toDegrees(angle);
         if(dist < this.pauseAtDistance+10){
@@ -51,12 +41,12 @@ class Boss extends Entity{
         }
         else{this.switchAnimation("Idle")}
     }   
-    brain=(dt)=>{        const currentTime = (new Date()).getTime();
+    brain=({dt, currentTime, gameTime})=>{
         switch (this.state) {
             case this.states.IDLE:
             break;
             case this.states.CHASING:
-                this.chasing(dt);
+                this.chasing({dt, currentTime, gameTime});
             break;
             case this.states.ATTACKING:
             break;

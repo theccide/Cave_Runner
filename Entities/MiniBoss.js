@@ -29,8 +29,8 @@ class MiniBoss extends Entity{
         this.lastTimeEvent = (new Date()).getTime();
     }
 
-    brain=(dt)=>{
-        const currentTime = (new Date()).getTime();
+    brain=({dt, currentTime, gameTime})=>{
+
         switch (this.state) {
             case this.states.IDLE:
                 this.switchAnimation("Idle");

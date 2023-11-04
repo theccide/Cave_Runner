@@ -28,13 +28,12 @@ class Logo extends Scene{
     frameInterval = 1000 / this.frameRate; // Interval in milliseconds
     lastTime = 0;    
 
-    update(dt){
-        super.update(dt);
+    update({dt, currentTime, gameTime}){
+        super.update({dt, currentTime, gameTime});
         if(!this.loaded) return;
 
         screenBuffer.clearRect(0, 0, canvas.width, canvas.height);
 
-        const currentTime = (new Date()).getTime();
         const deltaTime = currentTime - this.lastTime;
         if (deltaTime >= this.frameInterval) {
             this.lastTime = currentTime;

@@ -48,9 +48,8 @@ class Pot extends Entity{
         this.bobbingStrength.fx = 0.1;
     }
 
-    brain=(dt)=>{
+    brain=({dt, currentTime, gameTime})=>{
         if(this.takingDamage) {
-            const currentTime = (new Date()).getTime();
             if(currentTime > this.lastEventTime+this.timeHitDelay){
                 this.takingDamage = false;
                 this.bobbingStrength.x = 0;
@@ -75,7 +74,7 @@ class FallingRock extends Pot{
         this.light.globalAlpha = 0.1;
         this.addChild(this.light);
     }
-    brain=(dt)=>{
+    brain=({dt, currentTime, gameTime})=>{
         if(this.landed) return;
         this.fallSpeed+=this.fallSpeed*dt;
         this.position.y+= this.fallSpeed;

@@ -23,6 +23,6 @@ class Obelisk extends Entity{
         this.brightness=2;
     }
 
-    brain=(dt)=>{
+    brain=({dt, currentTime, gameTime})=>{
     }    
 }

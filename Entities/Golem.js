@@ -31,18 +31,18 @@ class Golem extends MoveableEntity{
         this.brightness=.8;
     }
 
-    brain(dt){
+    brain({dt, currentTime, gameTime}){
         switch (this.state) {
             case this.states.IDLE:
                 this.autoControlAnimation = true;
                 break;
             case this.states.PATROLLING:
                 this.autoControlAnimation = true;
-                this.runPatrollingState(dt);
+                this.runPatrollingState({dt, currentTime, gameTime});
                 break;     
             case this.states.ATTACKING:
                 this.autoControlAnimation = false;
-                this.runAttackState(dt);
+                this.runAttackState({dt, currentTime, gameTime});
                 break;         
         }          
     }
@@ -53,14 +53,14 @@ class Golem extends MoveableEntity{
         this.path = [...this.searchingWaypoints];
     }
 
-    runPatrollingState(deltaTime){
+    runPatrollingState({dt, currentTime, gameTime}){
         if(!this.target) {
             this.waypointPointer=0;
             this.target = this.searchingWaypoints[this.waypointPointer];
             this.findWaypoint();
         }
        
-        const targetWaypoint = Tools2D.moveTowards_CloseEnough(deltaTime,this.position,this.path[this.waypointPointer],this.speed-10,8);//move to the next waypoint
+        const targetWaypoint = Tools2D.moveTowards_CloseEnough(dt,this.position,this.path[this.waypointPointer],this.speed-10,8);//move to the next waypoint
         if(targetWaypoint?.hit){ 
             this.waypointPointer = (this.waypointPointer+=1) % this.path.length;
             this.state = this.states.ATTACKING;
@@ -69,7 +69,7 @@ class Golem extends MoveableEntity{
         if(targetWaypoint) this.animateTowards(targetWaypoint);
     } 
 
-    runAttackState(dt){
+    runAttackState({dt, currentTime, gameTime}){
         if(this.endAnimationCallback) return;
         // this.attackStartTime = (new Date()).getTime();
 

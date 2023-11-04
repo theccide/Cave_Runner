@@ -28,7 +28,7 @@ class Enemy extends MoveableEntity{
 
     changeState = (state) => {this.state = state;}
     
-    brain = (deltaTime) => {
+    brain = ({dt, currentTime, gameTime}) => {
         switch (this.state) {
             case this.states.IDLE:
                 this.autoControlAnimation = true;
@@ -37,16 +37,16 @@ class Enemy extends MoveableEntity{
             case this.states.PATROLLING:
                 this.autoControlAnimation = true;
                 this.calcState();
-                this.runPatrollingState(deltaTime);
+                this.runPatrollingState({dt, currentTime, gameTime});
                 break;
             case this.states.CHASING:
                 this.autoControlAnimation = true;
                 this.calcState();
-                this.runChasingState(deltaTime);
+                this.runChasingState({dt, currentTime, gameTime});
                 break;
             case this.states.HIT:
                 this.autoControlAnimation = false;
-                this.runHitState(deltaTime);
+                this.runHitState({dt, currentTime, gameTime});
                 break;     
         }          
     }
@@ -67,14 +67,14 @@ class Enemy extends MoveableEntity{
         this.path = this.gameController.levelMap.aStar.findPath().map(pos=>{return {x:(pos.x*32)+16,y:(pos.y*32)+16}}).reverse();
     }
 
-    runPatrollingState=(deltaTime)=>{
+    runPatrollingState=({dt, currentTime, gameTime})=>{
         if(!this.target) {
             this.waypointPointer=0;
             this.target = this.searchingWaypoints[this.waypointPointer];
             this.findWaypoint();
         }
        
-        const targetWaypoint = Tools2D.moveTowards_CloseEnough(deltaTime,this.position,this.path[1],this.speed-10,8);//move to the next waypoint
+        const targetWaypoint = Tools2D.moveTowards_CloseEnough(dt,this.position,this.path[1],this.speed-10,8);//move to the next waypoint
         if(this.path.length === 1 || targetWaypoint?.hit){ // take in account that you can start on the waypoint at your position
             if(this.path.length !== 1) this.path.shift();
             if(this.path.length === 1) { // correct last cell for rounding errors
@@ -116,9 +116,9 @@ class Enemy extends MoveableEntity{
 
     hitTime = 0;
 
-    runHitState=(deltaTime)=>{
+    runHitState=({dt, currentTime, gameTime})=>{
         this.switchAnimation("HIT");
-        const currentTime = (new Date()).getTime();
+
         if(this.forceDist.x==0 && this.forceDist.y==0){
             if(currentTime > this.hitTime + 500){
                 this.state = this.states.PATROLLING;
@@ -128,7 +128,7 @@ class Enemy extends MoveableEntity{
             return;
         }
 
-        deltaTime = 1;
+        // deltaTime = 1;
         this.forceDist.x = Math.max(0, this.forceDist.x-this.dragFriction);
         this.forceDist.y = Math.max(0, this.forceDist.y-this.dragFriction);
         const newLocation ={
@@ -143,7 +143,7 @@ class Enemy extends MoveableEntity{
         }
     }
 
-    runChasingState=(deltaTime)=>{
+    runChasingState=({dt, currentTime, gameTime})=>{
         if(!this.target) {
             this.gameController.levelMap.aStar.setup({x:Math.floor(this.position.x/32),y:Math.floor(this.position.y/32)},
             this.gameController.levelMap.findCellFrom(this.gameController.player.position), this.gameController.levelMap.grid);
@@ -154,7 +154,7 @@ class Enemy extends MoveableEntity{
             // changeScene(new GameOver(this.gameController.score*100));
             return;
         }
-        const targetWaypoint = Tools2D.moveTowards_CloseEnough(deltaTime,this.position,this.path[1],this.speed-5,8);//move to the next waypoint
+        const targetWaypoint = Tools2D.moveTowards_CloseEnough(dt,this.position,this.path[1],this.speed-5,8);//move to the next waypoint
         if(targetWaypoint.hit){                    
             this.path.shift();
         }

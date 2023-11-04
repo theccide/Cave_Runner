@@ -18,8 +18,8 @@ class StarEntity extends Entity{
         this.visible = false;
         this.frameChangeInterval = 0.2
     }
-    brain=(dt)=>{
-        const currentTime = (new Date()).getTime();
+    brain=({dt, currentTime, gameTime})=>{
+
         if(currentTime > this.lastEventTime+this.timeDelay){
             this.lastEventTime = currentTime;
             this.timeDelay = (Math.random()*60000)+500;
@@ -97,8 +97,8 @@ class GameOver extends Scene{
             this.enities.push(new StarEntity({images, currentScene:{backBuffer:screenBuffer}}, "star"+i,{x:(canvas.width/2*Math.random())+canvas.width/4,y:500*Math.random()}));
         this.enities.push(new SplashEntity({images, currentScene:{backBuffer:screenBuffer}}, "splash", {x:712,y:710}));     
     }
-    update(dt){
-        super.update(dt);
+    update({dt, currentTime, gameTime}){
+        super.update({dt, currentTime, gameTime});
         if(!this.loaded) return;
         drawBox(screenBuffer,0,0,canvas.width, canvas.height, 'black');
         screenBuffer.globalAlpha = 1;
@@ -106,7 +106,6 @@ class GameOver extends Scene{
         const label = this.images["Images/gameoverlabel.png"];
 
         screenBuffer.globalAlpha = 0;
-        const currentTime = (new Date()).getTime();
         if(currentTime > this.lastEventTimeGO+this.timeDelayGO){
             this.gameOverAlpha+=0.5*dt;
             if(this.gameOverAlpha > 1) this.gameOverAlpha = 1;
@@ -127,7 +126,7 @@ class GameOver extends Scene{
             this.convertRes(droplet.height)
         );
 
-        this.enities.forEach(entity=>entity.update(dt));
+        this.enities.forEach(entity=>entity.update({dt, currentTime, gameTime}));
 
     }
 

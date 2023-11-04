@@ -143,13 +143,9 @@ class Dialog{
         this.connerbounds.height = Math.floor(this.innerbounds.hheight/3);
     }
 
-    update(dt){
+    update({dt, currentTime, gameTime}){
         if(!this.isVisible) return;
         if(!this.gameController.resouncesReady) return;
-        const currentTime = (new Date).getTime();
-        // this.setupDialog("Hello World");
-
-        // drawImage(screenBuffer, this.gameController.images["Images/dialog.png"], canvas.width/2,canvas.height/2,100,100);
 
         drawImageSprite(screenBuffer, this.gameController.images["Images/dialog.png"], 
                         0,0, this.innerbounds.hwidth, this.innerbounds.hheight,

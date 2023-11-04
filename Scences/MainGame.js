@@ -23,9 +23,9 @@ class MainGame extends Scene {
         this.gameController.start(this);
     }
 
-    update(dt){
-        super.update(dt);
-        this.gameController.update(dt);
+    update({dt, currentTime, gameTime}){
+        super.update({dt, currentTime, gameTime});
+        this.gameController.update({dt, currentTime, gameTime});
         this.camera.render(screenBuffer);
 
         if(this.gameController.images["Images/lightsource.png"])

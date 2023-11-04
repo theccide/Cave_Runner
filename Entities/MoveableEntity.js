@@ -17,8 +17,8 @@ class MoveableEntity extends Entity{
         super(gameController, id, spriteSheet, position);        
     }
 
-    drawSprite=(deltaTime)=>{
-        this.nextFrame(deltaTime);
+    drawSprite=({dt, currentTime, gameTime})=>{
+        this.nextFrame({dt, currentTime, gameTime});
 
         if(this.autoControlAnimation){
             if(this.moveDirection.x != 0) {

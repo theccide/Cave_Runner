@@ -56,7 +56,7 @@ class Door extends Entity{
 
         return shouldBeOpen;
     }
-    brain=(dt)=>{
+    brain=({dt, currentTime, gameTime})=>{
         if(this.isLocked) return;
 
         if(this.doorShouldBeOpen()){

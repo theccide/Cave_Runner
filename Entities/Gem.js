@@ -32,7 +32,7 @@ class Gem extends Entity{
         this.bobbingStrength.y=3;
     }
 
-    brain=(dt)=>{
+    brain=({dt, currentTime, gameTime})=>{
         if(Collision.testCircleOnCircle(this.gameController.player.position,8,this.position,8)){
             this.gameController.player.score +=(4 - (this.gemType + 1)) * 10;
             this.gameController.destroy(this);

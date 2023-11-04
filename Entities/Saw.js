@@ -21,11 +21,12 @@ class Saw extends Entity{
     yoyoAngle = 0;
     startTime = Date.now();
     lastDist = 0;
-    brain=(dt)=>{
+    brain=({dt, currentTime, gameTime})=>{
         const easeInOutSine=(currentTime, startValue, changeInValue, duration)=> {
             return -changeInValue / 2 * (Math.cos(Math.PI * currentTime / duration) - 1) + startValue;
         }        
-        const dist = easeInOutSine(Date.now() - this.startTime, 0, 250, 1000)
+        //const dist = easeInOutSine(Date.now() - this.startTime, 0, 250, 1000)
+        const dist = easeInOutSine(gameTime, 0, 250, 1000)
         this.position.x = this.startPosition.x + dist;
 
         // check to see if the player was hit

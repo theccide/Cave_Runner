@@ -320,10 +320,10 @@ class GameController {
         return fadeValue;
     }
 
-    update = (deltaTime) => {        
+    update = ({dt, currentTime, gameTime}) => {        
         if(!this.resouncesReady) return;
 
-        this.sequencer.update(deltaTime);
+        this.sequencer.update({dt, currentTime, gameTime});
 
         if(this.entitiesToRemove.length != 0){
             this.entitiesToRemove.forEach(entity=>{
@@ -350,14 +350,14 @@ class GameController {
         drawImageFrom00(this.currentScene.backBuffer, this.images["Images/map1.png"],
                         0,0,this.currentScene.offBounds.width,this.currentScene.offBounds.height);
 
-        this.levelMap.update(deltaTime);
+        this.levelMap.update({dt, currentTime, gameTime});
 
         this.entities.forEach(entity => {
-            entity.update(deltaTime);
+            entity.update({dt, currentTime, gameTime});
         });
 
-        this.lavaManager.update(deltaTime);
+        this.lavaManager.update({dt, currentTime, gameTime});
         
-        this.player.update(deltaTime);
+        this.player.update({dt, currentTime, gameTime});
     }
 }

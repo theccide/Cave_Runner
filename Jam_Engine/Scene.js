@@ -12,7 +12,7 @@ class Scene{
         this.backBuffer = this.backCanvas.getContext('2d');        
     }
 
-    update(dt){
+    update({dt, currentTime, gameTime}){
         this.backBuffer.clearRect(0, 0, this.offBounds.width, this.offBounds.height); //clear canvas
     }
 }

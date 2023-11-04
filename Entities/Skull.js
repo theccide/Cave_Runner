@@ -20,7 +20,7 @@ class Skull extends Entity{
     }
 
     angle = 0;
-    brain=(dt)=>{
+    brain=({dt, currentTime, gameTime})=>{
         this.position = Tools.rotatePointAround(0,0,this.startPosition.x, this.startPosition.y, this.angle+=100*dt);
     }    
 }

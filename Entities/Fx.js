@@ -75,5 +75,5 @@ class Fx extends Entity{
         this.gameController.destroy(this);
     }
 
-    brain=(dt)=>{}
+    brain=({dt, currentTime, gameTime})=>{}
 }

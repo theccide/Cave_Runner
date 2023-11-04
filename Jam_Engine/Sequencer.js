@@ -116,22 +116,22 @@ class Sequence{
         this.scriptPtr = 0;
     }
 
-    runCommand(dt,command){
+    runCommand(dtPackage,command){
         switch(command.command){
             case "Spawn":
-                return this.command_Spawn(dt,command.params);
+                return this.command_Spawn(dtPackage,command.params);
             case "Dialog":
-                return this.command_Dialog(dt,command.params);                
+                return this.command_Dialog(dtPackage,command.params);                
             case "Delay":
-                return this.command_Delay(dt,command.params);
+                return this.command_Delay(dtPackage,command.params);
             case "Camera":
-                return this.command_Camera(dt,command.params);
+                return this.command_Camera(dtPackage,command.params);
             case "Player":
-                return this.command_Player(dt,command.params);
+                return this.command_Player(dtPackage,command.params);
             case "State":
-                return this.command_State(dt,command.params);
+                return this.command_State(dtPackage,command.params);
             case "GameController":
-                return this.command_GameController(dt,command.params);
+                return this.command_GameController(dtPackage,command.params);
             case "End":
                 console.log("end");
             default:
@@ -141,13 +141,13 @@ class Sequence{
         return true;
     }
 
-    update(dt){
+    update(dtPackage){
         if(this.isPaused) return;
         if(this.scriptPtr >= this.script.length-1) return;
-        while(this.scriptPtr < this.script.length && this.runCommand(dt,this.script[this.scriptPtr])){}
+        while(this.scriptPtr < this.script.length && this.runCommand(dtPackage,this.script[this.scriptPtr])){}
     }
 
-    command_GameController(dt,command){
+    command_GameController(dtPackage,command){
         if(command.fields){
             command.fields.forEach(field=>{
                 this.gameController[field.key]=field.value;
@@ -156,9 +156,9 @@ class Sequence{
             return true;                        
         }
     }
-    command_Spawn(dt,command){
+    command_Spawn({dt, currentTime, gameTime},command){
         if(command.delayTime){
-            const currentTime = (new Date()).getTime();
+
             if(!this.isWaiting) this.lastEventTime = currentTime;
     
             this.isWaiting = true;
@@ -176,8 +176,7 @@ class Sequence{
         return true;
     }
 
-    command_Player(dt,command){ 
-        const currentTime = (new Date()).getTime();
+    command_Player({dt, currentTime, gameTime},command){ 
 
         if (command.hasOwnProperty('controls')){        
             this.gameController.player.setPlayerControlled(command.controls);
@@ -204,7 +203,7 @@ class Sequence{
         return true;
     }
 
-    command_Dialog(dt,command){
+    command_Dialog(dtPackage,command){
         if(command.open)
             this.gameController.currentScene.dialogManager.setupDialog(command.text);
         if(!command.open)
@@ -212,14 +211,13 @@ class Sequence{
         this.scriptPtr++;
     }
 
-    command_State(dt,command){
+    command_State(dtPackage,command){
         this.gameController.entityMap[command.entity].state = command.state;
         this.scriptPtr++;
     }
     
-    command_Camera(dt,command){
+    command_Camera({dt, currentTime, gameTime},command){
   
-        const currentTime = (new Date()).getTime();
         if(command.zoom){
             if(command.time){
                 if(!this.isWaiting){
@@ -320,9 +318,8 @@ class Sequence{
         return true;
     }
 
-    command_Delay(dt,command){
+    command_Delay({dt, currentTime, gameTime},command){
   
-        const currentTime = (new Date()).getTime();
         if(!this.isWaiting) this.lastEventTime = currentTime;
 
         this.isWaiting = true;
@@ -356,8 +353,8 @@ class Sequencer{
     pauseSequence(sequenceName, pause){ this.sequenceMap[sequenceName].pause(pause);}
     startSequence(sequenceName){ this.sequenceMap[sequenceName].start();}
 
-    update(dt){
-        this.sequences.forEach(sequence=>sequence.update(dt));
+    update(dtPackage){
+        this.sequences.forEach(sequence=>sequence.update(dtPackage));
     }
 }
 

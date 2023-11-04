@@ -64,11 +64,11 @@ class Story extends Scene{
     buttonClicked (self, id) {
         console.log("clicked");
     }
-    update(dt){
-        super.update(dt);
+    update(dtPackage){
+        super.update(dtPackage);
         if(!this.loaded) return;
         drawImage(screenBuffer, this.images[`${localStorage.getItem("S3_BUCKET")}/generated_image.png`],canvas.height,canvas.height/2,canvas.height/2,canvas.height/2);
         this.wrapText(screenBuffer, storyContent);
-        // this.button.update(dt);
+        // this.button.update(dtPackage);
     }
 }

@@ -70,11 +70,11 @@ class Entity {
         this.animationQueue = animations;
     }
 
-    nextFrame = (deltaTime) => {
+    nextFrame = ({dt, currentTime, gameTime}) => {
         // if(this.id=="miniboss") console.log("paused",this.pauseAnimation);
         if(this.pauseAnimation) return;
 
-        this.elapsedTime += deltaTime;
+        this.elapsedTime += dt;
 
         if (this.elapsedTime >= this.frameChangeInterval) {
             this.frame += 1;
@@ -89,9 +89,9 @@ class Entity {
         }
     }
     
-    drawSprite=(deltaTime)=>{
+    drawSprite=({dt, currentTime, gameTime})=>{
 
-        this.nextFrame(deltaTime);
+        this.nextFrame({dt, currentTime, gameTime});
 
         this.gameController.currentScene.backBuffer.globalAlpha = this.globalAlpha;
         //this.gameController.currentScene.backBuffer.scale(-1, 1);
@@ -110,7 +110,7 @@ class Entity {
         this.gameController.currentScene.backBuffer.globalAlpha = 1;
     }
 
-    brain(deltaTime){}
+    brain({dt, currentTime, gameTime}){}
 
     setupCollisionBounds(){
         this.collisionBounds.x = this.parent.position.x+this.position.x - this.spriteSheet.spriteSize.width;
@@ -119,15 +119,15 @@ class Entity {
         this.collisionBounds.height = this.spriteSheet.spriteSize.height*2;
     }
 
-    update = (deltaTime) => {
-        this.nextFrame(deltaTime);
-        this.brain(deltaTime);
+    update = ({dt, currentTime, gameTime}) => {
+        this.nextFrame({dt, currentTime, gameTime});
+        this.brain({dt, currentTime, gameTime});
         this.setupCollisionBounds();
-        this.children.forEach(child=>child.update(deltaTime));
+        this.children.forEach(child=>child.update({dt, currentTime, gameTime}));
 
         if(this.visible){
             if(this.showDebug) drawBox(this.gameController.currentScene.backBuffer, this.collisionBounds.x, this.collisionBounds.y , this.collisionBounds.width, this.collisionBounds.height, "red");
-            this.drawSprite(deltaTime);
+            this.drawSprite({dt, currentTime, gameTime});
             if(this.showDebug) drawCircle(this.gameController.currentScene.backBuffer, this.parent.position.x+this.position.x, this.parent.position.y+this.position.y, 4, "red");
         }
         this.processCamera();
@@ -149,5 +149,5 @@ class EmptyEntity extends Entity{
     constructor (gameController, id, position) {
         super(gameController, id, null, position);
     }
-    update = (deltaTime) => {}
+    update = ({dt, currentTime, gameTime}) => {}
 }

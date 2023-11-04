@@ -108,7 +108,7 @@ class Player extends MoveableEntity {
     }
 
     swingBoxBounds= {x:-50,y:0,width:100,height:50};
-    update = (deltaTime) => {
+    update = ({dt, currentTime, gameTime}) => {
         const setupBounds=()=>{
             if(this.faceDir == this.directions.DOWN) this.swingBoxBounds= {x: this.position.x -50,y: this.position.y, width:100,height:75};
             if(this.faceDir == this.directions.UP) this.swingBoxBounds= {x: this.position.x -50,y: this.position.y-75, width:100,height: 75};
@@ -131,21 +131,21 @@ class Player extends MoveableEntity {
 
         const collisionDetection=()=>{
             if(this.gameController.levelMap.findCellFrom({x:this.position.x+(this.moveDirection.x*10), y:this.position.y}).col !== 1) 
-                this.position.x += this.speed * this.moveDirection.x * deltaTime;
+                this.position.x += this.speed * this.moveDirection.x * dt;
             if(this.moveDirection.y < 0) {
                 if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*15)}).col !== 1) 
-                    this.position.y += this.speed * this.moveDirection.y * deltaTime;
+                    this.position.y += this.speed * this.moveDirection.y * dt;
             }
             else {
                 if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*25)}).col !== 1) 
-                    this.position.y += this.speed * this.moveDirection.y * deltaTime;
+                    this.position.y += this.speed * this.moveDirection.y * dt;
             }
             
             // trigger Detection
             let triggerID = this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y}).col;
             if(triggerID !=0 && triggerID != 1){
                 if(triggerID === 4){
-                    this.overWater(deltaTime);
+                    this.overWater({dt, currentTime, gameTime});
                     return;
                 }
                 let trigger = this.gameController.triggers.find(trigger=>trigger.id == triggerID);
@@ -172,22 +172,22 @@ class Player extends MoveableEntity {
 
         if(this.forceHitDist.x!=0 || this.forceHitDist.y!=0) runHit();
         
-        this.drawSprite(deltaTime);
+        this.drawSprite({dt, currentTime, gameTime});
         this.processCamera();       
         setupBounds();
         collisionDetection();
-        this.children.forEach(child=>child.update(deltaTime));
+        this.children.forEach(child=>child.update({dt, currentTime, gameTime}));
 
     }
 
     waterDelay = 250;
     lastWaterTime = 0;
-    overWater(deltaTime){
+    overWater({dt, currentTime, gameTime}){
         if(this.inventory.questItems["Maguffin"]==0) {
             this.hit(0,0);
             return;
         }
-        const currentTime = (new Date()).getTime();
+
         if(currentTime > this.lastWaterTime+this.waterDelay){
             this.lastWaterTime = currentTime;
             this.gameController.spawn(this.gameController, {entityType:"Fx", params:{fxType:"0", destroyOnFinishAnim: true}, pos:{...this.position}});

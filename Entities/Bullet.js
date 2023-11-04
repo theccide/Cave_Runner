@@ -30,8 +30,8 @@ class Bullet extends Entity{
         this.target = this.gameController.player;
     }
 
-    brain=(dt)=>{
-        const currentTime = (new Date()).getTime();
+    brain=({dt, currentTime, gameTime})=>{
+
         if(currentTime > this.lastTime+this.ttl){
             this.brightness -= 0.5*dt;
             if(this.brightness <=0){
