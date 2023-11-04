@@ -25,7 +25,10 @@ class GameController {
 
     getMouseInput=(event)=>{if(this.player) this.player.getMouseInput(event);}    
     getMouseMoveInput=(event)=>{if(this.player) this.player.getMouseMoveInput(event);}
-    getKeyboardInput=(event)=>{if(this.player) this.player.getKeyboardInput(event);}
+    getKeyboardInput=(event)=>{
+        if(this?.currentScene?.dialogManager) this.currentScene.dialogManager.getKeyboardInput(event);
+        if(this.player) this.player.getKeyboardInput(event);
+    }
 
     start = (scene) => {
         this.currentScene = scene;
@@ -180,7 +183,7 @@ class GameController {
             new Door(this, "lavadoortop", {type:"hor"}, {x:1505, y:245}), 
             new Door(this, "lavadoorright", {type:"ver"}, {x:1936, y:95}),
             new Door(this, "rubydoor", {type:"ver"}, {x:976, y:95}),
-            new Door(this, "door6", {type:"ver"}, {x:912, y:543}),
+            new Door(this, "door6", {type:"ver"}, {x:912, y:543}, this.enemies),
             new Door(this, "door7", {type:"ver"}, {x:912, y:863}, this.enemies),
             new Door(this, "door8", {type:"ver"}, {x:1168, y:1280}, this.enemies),
             new Door(this, "door9", {type:"ver"}, {x:1424, y:768}, this.enemies)
@@ -196,7 +199,7 @@ class GameController {
         this.entities.push(new Pot(this, "Pot", {type:"ONE"}, {x:800,y:500}));
         this.entities.push(new Pot(this, "Pot", {type:"TWO"}, {x:750,y:500}));
         this.entities.push(new Pot(this, "Pot", {type:"THREE"}, {x:700,y:500}));
-        this.entities.push(new Pot(this, "Pot", {type:"FOUR"}, {x:850,y:500}));
+        this.entities.push(new Pot(this, "Pot", {type:"THREE",dropSequence:"rescueSpirit"}, {x:850,y:500}));
 
         this.interactableObjects = this.entities.filter(entity=>entity.playerInteractable);
         this.entities = this.entities.concat(this.interactableObjects);

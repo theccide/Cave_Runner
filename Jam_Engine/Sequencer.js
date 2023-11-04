@@ -89,7 +89,7 @@ const golemAttackSequence = [
 
 const rescueSpiritSequence = [
     {command:"Dialog", params:{open:true, text:"To make the text wrap within the specified box dimensions, you'll need a more complex function. This function will not only reduce the font size if necessary but also break the text into lines that fit within the specified width. Here's how you could write such a function:"}},
-    {command:"Delay", params:{delayTime:1000}},
+    {command:"Delay", params:{delayTime:100}},
     {command:"Dialog", params:{open:false}},
     {command:"End"}
 ];
@@ -343,6 +343,7 @@ class Sequencer{
         this.addSequence(new Sequence("startBossBattle",gameController,startBossBattleSequence));
         this.addSequence(new Sequence("miniBossDeath",gameController,miniBossDeathSequence));
         this.addSequence(new Sequence("golemAttack",gameController,golemAttackSequence));
+        this.addSequence(new Sequence("rescueSpirit",gameController,rescueSpiritSequence));        
     }
 
     addSequence(sequence){

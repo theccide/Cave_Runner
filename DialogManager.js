@@ -82,8 +82,7 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
     });
     return currentFontSize;
   }
-  
-  
+    
 class Dialog{
     bounds = {x:0, y:0, width:0, height:0};
     innerbounds = {x:0, y:0, width:0, height:0};
@@ -112,17 +111,18 @@ class Dialog{
         this.bounds.y = canvas.height/2;
         this.innerbounds = {x:0, y:0, width:0, height:0};
         // if(this.lastEventTime == 0)
-        this.lastEventTime = gameTime;
+        this.lastEventTime = gameTimeAlt;
         this.isVisible = true;
         this.isGrowing = true;
         this.boxSize.width=0;
         this.boxSize.height=0;
         this.setupBounds();
+        setPause(true);
     }
 
     close(){
         // this.isVisible = false;
-        this.lastEventTime = gameTime;
+        this.lastEventTime = gameTimeAlt;
         this.isShrinking = true;
     }
 
@@ -186,7 +186,7 @@ class Dialog{
 
         if(this.isGrowing){
             this.setupBounds();
-            let percentage = (gameTime-this.lastEventTime)/this.transitionTime;
+            let percentage = (gameTimeAlt-this.lastEventTime)/this.transitionTime;
             // if(this.lastEventTime == 0) percentage = 0;
             if(percentage>=1){
                 this.lastEventTime = 0;
@@ -199,7 +199,7 @@ class Dialog{
 
         if(this.isShrinking){
             this.setupBounds();
-            let percentage = (gameTime-this.lastEventTime)/this.transitionTime;
+            let percentage = (gameTimeAlt-this.lastEventTime)/this.transitionTime;
             // if(this.lastEventTime == 0) percentage = 0;
             if(percentage>=1){
                 this.lastEventTime = 0;
@@ -217,4 +217,8 @@ class Dialog{
                     this.bounds.width, this.bounds.height, 
                     this.fontSize, 'left', 'top', this.typeFace, this.color);
     }
+    getKeyboardInput(event){
+      if (event.type === "down") 
+          if (event.key === " ") setPause(false);
+  }    
 }

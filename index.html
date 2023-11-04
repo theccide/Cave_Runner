@@ -58,7 +58,10 @@
     <script>
         const skipStory = true;
         const canvas = document.getElementById('myCanvas');
+        let gameStartTime = (new Date()).getTime();
+        let gameStartTimeAlt = (new Date()).getTime(); // pause free
         let gameTime = 0;
+        let gameTimeAlt = 0; // pause free
         // let copyScreenBuffer = screenBuffer = canvas.getContext('2d');
         let screenBuffer = canvas.getContext('2d');
         screenBuffer.canvas.width  = window.innerWidth;
@@ -68,6 +71,9 @@
         let currentScene = null;
         let storyContent = "";
         let titleScreen = null;
+        let paused = false;
+        let pauseTime = 0;
+
         if(!skipStory){
             titleScreen = new Title();
             let storyGenerator = new StoryGenerator();
@@ -86,7 +92,6 @@
         let fpslastTime = 0;
         let frameCount = 0;
         let fps = 0;
-        let gameStartTime = (new Date()).getTime();
 
         function drawFPS(){            
             const time = (new Date()).getTime();
@@ -105,20 +110,48 @@
             screenBuffer.fillText(`FPS: ${fps}`, 10, 30);            
         }
 
+        // let gameStartTime = (new Date()).getTime();
+        function setPause(shouldPause){
+            const currentTime =(new Date()).getTime();
+            if(shouldPause) pauseTime = currentTime;
+            if(!shouldPause && pauseTime!=0) {
+                gameStartTime += (currentTime-pauseTime);
+            }
+            paused = shouldPause;
+        }
+
         function gameLoop(timestamp) {
             const currentTime = (new Date()).getTime();
-            gameTime = currentTime - gameStartTime;           
-            const dt = (timestamp - lastTimestamp) / 1000; // Calculate delta time
-            lastTimestamp = timestamp;            
-            currentScene.update({dt, currentTime, gameTime}); // Update and render the game  
+            gameTimeAlt = currentTime - gameStartTimeAlt; // pause free gameTime
+            if(paused){
+                currentScene.update({dt:0, currentTime:(new Date()).getTime(), gameTime}); // Update and render the game  
+                requestAnimationFrame(gameLoop); 
+                return;   
+            }
+            gameTime = currentTime - gameStartTime;
+            const dt = (gameTime - lastTimestamp) / 1000; // Calculate delta time
+            lastTimestamp = gameTime;            
+            currentScene.update({dt, currentTime, gameTime}); // Update and render the game 
+                        
             // drawFPS(timestamp);          
             requestAnimationFrame(gameLoop);
         }
 
         const getMouseInput=(event)=>{ currentScene.getMouseInput(event); }    
         const getMouseMoveInput=(event)=>{ currentScene.getMouseMoveInput(event); }
-        const getKeyboardInput=(event)=>{ currentScene.getKeyboardInput(event); }
+        const getKeyboardInput=(event)=>{         
+            if (event.type === "down") 
+                if (event.key === "p") {
+                    if(currentScene?.dialogManager && currentScene.dialogManager.isVisible) 
+                        return;                    
+                    setPause(!paused);
+                }
+            currentScene.getKeyboardInput(event); 
+        }
         
+        // Add event listeners for the window losing and gaining focus
+        window.addEventListener('blur', ()=>setPause(true));
+        window.addEventListener('focus', ()=>setPause(false));
         requestAnimationFrame(gameLoop); // Start the game loop
     </script>
     <script src="Jam_Engine/InputHandler.js"></script>

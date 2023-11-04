@@ -29,7 +29,7 @@ class Camera{
         const x = Tools.clamp(this.offWindow.x+this.scaledWindow.x,0,this.offWindow.width-this.scaledWindow.width);
         const y = Tools.clamp(this.offWindow.y+this.scaledWindow.y,0,this.offWindow.height-this.scaledWindow.height);
         let dx = 0, dy = 0;
-        if(this.shake){
+        if(this.shake && !paused){
             dx = Math.random() * this.shakeIntensity.x * 2 - this.shakeIntensity.x;
             dy = Math.random() * this.shakeIntensity.y * 2 - this.shakeIntensity.y; 
         }

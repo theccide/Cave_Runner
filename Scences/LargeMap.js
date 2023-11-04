@@ -123,5 +123,7 @@ class LargeMap extends Scene {
         if(this.isTransitioning) this.drawTransition({dt, currentTime, gameTime});
         this.dialogManager.update({dt, currentTime, gameTime});
         this.HUD.update({dt, currentTime, gameTime});
+        if(paused && Math.floor(currentTime/500)%2==0)        
+                drawText(screenBuffer, 85, 130, "PAUSED")//, 25, "yellow")
     }
 }

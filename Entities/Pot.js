@@ -3,8 +3,9 @@ class Pot extends Entity{
     type = "";
     takingDamage = false;
     
-    constructor (gameController, id,  {type}, position) {
+    constructor (gameController, id,  {type, dropSequence}, position) {
         super(gameController, id, null, position);
+        this.dropSequence = dropSequence;
         this.type = type;
         this.initSpriteSheet( {
             sprite: null,
@@ -39,6 +40,7 @@ class Pot extends Entity{
             this.switchAnimation("BREAK"+this.type);
             this.endAnimationCallback=()=>{
                 this.gameController.destroy(this);
+                if(this.dropSequence) this.gameController.playSequence(this.gameController,this.dropSequence);
             }
             return;
         }
@@ -76,7 +78,7 @@ class FallingRock extends Pot{
     }
     brain=({dt, currentTime, gameTime})=>{
         if(this.landed) return;
-        this.fallSpeed+=this.fallSpeed*dt;
+        this.fallSpeed+=this.fallSpeed*dt; // the acceration will not allow it to pause
         this.position.y+= this.fallSpeed;
         this.light.position.y-= this.fallSpeed;
         if(this.position.y >= this.ground.y){
