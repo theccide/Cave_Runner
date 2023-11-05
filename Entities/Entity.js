@@ -25,6 +25,13 @@ class Entity {
     parent = { position:{x:0,y:0} };
     children=[];
     globalAlpha = 1;
+    animationController={
+        fade:[],
+        transtlation:[],
+        rotation:[],
+        brightness:[]
+    };
+    sequencerStatus = {};
     
     constructor (gameController, id, spriteSheet, position) {
         this.id = id;
@@ -43,6 +50,14 @@ class Entity {
     addChild(entity){
         entity.parent = this;
         this.children.push(entity);
+    }
+
+    // check the completeion status of an Entity function running from the Sequencer.
+    getSequencerStatus(statusID){
+        if(statusID in this.sequencerStatus){
+            return this.sequencerStatus[statusID].complete;
+        }
+        return true; // there is no id for this function so mark it as complete
     }
 
     forceAnimation(name){
@@ -120,6 +135,7 @@ class Entity {
     }
 
     update = ({dt, currentTime, gameTime}) => {
+        this.runKeyFrames({dt, currentTime, gameTime});
         this.nextFrame({dt, currentTime, gameTime});
         this.brain({dt, currentTime, gameTime});
         this.setupCollisionBounds();
@@ -140,6 +156,53 @@ class Entity {
             this.camera.offWindow.x = this.parent.position.x+this.position.x - this.camera.screenWindow.width / 2;
             this.camera.offWindow.y = this.parent.position.y+this.position.y - this.camera.screenWindow.height / 2;
         }        
+    }
+
+    keyFrameState = {}
+    runKeyFrames({dt, currentTime, gameTime}){
+        if(this.keyFrameState["fade"]){
+            const percent = (gameTime-this.keyFrameState["fade"].startTime)/this.keyFrameState["fade"].time;
+            this.globalAlpha= Tools.tween1D(this.keyFrameState["fade"].startVal, this.keyFrameState["fade"].val, percent);
+            if(percent >= 1){
+                if("statusID" in this.keyFrameState["fade"]){
+                    delete this.sequencerStatus[this.keyFrameState["fade"].statusID];
+                }
+                this.keyFrameState["fade"] = null;
+                this.animationController["fade"].shift();
+            }            
+        }
+        if(this.keyFrameState["transtlation"]){
+            const percent = (gameTime-this.keyFrameState["transtlation"].startTime)/this.keyFrameState["transtlation"].time;
+            this.position={...Tools.tween2D(this.keyFrameState["transtlation"].startVal, this.keyFrameState["transtlation"].val, percent)};
+            if(percent >= 1){
+                if("statusID" in this.keyFrameState["transtlation"]){
+                    console.log("released");
+                    delete this.sequencerStatus[this.keyFrameState["transtlation"].statusID];
+                }
+                this.keyFrameState["transtlation"] = null;
+                this.animationController["transtlation"].shift();
+            }            
+        }
+
+        if(!this.keyFrameState["fade"] && this.animationController["fade"].length>0){
+            this.keyFrameState["fade"] = this.animationController["fade"][0];
+            this.keyFrameState["fade"].startTime = gameTime;
+            this.keyFrameState["fade"].startVal = this.globalAlpha;
+        }
+
+        if(!this.keyFrameState["transtlation"] && this.animationController["transtlation"].length>0){
+            this.keyFrameState["transtlation"] = this.animationController["transtlation"][0];
+            this.keyFrameState["transtlation"].startTime = gameTime;
+            this.keyFrameState["transtlation"].startVal = {...this.position};
+        }
+    }
+
+    addKeyFrame(kf){
+        if("block" in kf) {
+            kf.keyFrame.statusID = kf.block.statusID;
+            this.sequencerStatus[kf.block.statusID]={complete:false};
+        }
+        this.animationController[kf.type].push(kf.keyFrame);
     }
 
     hit(direction, force){}

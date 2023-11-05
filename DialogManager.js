@@ -85,12 +85,14 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
     
 class Dialog{
     bounds = {x:0, y:0, width:0, height:0};
+    offset = {x:0, y:0};
+    hAlign = 2;
     innerbounds = {x:0, y:0, width:0, height:0};
     connerbounds = {x:0, y:0, width:0, height:0};
     dialogImage = null;
     boxSize = {width:0, height:0}
     maxBoxSize = {width:600, height:100}
-    text = "";
+    text = [""];
     isVisible = false;
     isGrowing = true;
     transitionTime = 500;
@@ -105,10 +107,13 @@ class Dialog{
     }
 
     setupDialog(text){
+        this.textPtr = 0;
         this.text = text;
-        this.dialogImage = this.gameController.images["Images/dialog.png"];        
-        this.bounds.x = canvas.width/2;
-        this.bounds.y = canvas.height/2;
+        this.dialogImage = this.gameController.images["Images/dialog.png"];
+        if(this.hAlign==0){ this.offset.y = -((canvas.height/2)-(this.maxBoxSize.height+50));}
+        if(this.hAlign==2){ this.offset.y = ((canvas.height/2)-(this.maxBoxSize.height+50));}
+        this.bounds.x = (canvas.width/2)+this.offset.x;
+        this.bounds.y = (canvas.height/2)+this.offset.y;
         this.innerbounds = {x:0, y:0, width:0, height:0};
         // if(this.lastEventTime == 0)
         this.lastEventTime = gameTimeAlt;
@@ -211,14 +216,23 @@ class Dialog{
             this.boxSize.height = Math.round(Tools.tween1D(this.maxBoxSize.height, 0, percentage));
         }        
         
-        this.lastFontSize = fitTextInBox(screenBuffer, this.text, 
-                    (canvas.width/2)-this.bounds.hwidth, 
-                    (canvas.height/2)-this.bounds.hheight+this.lastFontSize/2, 
+        this.lastFontSize = fitTextInBox(screenBuffer, this.text[this.textPtr], 
+                    (canvas.width/2)-this.bounds.hwidth+this.offset.x, 
+                    (canvas.height/2)-this.bounds.hheight+this.offset.y+this.lastFontSize/2, 
                     this.bounds.width, this.bounds.height, 
                     this.fontSize, 'left', 'top', this.typeFace, this.color);
     }
+
+    runNext(){
+      if(this.textPtr >= this.text.length-1){
+        setPause(false);
+        return;
+      }
+      this.text[this.textPtr++];
+    }
+
     getKeyboardInput(event){
       if (event.type === "down") 
-          if (event.key === " ") setPause(false);
+          if (event.key === " ") this.runNext();
   }    
 }

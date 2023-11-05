@@ -1,8 +1,10 @@
 class Skull extends Entity{
     
-    constructor (gameController, id,   position) {
+    constructor (gameController, id, {shouldRotate}, position) {
         super(gameController, id, null, position);
-        this.startPosition = {...position};
+        this.distPosition = {...position};
+        this.shouldRotate = shouldRotate;
+        this.rotateSpeed = 100;
         this.initSpriteSheet( {
             sprite: null,
             fileName: "Images/spritemaps/skull.png",
@@ -15,13 +17,18 @@ class Skull extends Entity{
             }
         });
         this.frameChangeInterval = 0.2;
-        this.globalAlpha = 0.5;
-        this.brightness = 0.4;
+        // this.globalAlpha = 0.5;
+        // this.brightness = 0.4;
     }
-
+    setOrbit({speed}){
+        this.shouldRotate = true;
+        this.rotateSpeed = speed;
+        this.distPosition={...this.position};
+    }
     angle = 0;
     brain=({dt, currentTime, gameTime})=>{
-        this.position = Tools.rotatePointAround(0,0,this.startPosition.x, this.startPosition.y, this.angle+=100*dt);
+        if(this.shouldRotate)
+            this.position = Tools.rotatePointAround(0,0,this.distPosition.x, this.distPosition.y, this.angle+=this.rotateSpeed*dt);
     }    
 }
 

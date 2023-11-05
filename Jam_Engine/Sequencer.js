@@ -88,9 +88,25 @@ const golemAttackSequence = [
 ];
 
 const rescueSpiritSequence = [
-    {command:"Dialog", params:{open:true, text:"To make the text wrap within the specified box dimensions, you'll need a more complex function. This function will not only reduce the font size if necessary but also break the text into lines that fit within the specified width. Here's how you could write such a function:"}},
+    {command:"Player", params:{controls:false}},
+    {command:"Camera", params:{detach:"Player"}},
+    {command:"Camera", params:{zoom:2,time:1000}},
+    {command:"Spawn", params:{entityType:"Fx",params:{fxType:5, destroyOnFinishAnim: true},pos:{x:850,y:500}, delayTime:100}},
+    {command:"Delay", params:{delayTime:1000}},
+    {command:"Spawn", params:{id:"skull", entityType:"Skull",params:{shouldRotate:false},pos:{x:850,y:500}, delayTime:100}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Camera", params:{attachToEnity:"skull"}},
+    {command:"Delay", params:{delayTime:1000}},    
+    {command:"Dialog", params:{open:true, text:["Thank you for resucing me adventurer! I have been stuck in this pot for a 1000 years!","Let me join you to defeat the stone Golem guarding the obelisk."]}},
     {command:"Delay", params:{delayTime:100}},
     {command:"Dialog", params:{open:false}},
+    {command:"Player", params:{attachEntity:"skull"}},
+    {command:"Entity", params:{id:"skull", fn:"addKeyFrame", args:{type:"fade", keyFrame:{val:0.5, time:2000}}}},
+    {command:"Entity", params:{id:"skull", fn:"addKeyFrame", block:{statusID:"transtlation"}, args:{type:"transtlation", keyFrame:{val:{x:45, y:45}, time:2000}}}},
+    {command:"Camera", params:{attach:"Player"}},
+    {command:"Camera", params:{zoom:1,time:1000}},
+    {command:"Player", params:{controls:true}},    
+    {command:"Entity", params:{id:"skull", fn:"setOrbit", args:{speed:50}}},
     {command:"End"}
 ];
 
@@ -117,13 +133,15 @@ class Sequence{
     }
 
     runCommand(dtPackage,command){
-        switch(command.command){
+        switch(command.command){            
             case "Spawn":
                 return this.command_Spawn(dtPackage,command.params);
             case "Dialog":
                 return this.command_Dialog(dtPackage,command.params);                
             case "Delay":
                 return this.command_Delay(dtPackage,command.params);
+            case "Entity":
+                return this.command_Entity(dtPackage,command.params);
             case "Camera":
                 return this.command_Camera(dtPackage,command.params);
             case "Player":
@@ -175,12 +193,39 @@ class Sequence{
         this.gameController.spawn(this.gameController, command, command.id);
         return true;
     }
+    
+    command_Entity({dt, currentTime, gameTime},command){ 
+        let entity =  this.gameController.entityMap[command.id];
+        
+        if(command.block){
+            if(this.isWaiting != true){
+                command.args["block"] = {...command.block};
+                entity[command.fn]({...command.args});
+            }
+            this.isWaiting = true;
+            if(entity.getSequencerStatus(command.block.statusID)){
+                console.log("UNBocked");
+                this.isWaiting = false;
+                this.scriptPtr++;
+                return true;
+            }
+            console.log("bocked");
+            return false;
+        }
 
+        entity[command.fn]({...command.args});
+        this.scriptPtr++;
+    }
     command_Player({dt, currentTime, gameTime},command){ 
 
         if (command.hasOwnProperty('controls')){        
             this.gameController.player.setPlayerControlled(command.controls);
         }
+        if (command.hasOwnProperty('attachEntity')){
+            let child = this.gameController.entityMap[command.attachEntity];
+            child.position = {x:child.position.x-this.gameController.player.position.x, y:child.position.y-this.gameController.player.position.y};
+            this.gameController.player.addChild(child);
+        }        
         if(command.keyPressed){
             this.gameController.player.processInput({type:"down",key:command.keyPressed});
 

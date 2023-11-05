@@ -215,7 +215,7 @@ class GameController {
         // this.entities.push(new Boss(this, {x:400,y:800}));
 
         this.player = new Player(this);
-        this.player.addChild(new Skull(this,"skull", {x:45, y:45}));
+        // this.player.addChild(new Skull(this,"skull", {x:45, y:45}));
         this.addTriggerEntities();
 
         this.sequencer = new Sequencer(this);
@@ -290,7 +290,7 @@ class GameController {
         }
 
         const createInstance=(className, context, id, params, pos)=>{
-            const classes = { Bullet, Gem, Fx, Torch, Boss, Arrow, FallingRock };
+            const classes = { Bullet, Gem, Fx, Torch, Boss, Arrow, FallingRock, Skull };
             return new classes[className](context, id, params, pos);
         }
         
