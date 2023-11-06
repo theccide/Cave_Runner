@@ -64,6 +64,8 @@ const startBossBattleSequence = [
 ];
 
 const miniBossDeathSequence = [
+    {command:"Entity", params:{id:"miniboss", fn:"removeOrbit"}},
+    {command:"Entity", params:{id:"miniboss", fn:"detachChild", args:"key"}},
     {command:"Player", params:{controls:false}},
     {command:"Camera", params:{detach:"Player"}},
     {command:"Camera", params:{attachToEnity:"miniboss"}},
@@ -103,12 +105,23 @@ const rescueSpiritSequence = [
     {command:"Player", params:{attachEntity:"skull"}},
     {command:"Entity", params:{id:"skull", fn:"addKeyFrame", args:{type:"fade", keyFrame:{val:0.5, time:2000}}}},
     {command:"Entity", params:{id:"skull", fn:"addKeyFrame", block:{statusID:"transtlation"}, args:{type:"transtlation", keyFrame:{val:{x:45, y:45}, time:2000}}}},
+    {command:"Entity", params:{id:"Obelisk", fn:"switchAnimation", args:"HIT"}},
     {command:"Camera", params:{attach:"Player"}},
     {command:"Camera", params:{zoom:1,time:1000}},
     {command:"Player", params:{controls:true}},    
     {command:"Entity", params:{id:"skull", fn:"setOrbit", args:{speed:50}}},
     {command:"End"}
 ];
+
+const playerDeathSequence=[
+    {command:"Player", params:{controls:false}},
+    {command:"Player", params:{fields:{visible:false}}},
+    {command:"Spawn", params:{entityType:"Fx",params:{fxType:"THREE", destroyOnFinishAnim: true, spriteMap:"SMOKEFX03"},fields:{frameChangeInterval:0.1}, pos:"player"}},
+    {command:"Camera", params:{zoom:2,time:1000}},
+    {command:"Delay", params:{delayTime:1500}},
+    {command:"Level", params:{scene:"GameOver"}},
+    {command:"End"}
+]
 
 class Sequence{
     gameController = null;
@@ -148,12 +161,16 @@ class Sequence{
                 return this.command_Player(dtPackage,command.params);
             case "State":
                 return this.command_State(dtPackage,command.params);
+            case "Level":
+                return this.command_Level(dtPackage,command.params);
             case "GameController":
                 return this.command_GameController(dtPackage,command.params);
             case "End":
-                console.log("end");
+                // console.log("end");
+                break;
             default:
-                console.log("Command Not Found!");
+                console.log("Command Not Found! "+command.command);
+                break;
         }
         this.scriptPtr++;
         return true;
@@ -174,7 +191,17 @@ class Sequence{
             return true;                        
         }
     }
+
+    command_Level(dtPackage,command){
+        if(command.scene == "GameOver"){
+            changeScene(new GameOver(this.gameController.player.score));
+        }
+    }
+
     command_Spawn({dt, currentTime, gameTime},command){
+        if(command?.pos=="player"){
+            command.pos = {...this.gameController.player.position};
+        }
         if(command.delayTime){
 
             if(!this.isWaiting) this.lastEventTime = gameTime;
@@ -200,24 +227,39 @@ class Sequence{
         if(command.block){
             if(this.isWaiting != true){
                 command.args["block"] = {...command.block};
-                entity[command.fn]({...command.args});
+                if("args" in command){
+                    if(typeof command.args == "string") 
+                        entity[command.fn](command.args);
+                    else 
+                        entity[command.fn]({...command.args});
+                }else{
+                    entity[command.fn]();
+                }
             }
             this.isWaiting = true;
             if(entity.getSequencerStatus(command.block.statusID)){
-                console.log("UNBocked");
                 this.isWaiting = false;
                 this.scriptPtr++;
                 return true;
             }
-            console.log("bocked");
             return false;
         }
 
-        entity[command.fn]({...command.args});
+        if("args" in command){
+            if(typeof command.args == "string") 
+                entity[command.fn](command.args);
+            else 
+                entity[command.fn]({...command.args});
+        }else{
+            entity[command.fn]();
+        }
+        
         this.scriptPtr++;
     }
     command_Player({dt, currentTime, gameTime},command){ 
-
+        if (command.hasOwnProperty('fields')){        
+            this.gameController.player.updateFields(command.fields);
+        }
         if (command.hasOwnProperty('controls')){        
             this.gameController.player.setPlayerControlled(command.controls);
         }
@@ -388,7 +430,8 @@ class Sequencer{
         this.addSequence(new Sequence("startBossBattle",gameController,startBossBattleSequence));
         this.addSequence(new Sequence("miniBossDeath",gameController,miniBossDeathSequence));
         this.addSequence(new Sequence("golemAttack",gameController,golemAttackSequence));
-        this.addSequence(new Sequence("rescueSpirit",gameController,rescueSpiritSequence));        
+        this.addSequence(new Sequence("rescueSpirit",gameController,rescueSpiritSequence));
+        this.addSequence(new Sequence("playerDeath",gameController, playerDeathSequence));
     }
 
     addSequence(sequence){

@@ -80,6 +80,10 @@ class MiniBoss extends Entity{
         }  
     }
 
+    removeOrbit(){
+        this.children[0].removeOrbit();
+    }
+
     hit(direction, force){
         this.state = this.states.HIT;
         this.hp=0;

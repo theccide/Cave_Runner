@@ -17,9 +17,9 @@ class LavaManager{
             this.lastEventTime = gameTime;
             const pos = {x: (Math.random() * this.lavaBounds[1].width)+this.lavaBounds[1].x,
                          y:(Math.random() * this.lavaBounds[1].height)+this.lavaBounds[1].y}
-            this.gameController.spawn(
-                this.gameController, 
-                {entityType:"Fx", params:{fxType:"0", destroyOnFinishAnim: true, spriteMap:"BUBBLE"}, pos},
+            this.gameController.spawn(this.gameController, 
+                {entityType:"Fx", params:{fxType:"0", destroyOnFinishAnim: true, spriteMap:"BUBBLE"}, pos, 
+                fields:{frameChangeInterval:0.5}},
                  "bubble");
         }
     }

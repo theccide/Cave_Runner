@@ -30,6 +30,7 @@
     <script src="Entities/Pot.js"></script>
     <script src="Entities/FlameThrower.js"></script>
     <script src="Entities/Skull.js"></script>
+    <script src="Entities/Key.js"></script>
     <script src="Entities/Obelisk.js"></script>    
     <script src="Entities/LavaManager.js"></script>
     <script src="DialogManager.js"></script>
@@ -67,6 +68,41 @@
         screenBuffer.canvas.width  = window.innerWidth;
         screenBuffer.canvas.height = window.innerHeight;        
         screenBuffer.imageSmoothingEnabled= false;
+
+        lastCanvasSize = {
+            width: canvas.width,
+            height: canvas.height
+        }
+        
+        const resizeCanvas=(currentScene)=> {
+
+            if(window.innerWidth == lastCanvasSize.width && window.innerHeight == lastCanvasSize.height)
+                return;
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            lastCanvasSize = {
+                width: canvas.width,
+                height: canvas.height
+            }
+            currentScene.init();
+            // currentScene.setup({
+            //     viewBounds:{x:0,y:0,width: canvas.width,height: canvas.height},
+            //     offBounds:{x:0,y:0,width: canvas.width,height: canvas.height}            
+            // });
+            // if(currentScene.camera){
+            //     currentScene.camera.init({
+            //         backCanvas:currentScene.backCanvas,
+            //         screenWindow:{x:0,y:0,width: canvas.width, height:canvas.height},
+            //         offWindow:{x:0,y:0,width: currentScene.mapSize.width,height: currentScene.mapSize.height}
+            //     });
+            // }
+            // if(currentScene.gameController){
+            //     currentScene.gameController.levelMap.init();
+            // }            
+        }
+        //window.addEventListener('resize', resizeCanvas);
 
         let currentScene = null;
         let storyContent = "";
@@ -121,6 +157,7 @@
         }
 
         function gameLoop(timestamp) {
+            resizeCanvas(currentScene);
             const currentTime = (new Date()).getTime();
             gameTimeAlt = currentTime - gameStartTimeAlt; // pause free gameTime
             if(paused){

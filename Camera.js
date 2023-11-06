@@ -8,6 +8,10 @@ class Camera{
     shakeIntensity = {x:0,y:0};
 
     constructor(params){
+        this.init(params);
+    }
+
+    init(params){
         this.backCanvas = params.backCanvas;
         this.screenWindow = params.screenWindow;
         this.offWindow = params.offWindow;

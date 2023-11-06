@@ -172,7 +172,7 @@ class Player extends MoveableEntity {
 
         if(this.forceHitDist.x!=0 || this.forceHitDist.y!=0) runHit();
         
-        this.drawSprite({dt, currentTime, gameTime});
+        if(this.visible){ this.drawSprite({dt, currentTime, gameTime});}
         this.processCamera();       
         setupBounds();
         collisionDetection();
@@ -210,7 +210,8 @@ class Player extends MoveableEntity {
         }
         if(this.hp <= 0){
             this.hp = 0;
-            changeScene(new GameOver(this.score));
+            this.gameController.playSequence(this.gameController,"playerDeath");
+            // changeScene(new GameOver(this.score));
         }
         console.log("hit");
     }

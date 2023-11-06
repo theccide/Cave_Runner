@@ -65,6 +65,11 @@ class LevelMap{
     }
     constructor(gc){
         this.gameController = gc;
+        this.init();
+    } 
+
+    init(){
+        const gc = this.gameController;
         this.bounds = {x:0, y:0, width: gc.currentScene.offBounds.width, height: gc.currentScene.offBounds.height};
         this.grid = new Grid(this, 44, 88, {...this.bounds});
         this.grid.colors = this.colors;
@@ -74,7 +79,7 @@ class LevelMap{
 
         this.mob={x:2,y:2};
         this.target={x:16,y:10};
-    } 
+    }
     
     update(delta){
         if(this.showDebugInfo){

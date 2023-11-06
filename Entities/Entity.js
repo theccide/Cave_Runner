@@ -25,6 +25,9 @@ class Entity {
     parent = { position:{x:0,y:0} };
     children=[];
     globalAlpha = 1;
+
+    entityMap = {};
+
     animationController={
         fade:[],
         transtlation:[],
@@ -40,6 +43,13 @@ class Entity {
         if(spriteSheet) this.initSpriteSheet(spriteSheet);
     }
 
+    updateFields(fields){
+        const keys = Object.keys(fields);
+        keys.forEach(field=>{
+            this[field] = fields[field];
+        })
+    }
+
     initSpriteSheet(spriteSheet){
         this.spriteSheet = spriteSheet;
         this.spriteSheet.sprite = this.gameController.images[spriteSheet.fileName];
@@ -49,7 +59,25 @@ class Entity {
 
     addChild(entity){
         entity.parent = this;
+        let id = generateRandomId(8);
+        if("id" in entity){
+            id = entity.id;
+        }
+        this.entityMap[id]=entity;
         this.children.push(entity);
+    }
+
+    detachChild(childID){
+        const entityToRemove = this.entityMap[childID];
+        delete this.entityMap[childID];
+        this.children = this.children.filter(child=>child!=entityToRemove);
+        entityToRemove.position = {
+            x: entityToRemove.position.x + this.position.x,
+            y: entityToRemove.position.y + this.position.y,
+            z: 0
+        }
+        entityToRemove.parent = { position:{x:0,y:0} };
+        this.gameController.addEntity(this.gameController,entityToRemove, entityToRemove.playerInteractable);
     }
 
     // check the completeion status of an Entity function running from the Sequencer.
@@ -134,12 +162,14 @@ class Entity {
         this.collisionBounds.height = this.spriteSheet.spriteSize.height*2;
     }
 
-    update = ({dt, currentTime, gameTime}) => {
+    update ({dt, currentTime, gameTime}){
         this.runKeyFrames({dt, currentTime, gameTime});
         this.nextFrame({dt, currentTime, gameTime});
         this.brain({dt, currentTime, gameTime});
         this.setupCollisionBounds();
-        this.children.forEach(child=>child.update({dt, currentTime, gameTime}));
+        this.children.forEach(child=>
+            child.update({dt, currentTime, gameTime})
+            );
 
         if(this.visible){
             if(this.showDebug) drawBox(this.gameController.currentScene.backBuffer, this.collisionBounds.x, this.collisionBounds.y , this.collisionBounds.width, this.collisionBounds.height, "red");

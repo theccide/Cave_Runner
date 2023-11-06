@@ -44,24 +44,38 @@ class LargeMap extends Scene {
     getMouseMoveInput=(event)=>{this.gameController.getMouseMoveInput(event);}
     getKeyboardInput=(event)=>{this.gameController.getKeyboardInput(event);}
 
-    constructor(){ super();
+    constructor(){ 
+        super();
+        this.init();
+    }
+
+    init(){
         this.mapSize = {width: 2816,height: 1408};
         this.setup({
             viewBounds:{x:0,y:0,width: canvas.width,height: canvas.height},
             offBounds:{x:0,y:0,width: this.mapSize.width,height: this.mapSize.height}            
         });
-        this.gameController = new GameController();
         this.backBuffer.imageSmoothingEnabled= false;
-        this.camera = new Camera({
-            backCanvas:this.backCanvas,
-            screenWindow:{x:0,y:0,width: canvas.width, height:canvas.height},
-            offWindow:{x:0,y:0,width: this.mapSize.width,height: this.mapSize.height}
-        });
-
         this.blackCanvas = createBufferedImage(this.mapSize.width, this.mapSize.height);
         this.blackBuffer = this.blackCanvas.getContext('2d');  
+
+        if(!this.camera){ // create a new camera the first time this loads
+            this.gameController = new GameController();
+            this.camera = new Camera({
+                backCanvas:this.backCanvas,
+                screenWindow:{x:0,y:0,width: canvas.width, height:canvas.height},
+                offWindow:{x:0,y:0,width: this.mapSize.width,height: this.mapSize.height}
+            });
+            this.gameController.start(this);
+        }
+        else{ // if the screen size changes use the old camera
+            this.camera.init({
+                backCanvas:this.backCanvas,
+                screenWindow:{x:0,y:0,width: canvas.width, height:canvas.height},
+                offWindow:{x:0,y:0,width: this.mapSize.width,height: this.mapSize.height}
+            });
+        }
         
-        this.gameController.start(this);
         this.HUD = new HUD(this.gameController);
     }
 

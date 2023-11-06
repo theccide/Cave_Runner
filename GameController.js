@@ -31,6 +31,7 @@ class GameController {
     }
 
     start = (scene) => {
+        if(this.resouncesReady) return;
         this.currentScene = scene;
         this.currentScene.dialogManager = new Dialog(this);
         this.camera = scene.camera;
@@ -55,6 +56,9 @@ class GameController {
             "Images/spritemaps/skull.png",
             "Images/spritemaps/golem.png",
             "Images/spritemaps/obelisk.png",
+            "Images/spritemaps/smokeFx.png",
+            "Images/spritemaps/smokeFx02.png",
+            "Images/spritemaps/smokeFx03.png",
             "Images/map1.png",
             "Images/lightsource.png",
             "Images/gems.png",
@@ -190,7 +194,7 @@ class GameController {
         ];
         this.entities = this.entities.concat(this.doors);
 
-        this.entities.push(new Fx(this, "key", {fxType:"0", destroyOnFinishAnim: false, spriteMap:"KEY"}, {x:220,y:420}));
+        //this.entities.push(new Fx(this, "key", {fxType:"0", destroyOnFinishAnim: false, spriteMap:"KEY"}, {x:220,y:420}));
         this.entities.push(new Saw(this, "SAW", {x:800,y:400}));
 
         this.entities.push(new Golem(this, "Golem", {x:2600,y:1200}));
@@ -200,6 +204,8 @@ class GameController {
         this.entities.push(new Pot(this, "Pot", {type:"TWO"}, {x:750,y:500}));
         this.entities.push(new Pot(this, "Pot", {type:"THREE"}, {x:700,y:500}));
         this.entities.push(new Pot(this, "Pot", {type:"THREE",dropSequence:"rescueSpirit"}, {x:850,y:500}));
+
+        // this.entities.push(new Fx(this, "smoke", {fxType:"SEVEN", destroyOnFinishAnim: false, spriteMap:"SMOKEFX02"}, {x:800,y:420}));
 
         this.interactableObjects = this.entities.filter(entity=>entity.playerInteractable);
         this.entities = this.entities.concat(this.interactableObjects);
@@ -214,8 +220,9 @@ class GameController {
         });
         // this.entities.push(new Boss(this, {x:400,y:800}));
 
+        
         this.player = new Player(this);
-        // this.player.addChild(new Skull(this,"skull", {x:45, y:45}));
+        this.entityMap["miniboss"].addChild(new Key(this,"key", {shouldRotate:true}, {x:35, y:35}));
         this.addTriggerEntities();
 
         this.sequencer = new Sequencer(this);
@@ -290,11 +297,12 @@ class GameController {
         }
 
         const createInstance=(className, context, id, params, pos)=>{
-            const classes = { Bullet, Gem, Fx, Torch, Boss, Arrow, FallingRock, Skull };
+            const classes = { Bullet, Gem, Fx, Torch, Boss, Arrow, FallingRock, Skull, Key };
             return new classes[className](context, id, params, pos);
         }
         
         let entity = createInstance(objDef.entityType, this, (objDef.id)?objDef.id:id, {...objDef.params}, {...objDef.pos});
+        if("fields" in objDef) entity.updateFields(objDef.fields);
         this.addEntity(self, entity, entity.playerInteractable);
         return entity;
     }
