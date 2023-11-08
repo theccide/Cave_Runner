@@ -181,7 +181,7 @@ class GameController {
             new Door(this, "midbossINdoor", {type:"hor"}, {x:543, y:696}, this.enemies),
             new Door(this, "door3", {type:"hor"}, {x:833, y:696}, this.enemies),
             new Door(this, "spikesdoor", {type:"hor"}, {x:1312, y:470}), 
-            new Door(this, "To lavadoortop", {type:"hor"}, {x:1345, y:245}), 
+            new Door(this, "Tolavadoortop", {type:"hor"}, {x:1345, y:245}), 
             new Door(this, "lavadoorbot", {type:"hor"}, {x:1505, y:696}), 
             new Door(this, "dragondoor", {type:"hor"}, {x:2016, y:696}), 
             new Door(this, "lavadoortop", {type:"hor"}, {x:1505, y:245}), 
@@ -198,12 +198,17 @@ class GameController {
         this.entities.push(new Saw(this, "SAW", {x:800,y:400}));
 
         this.entities.push(new Golem(this, "Golem", {x:2600,y:1200}));
+        // this.entities.push(new Runner(this, "Runner", {x:800,y:350},{
+        //         searchingWaypoints:[{x:1350,y:300},{x:1350,y:85},{x:1500,y:85},{x:1500,y:320},{x:1600,y:320},{x:1900,y:90},{x:2100,y:90}],
+        //         state: Runner.states.IDLE
+        //     }));
+        this.entities.push(new Runner(this, "Runner", {}, {x:2600,y:1000}));
         this.entities.push(new Obelisk(this, "Obelisk", {x:2400,y:1000}));
 
         this.entities.push(new Pot(this, "Pot", {type:"ONE"}, {x:800,y:500}));
         this.entities.push(new Pot(this, "Pot", {type:"TWO"}, {x:750,y:500}));
         this.entities.push(new Pot(this, "Pot", {type:"THREE"}, {x:700,y:500}));
-        this.entities.push(new Pot(this, "Pot", {type:"THREE",dropSequence:"rescueSpirit"}, {x:850,y:500}));
+        this.entities.push(new Pot(this, "Pot", {type:"THREE",dropSequence:"miniBossDeath"}, {x:850,y:500}));
 
         // this.entities.push(new Fx(this, "smoke", {fxType:"SEVEN", destroyOnFinishAnim: false, spriteMap:"SMOKEFX02"}, {x:800,y:420}));
 
@@ -297,7 +302,7 @@ class GameController {
         }
 
         const createInstance=(className, context, id, params, pos)=>{
-            const classes = { Bullet, Gem, Fx, Torch, Boss, Arrow, FallingRock, Skull, Key };
+            const classes = { Bullet, Gem, Fx, Torch, Boss, Arrow, FallingRock, Skull, Key, Runner };
             return new classes[className](context, id, params, pos);
         }
         
@@ -317,6 +322,11 @@ class GameController {
 
     _instatiate=(entityInfo)=>{
         this.spawn(this, entityInfo, generateRandomId(8));
+    }
+        
+    placeOnTop(entity){ //TODO: create a real sorting system that sorts before it renders
+        this.entities = this.entities.filter(obj => obj!=entity);
+        this.entities.push(entity);
     }
 
     startTime = Date.now();

@@ -69,8 +69,23 @@ const miniBossDeathSequence = [
     {command:"Player", params:{controls:false}},
     {command:"Camera", params:{detach:"Player"}},
     {command:"Camera", params:{attachToEnity:"miniboss"}},
+    {command:"Camera", params:{zoom:2,time:1000}},
+    {command:"Spawn", params:{id:"runner",entityType:"Runner",params:{},pos:{x:850,y:300}, fields:{
+        searchingWaypoints:[{x:1350,y:300},{x:1350,y:85},{x:1500,y:85},{x:1500,y:320},{x:1600,y:320},{x:1900,y:90},{x:2100,y:90}],
+        state: Runner.states.IDLE        
+    },delayTime:100}},
+    {command:"Delay", params:{delayTime:1000}},
+    {command:"Camera", params:{attachToEnity:"key"}},
+    {command:"Entity", params:{id:"key", fn:"addKeyFrame", block:{statusID:"transtlation"}, args:{type:"transtlation", keyFrame:{val:{x:825,y:300}, time:2000}}}},
+    {command:"Entity", params:{id:"runner", attachEntity:"key"}},
     {command:"Camera", params:{zoom:3}},
     {command:"Delay", params:{delayTime:1000}},
+    {command:"Camera", params:{attachToEnity:"runner"}},
+    {command:"Delay", params:{delayTime:2000}},
+    {command:"Entity", params:{id:"runner", fn:"run", args:{}, block:{statusID:"GottoDoor"}}},
+    {command:"Entity", params:{id:"runner", fn:"detachChild", args:"key"}},
+    {command:"Entity", params:{id:"runner", destroy:true}},
+    {command:"Entity", params:{id:"key", destroy:true}},
     {command:"Camera", params:{zoom:1}},
     {command:"Camera", params:{attach:"Player"}},
     {command:"Player", params:{controls:true}},
@@ -223,7 +238,21 @@ class Sequence{
     
     command_Entity({dt, currentTime, gameTime},command){ 
         let entity =  this.gameController.entityMap[command.id];
-        
+
+        if (command.hasOwnProperty('destroy')){
+            this.gameController.destroy(entity);
+            this.scriptPtr++;
+            return true;            
+        }  
+
+        if (command.hasOwnProperty('attachEntity')){
+            let child = this.gameController.entityMap[command.attachEntity];
+            child.position = {x:child.position.x-entity.position.x, y:child.position.y-entity.position.y};
+            entity.addChild(child);
+            this.scriptPtr++;
+            return true;            
+        }         
+
         if(command.block){
             if(this.isWaiting != true){
                 command.args["block"] = {...command.block};

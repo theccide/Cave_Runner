@@ -13,8 +13,8 @@ class MoveableEntity extends Entity{
     speed = 100;
     autoControlAnimation = true;
 
-    constructor(gameController, id, spriteSheet, position) {
-        super(gameController, id, spriteSheet, position);        
+    constructor(gameController, id, spriteSheet, position, fields) {
+        super(gameController, id, spriteSheet, position, fields);        
     }
 
     drawSprite=({dt, currentTime, gameTime})=>{

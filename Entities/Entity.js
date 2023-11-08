@@ -36,10 +36,12 @@ class Entity {
     };
     sequencerStatus = {};
     
-    constructor (gameController, id, spriteSheet, position) {
+    constructor (gameController, id, spriteSheet, position, fields={}) {
         this.id = id;
         this.gameController = gameController;
-        this.position = position;        
+        this.position = position;
+        if(!isObjectEmpty(fields))
+            this.updateFields(fields);
         if(spriteSheet) this.initSpriteSheet(spriteSheet);
     }
 
@@ -206,7 +208,7 @@ class Entity {
             this.position={...Tools.tween2D(this.keyFrameState["transtlation"].startVal, this.keyFrameState["transtlation"].val, percent)};
             if(percent >= 1){
                 if("statusID" in this.keyFrameState["transtlation"]){
-                    console.log("released");
+                    // console.log("released");
                     delete this.sequencerStatus[this.keyFrameState["transtlation"].statusID];
                 }
                 this.keyFrameState["transtlation"] = null;

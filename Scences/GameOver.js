@@ -54,17 +54,14 @@ class SplashEntity extends Entity{
 class GameOver extends Scene{
     images = {}
     loaded = false;
+    splashSprite = null;
     droplet={
-        pos:{x:718, y:500}
+        pos:{x:0, y:0}
     }
 
     constructor (score) {
         super();
         this.score = score;
-        this.setup({
-            viewBounds:{x:0,y:0,width: canvas.width,height: canvas.height},
-            offBounds:{x:0,y:0,width: canvas.width,height: canvas.height}            
-        });
         loadImages([
             "Images/gameover.png",
             "Images/gameoverlabel.png",
@@ -73,16 +70,38 @@ class GameOver extends Scene{
             "Images/droplet.png"
         ],this.finishedLoading(this));
 
+        this.gameOverAlpha = 0;
+        this.enities = [];
+        this.timeDelayGO = 2000;
+        this.lastEventTimeGO = gameTime;
+
+        this.init();
+    }
+
+    init(){
+        this.setup({
+            viewBounds:{x:0,y:0,width: canvas.width,height: canvas.height},
+            offBounds:{x:0,y:0,width: canvas.width,height: canvas.height}            
+        });
+
         this.backgroundBounds = {
             x: canvas.height,
             y: canvas.height/2,
             width: canvas.height/2,
             height: canvas.height/2
         }
-        this.gameOverAlpha = 0;
-        this.enities = [];
-        this.timeDelayGO = 2000;
-        this.lastEventTimeGO = gameTime;        
+        this.droplet={
+            pos:{x:(canvas.width/2)-canvas.height*.052, y:canvas.height*0.8}
+        }
+        if(this.splashSprite){
+            this.splashSprite.position = {x:(canvas.width/2)-(canvas.height*0.06),y:canvas.height-(canvas.height*0.07)};
+            this.splashSprite.spriteSheet.spriteSize={width:canvas.height*0.05, height:canvas.height*0.04}
+            
+            this.enities.forEach(star=>{
+                if(star.id.startsWith("star"))
+                    star.position = {x:((canvas.width/2)*Math.random())+canvas.width/4,y:(canvas.height*.4)*Math.random()};
+            });
+        }
     }
 
     convertRes(size){
@@ -93,16 +112,25 @@ class GameOver extends Scene{
         self.images = images;
         self.loaded = true;
 
-        for(let i = 0; i<20; i++)
-            this.enities.push(new StarEntity({images, currentScene:{backBuffer:screenBuffer}}, "star"+i,{x:(canvas.width/2*Math.random())+canvas.width/4,y:500*Math.random()}));
-        this.enities.push(new SplashEntity({images, currentScene:{backBuffer:screenBuffer}}, "splash", {x:712,y:710}));     
+        for(let i = 0; i<20; i++){            
+            this.enities.push(new StarEntity({images, currentScene:{backBuffer:screenBuffer}}, "star"+i,{x:((canvas.width/2)*Math.random())+canvas.width/4,y:(canvas.height*.4)*Math.random()}));
+        }
+        this.splashSprite = new SplashEntity({images, currentScene:{backBuffer:screenBuffer}}, "splash", {x:0,y:0});        
+        this.splashSprite.position = {x:(canvas.width/2)-(canvas.height*0.06),y:canvas.height-(canvas.height*0.07)};
+        this.splashSprite.spriteSheet.spriteSize={width:canvas.height*0.05, height:canvas.height*0.04}        
+        
+        this.droplet={
+            pos:{x:(canvas.width/2)-canvas.height*.052, y:canvas.height*0.8}
+        }
+
+        this.enities.push(this.splashSprite);     
     }
     update({dt, currentTime, gameTime}){
         super.update({dt, currentTime, gameTime});
         if(!this.loaded) return;
         drawBox(screenBuffer,0,0,canvas.width, canvas.height, 'black');
         screenBuffer.globalAlpha = 1;
-        drawImage(screenBuffer, this.images["Images/gameover.png"],canvas.height,canvas.height/2,canvas.height/2,canvas.height/2);
+        drawImage(screenBuffer, this.images["Images/gameover.png"],canvas.width/2,canvas.height/2,canvas.height/2,canvas.height/2);
         const label = this.images["Images/gameoverlabel.png"];
 
         screenBuffer.globalAlpha = 0;
@@ -112,14 +140,14 @@ class GameOver extends Scene{
             screenBuffer.globalAlpha = this.gameOverAlpha;
         }
         //console.log(screenBuffer.globalAlpha, gameTime, this.lastEventTimeGO+this.timeDelayGO);
-        drawImage(screenBuffer, label,canvas.height,(canvas.height/2)-200,
+        drawImage(screenBuffer, label,canvas.width/2,(canvas.height/2)-(canvas.height*.3),
             this.convertRes(label.width),
             this.convertRes(label.height)
         );
         screenBuffer.globalAlpha = 1;
 
         const droplet = this.images["Images/droplet.png"];
-        if(this.droplet.pos.y > 700) this.droplet.pos.y=500;
+        if(this.droplet.pos.y > canvas.height*0.9) this.droplet.pos.y=canvas.height*0.65;
         this.droplet.pos.y+=(100*dt);
         drawImage(screenBuffer, droplet,this.droplet.pos.x,this.droplet.pos.y,
             this.convertRes(droplet.width),
@@ -127,7 +155,6 @@ class GameOver extends Scene{
         );
 
         this.enities.forEach(entity=>entity.update({dt, currentTime, gameTime}));
-
     }
 
     getMouseInput=(event)=>{ }    

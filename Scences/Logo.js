@@ -10,12 +10,17 @@ class Logo extends Scene{
 
     constructor () {
         super();
+        loadImages(["Images/logo.png"],this.finishedLoading(this));
+        this.init();
+    }
+
+    init(){
         this.setup({
             viewBounds:{x:0,y:0,width: canvas.width,height: canvas.height},
             offBounds:{x:0,y:0,width: canvas.width,height: canvas.height}            
         });
-        loadImages(["Images/logo.png"],this.finishedLoading(this));
     }
+
     finishedLoading = (self) => (images) => {
         self.images = images;
         self.loaded = true;
@@ -51,7 +56,7 @@ class Logo extends Scene{
         screenBuffer.globalAlpha = this.alpha;
         // console.log(screenBuffer.globalAlpha);
         
-        drawImage(screenBuffer, this.images["Images/logo.png"],canvas.height,canvas.height/2,canvas.height/2,canvas.height/2);
+        drawImage(screenBuffer, this.images["Images/logo.png"],canvas.width/2,canvas.height/2,canvas.height/2,canvas.height/2);
         // this.button.update(dt);
     }
 }

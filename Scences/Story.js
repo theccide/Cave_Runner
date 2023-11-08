@@ -12,7 +12,7 @@ class Story extends Scene{
     getKeyboardInput=(event)=>{}
 
     wrapText(context, text, x, y, maxWidth, lineHeight) {
-        maxWidth = 650; // Width of the rectangle
+        maxWidth = canvas.width*.4; // Width of the rectangle
         lineHeight = 25; // Height between lines
         x = (canvas.width - maxWidth) / 2;
         y = 60;
@@ -23,7 +23,7 @@ class Story extends Scene{
         context.strokeStyle = '#aaa';
         context.fillStyle = '#0000007F';
         context.beginPath();
-        context.rect(x-25, y-50, maxWidth, canvas.height - y*2);
+        context.rect(x-25, y-50, maxWidth+50, canvas.height - y*2);
         context.fill();
         context.stroke();
 
@@ -47,15 +47,20 @@ class Story extends Scene{
 
     constructor () {
         super();
-        this.setup({
-            viewBounds:{x:0,y:0,width: canvas.width,height: canvas.height},
-            offBounds:{x:0,y:0,width: canvas.width,height: canvas.height}            
-        });
         screenBuffer.globalAlpha = 1;
         loadImages([`${localStorage.getItem("S3_BUCKET")}/generated_image.png`],this.finishedLoading(this));
         const audio = new Audio(`${localStorage.getItem("S3_BUCKET")}/generatedSound.mp3`);
         audio.play();
+        this.init();
     }
+
+    init(){
+        this.setup({
+            viewBounds:{x:0,y:0,width: canvas.width,height: canvas.height},
+            offBounds:{x:0,y:0,width: canvas.width,height: canvas.height}            
+        });
+    }
+
     finishedLoading = (self) => (images) => {
         self.images = images;
         self.loaded = true;
@@ -67,7 +72,7 @@ class Story extends Scene{
     update(dtPackage){
         super.update(dtPackage);
         if(!this.loaded) return;
-        drawImage(screenBuffer, this.images[`${localStorage.getItem("S3_BUCKET")}/generated_image.png`],canvas.height,canvas.height/2,canvas.height/2,canvas.height/2);
+        drawImage(screenBuffer, this.images[`${localStorage.getItem("S3_BUCKET")}/generated_image.png`],canvas.width/2,canvas.height/2,canvas.height/2,canvas.height/2);
         this.wrapText(screenBuffer, storyContent);
         // this.button.update(dtPackage);
     }

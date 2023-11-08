@@ -26,7 +26,7 @@ class StoryGenerator{
 
     finishedLoading(self, resource){
         self.resourcesLoaded++;
-        console.log(resource.name+" loaded");
+        loadingStatus = resource.name+" loaded";
         if(resource.name === "chatGPT") {
             storyContent = resource.content[0].message.content;
             localStorage.setItem("storyContent",storyContent);
@@ -39,7 +39,7 @@ class StoryGenerator{
 
             if(!self.useCached){
                 runAPI(self, "DallE2",localStorage.getItem("GPT_IMAGE_ENDPOINT"),{
-                    description: storyContent+" in the style of pixel art for a Nintendo game"
+                    description: "Create a fullscreen image with no text for following story: "+storyContent+" in the style of pixel art for a Nintendo game"
                 }, self.finishedLoading);
             } else self.finishedLoading(self, {name:"DallE2"});
         }

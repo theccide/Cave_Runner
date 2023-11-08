@@ -1,3 +1,14 @@
+const clamp=(val, min, max)=> Math.min(Math.max(val, min), max);
+const isObjectEmpty=obj=> Object.entries(obj).length === 0;
+const getObjectSize=obj=> Object.entries(obj).length;
+const isObject=obj=>typeof obj === 'object' && obj !== null;
+const isFunction=func=>typeof func === 'function';
+const isDefined=obj=>typeof obj !== "undefined";
+const isArray=obj=>Array.isArray(obj);
+const lerp = (x, y, a) => x * (1 - a) + y * a;
+const sign =(n) => (n < 0)?-1:1;
+const rgbToHex=(r, g, b)=> "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+
 const wrap=(num, length)=> (num+length)%(length);
 const dist=(x1, y1, x2, y2)=>{
     let a = x1 - x2;
