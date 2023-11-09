@@ -41,6 +41,7 @@ class Runner extends MoveableEntity{
     run(params){
         this.sequencerStatus[params.block.statusID]={complete:false};
         this.state = Runner.states.RUN;
+        this.speed = 200;
     }
 
     brain({dt, currentTime, gameTime}){
@@ -70,7 +71,7 @@ class Runner extends MoveableEntity{
             this.findWaypoint();
         }
        
-        const targetWaypoint = Tools2D.moveTowards_CloseEnough(dt,this.position,this.path[this.waypointPointer],this.speed-10,8);//move to the next waypoint
+        const targetWaypoint = Tools2D.moveTowards_CloseEnough(dt,this.position,this.path[this.waypointPointer],this.speed,8);//move to the next waypoint
         if(targetWaypoint?.hit){ 
             this.waypointPointer+=1;
             if(this.waypointPointer == this.path.length)

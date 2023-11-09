@@ -208,7 +208,7 @@ class GameController {
         this.entities.push(new Pot(this, "Pot", {type:"ONE"}, {x:800,y:500}));
         this.entities.push(new Pot(this, "Pot", {type:"TWO"}, {x:750,y:500}));
         this.entities.push(new Pot(this, "Pot", {type:"THREE"}, {x:700,y:500}));
-        this.entities.push(new Pot(this, "Pot", {type:"THREE",dropSequence:"miniBossDeath"}, {x:850,y:500}));
+        this.entities.push(new Pot(this, "Pot", {type:"THREE",dropSequence:"startBossBattle"}, {x:850,y:500}));
 
         // this.entities.push(new Fx(this, "smoke", {fxType:"SEVEN", destroyOnFinishAnim: false, spriteMap:"SMOKEFX02"}, {x:800,y:420}));
 

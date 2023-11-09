@@ -78,15 +78,16 @@ const miniBossDeathSequence = [
     {command:"Camera", params:{attachToEnity:"key"}},
     {command:"Entity", params:{id:"key", fn:"addKeyFrame", block:{statusID:"transtlation"}, args:{type:"transtlation", keyFrame:{val:{x:825,y:300}, time:2000}}}},
     {command:"Entity", params:{id:"runner", attachEntity:"key"}},
-    {command:"Camera", params:{zoom:3}},
+    {command:"Camera", params:{zoom:2.7}},
     {command:"Delay", params:{delayTime:1000}},
     {command:"Camera", params:{attachToEnity:"runner"}},
-    {command:"Delay", params:{delayTime:2000}},
     {command:"Entity", params:{id:"runner", fn:"run", args:{}, block:{statusID:"GottoDoor"}}},
     {command:"Entity", params:{id:"runner", fn:"detachChild", args:"key"}},
+    {command:"Camera", params:{zoom:1, time:500}},
+    {command:"Camera", params:{detach:"runner"}},
+    {command:"Camera", params:{fromEntity:"runner", moveToEntity:"Player", time:2000}},
     {command:"Entity", params:{id:"runner", destroy:true}},
     {command:"Entity", params:{id:"key", destroy:true}},
-    {command:"Camera", params:{zoom:1}},
     {command:"Camera", params:{attach:"Player"}},
     {command:"Player", params:{controls:true}},
     {command:"End"}
@@ -372,8 +373,8 @@ class Sequence{
                             this.commandGlobals.to_y = this.gameController.player.position.y;
                         }
                         else{
-                            this.commandGlobals.to_x = this.gameController.entityMap[command.fromEntity].position.x;
-                            this.commandGlobals.to_y = this.gameController.entityMap[command.fromEntity].position.y;
+                            this.commandGlobals.to_x = this.gameController.entityMap[command.moveToEntity].position.x;
+                            this.commandGlobals.to_y = this.gameController.entityMap[command.moveToEntity].position.y;
                         }
                     }
                     if(command.fromEntity){
@@ -419,6 +420,8 @@ class Sequence{
         if(command.detach){
             if(command.detach == "Player") 
                 this.gameController.player.camera = null;
+            else
+                this.gameController.entityMap[command.detach].camera = null;
         }
         if(command.attach){
             if(command.attach == "Player"){
