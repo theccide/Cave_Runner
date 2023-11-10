@@ -23,6 +23,7 @@ class Entity {
     visible = true;
     playerInteractable = false;
     parent = { position:{x:0,y:0} };
+    lightOffset = { x:0,y:0};
     children=[];
     globalAlpha = 1;
 
@@ -169,14 +170,12 @@ class Entity {
         this.nextFrame({dt, currentTime, gameTime});
         this.brain({dt, currentTime, gameTime});
         this.setupCollisionBounds();
-        this.children.forEach(child=>
-            child.update({dt, currentTime, gameTime})
-            );
-
+        
         if(this.visible){
             if(this.showDebug) drawBox(this.gameController.currentScene.backBuffer, this.collisionBounds.x, this.collisionBounds.y , this.collisionBounds.width, this.collisionBounds.height, "red");
             this.drawSprite({dt, currentTime, gameTime});
             if(this.showDebug) drawCircle(this.gameController.currentScene.backBuffer, this.parent.position.x+this.position.x, this.parent.position.y+this.position.y, 4, "red");
+            this.children.forEach(child=>child.update({dt, currentTime, gameTime}));
         }
         this.processCamera();
     }

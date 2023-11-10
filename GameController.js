@@ -28,6 +28,7 @@ class GameController {
     getKeyboardInput=(event)=>{
         if(this?.currentScene?.dialogManager) this.currentScene.dialogManager.getKeyboardInput(event);
         if(this.player) this.player.getKeyboardInput(event);
+        if(this.entityMap?.["golem"]) this.entityMap["golem"].getKeyboardInput(event);
     }
 
     start = (scene) => {
@@ -59,10 +60,13 @@ class GameController {
             "Images/spritemaps/smokeFx.png",
             "Images/spritemaps/smokeFx02.png",
             "Images/spritemaps/smokeFx03.png",
+            "Images/spritemaps/shields.png",
+            "Images/spritemaps/rocks.png",
             "Images/map1.png",
             "Images/lightsource.png",
             "Images/gems.png",
-            "Images/hud.png",
+            "Images/hud_hero.png",
+            "Images/hud_golem.png",
             "Images/arrow.png",
             "Images/lava1.png",
             "Images/lava2.png",
@@ -197,18 +201,18 @@ class GameController {
         //this.entities.push(new Fx(this, "key", {fxType:"0", destroyOnFinishAnim: false, spriteMap:"KEY"}, {x:220,y:420}));
         this.entities.push(new Saw(this, "SAW", {x:800,y:400}));
 
-        this.entities.push(new Golem(this, "Golem", {x:2600,y:1200}));
+        // this.entities.push(new Golem(this, "Golem", {x:2600,y:1200}));
         // this.entities.push(new Runner(this, "Runner", {x:800,y:350},{
         //         searchingWaypoints:[{x:1350,y:300},{x:1350,y:85},{x:1500,y:85},{x:1500,y:320},{x:1600,y:320},{x:1900,y:90},{x:2100,y:90}],
         //         state: Runner.states.IDLE
         //     }));
-        this.entities.push(new Runner(this, "Runner", {}, {x:2600,y:1000}));
+        // this.entities.push(new Runner(this, "Runner", {}, {x:2600,y:1000}));
         this.entities.push(new Obelisk(this, "Obelisk", {x:2400,y:1000}));
 
         this.entities.push(new Pot(this, "Pot", {type:"ONE"}, {x:800,y:500}));
         this.entities.push(new Pot(this, "Pot", {type:"TWO"}, {x:750,y:500}));
         this.entities.push(new Pot(this, "Pot", {type:"THREE"}, {x:700,y:500}));
-        this.entities.push(new Pot(this, "Pot", {type:"THREE",dropSequence:"startBossBattle"}, {x:850,y:500}));
+        this.entities.push(new Pot(this, "Pot", {type:"THREE",dropSequence:"activateGolem"}, {x:850,y:500}));
 
         // this.entities.push(new Fx(this, "smoke", {fxType:"SEVEN", destroyOnFinishAnim: false, spriteMap:"SMOKEFX02"}, {x:800,y:420}));
 
@@ -302,7 +306,7 @@ class GameController {
         }
 
         const createInstance=(className, context, id, params, pos)=>{
-            const classes = { Bullet, Gem, Fx, Torch, Boss, Arrow, FallingRock, Skull, Key, Runner };
+            const classes = { Bullet, Gem, Fx, Torch, Boss, Arrow, FallingRock, Skull, Key, Runner, Golem };
             return new classes[className](context, id, params, pos);
         }
         

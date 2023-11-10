@@ -108,14 +108,13 @@ class LargeMap extends Scene {
                 }
             });
 
-
             clearRingRect(this.blackBuffer, 1435,260,135,417,0.9,getFlicker(0.9,0.002));
             clearRingRect(this.blackBuffer, 1570,40,350,405+8,0.9,getFlicker(0.9,0.002));
             clearRingRect(this.blackBuffer, 1570+350,270,190,180,0.9,getFlicker(0.9,0.002));
 
             this.gameController.entities.forEach(entity => {
                 if(entity.isLightSource){
-                    clearRingCircles(this.blackBuffer, entity.position.x, entity.position.y, 50+(entity.brightness*50)+getFlicker(entity.brightness,0.005), entity.brightness);
+                    clearRingCircles(this.blackBuffer, entity.position.x+entity.lightOffset.x, entity.position.y+entity.lightOffset.y, 50+(entity.brightness*50)+getFlicker(entity.brightness,0.005), entity.brightness);
                 }
                 entity.children.forEach(child => {
                     if(child.isLightSource){

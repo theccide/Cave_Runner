@@ -105,6 +105,9 @@ class Player extends MoveableEntity {
                 if(currentTime > this.damageStartTime+this.damageTime) this.takingDamage=false;
             }
         }
+        this.addChild(new Skull(this.gameController, "skull", {shouldRotate:true}, {x:45, y:45}));
+
+        // this.addChild(new Skull(this.gameController, "skull", {shouldRotate:true}, {x:this.position.x+45, y:this.position.y+45}));
     }
 
     swingBoxBounds= {x:-50,y:0,width:100,height:50};

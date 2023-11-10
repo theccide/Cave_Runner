@@ -65,6 +65,7 @@
         let gameStartTimeAlt = (new Date()).getTime(); // pause free
         let gameTime = 0;
         let gameTimeAlt = 0; // pause free
+        let timeScale = 1;
         // let copyScreenBuffer = screenBuffer = canvas.getContext('2d');
         let screenBuffer = canvas.getContext('2d');
         screenBuffer.canvas.width  = window.innerWidth;
@@ -121,7 +122,7 @@
         else {currentScene = new LargeMap();}
         // else {currentScene = new GameOver();}
         // let currentScene = new LargeMap();
-        let lastTimestamp = 0; // Store the timestamp of the previous frame
+        let lastTimestamp = (new Date()).getTime(); // Store the timestamp of the previous frame
 
         function changeScene (scene) {
             currentScene = scene;
@@ -145,17 +146,21 @@
             // Draw the FPS
             screenBuffer.font = '24px Arial';
             screenBuffer.fillStyle = 'white';
-            screenBuffer.fillText(`FPS: ${fps}`, 10, 30);            
+            screenBuffer.fillText(`FPS: ${fps}`, 10, 130);            
         }
 
         // let gameStartTime = (new Date()).getTime();
         function setPause(shouldPause){
             const currentTime =(new Date()).getTime();
-            if(shouldPause) pauseTime = currentTime;
-            if(!shouldPause && pauseTime!=0) {
-                gameStartTime += (currentTime-pauseTime);
-            }
+            // if(shouldPause) pauseTime = currentTime;
+            // if(!shouldPause && pauseTime!=0) {
+            //     gameStartTime += (currentTime-pauseTime);
+            // }
             paused = shouldPause;
+            if (!paused) {
+                // When unpausing, reset lastTimestamp to avoid a large dt
+                lastTimestamp = (new Date()).getTime();
+            }            
         }
 
         function gameLoop(timestamp) {
@@ -167,12 +172,15 @@
                 requestAnimationFrame(gameLoop); 
                 return;   
             }
-            gameTime = currentTime - gameStartTime;
-            const dt = (gameTime - lastTimestamp) / 1000; // Calculate delta time
-            lastTimestamp = gameTime;            
+            // gameTime = currentTime - gameStartTime;
+            // const dt = (gameTime - lastTimestamp) / 1000; // Calculate delta time
+            // lastTimestamp = gameTime;            
+            const dt = ((currentTime - lastTimestamp) / 1000) * timeScale; 
+            gameTime += dt * 1000;
+            lastTimestamp = currentTime;
             currentScene.update({dt, currentTime, gameTime}); // Update and render the game 
                         
-            // drawFPS(timestamp);          
+            drawFPS(timestamp);          
             requestAnimationFrame(gameLoop);
         }
 
@@ -192,6 +200,25 @@
         window.addEventListener('blur', ()=>setPause(true));
         window.addEventListener('focus', ()=>setPause(false));
         requestAnimationFrame(gameLoop); // Start the game loop
+
+        function setTimeScale(scale) {
+            timeScale = scale;
+        }
+
+        // Example usage of pause toggle:
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'p') {
+                // togglePause(); // Toggle pause on 'p' key press
+            } else if (!paused) { // Check if not paused before changing time scale
+                if (event.key === '1') {
+                    setTimeScale(1); // Normal speed
+                } else if (event.key === '2') {
+                    setTimeScale(0.5); // Slow motion
+                } else if (event.key === '3') {
+                    setTimeScale(2); // Fast forward
+                }
+            }
+        });        
     </script>
     <script src="Jam_Engine/InputHandler.js"></script>
 </body>

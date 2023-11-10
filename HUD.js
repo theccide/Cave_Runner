@@ -1,5 +1,6 @@
 class HUD{
     gameController = null;
+    mode = "player";
     
     constructor(gameController){
         this.gameController = gameController;
@@ -9,7 +10,7 @@ class HUD{
     update({dt, currentTime, gameTime}){
 
         if(!this.gameController.resouncesReady) return;
-        const hudImage =this.gameController.images["Images/hud.png"];
+        const hudImage =this.gameController.images[(this.mode=="player")?"Images/hud_hero.png":"Images/hud_golem.png"];
         drawImageFrom00(screenBuffer,hudImage,10,10,hudImage.width/2, hudImage.height/2);
 
         let healthPillImage =this.gameController.images["Images/heatlhgreen.png"];

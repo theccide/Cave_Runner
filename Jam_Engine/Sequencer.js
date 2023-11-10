@@ -68,19 +68,19 @@ const miniBossDeathSequence = [
     {command:"Entity", params:{id:"miniboss", fn:"detachChild", args:"key"}},
     {command:"Player", params:{controls:false}},
     {command:"Camera", params:{detach:"Player"}},
-    {command:"Camera", params:{attachToEnity:"miniboss"}},
+    {command:"Camera", params:{attachToEntity:"miniboss"}},
     {command:"Camera", params:{zoom:2,time:1000}},
     {command:"Spawn", params:{id:"runner",entityType:"Runner",params:{},pos:{x:850,y:300}, fields:{
         searchingWaypoints:[{x:1350,y:300},{x:1350,y:85},{x:1500,y:85},{x:1500,y:320},{x:1600,y:320},{x:1900,y:90},{x:2100,y:90}],
         state: Runner.states.IDLE        
     },delayTime:100}},
     {command:"Delay", params:{delayTime:1000}},
-    {command:"Camera", params:{attachToEnity:"key"}},
+    {command:"Camera", params:{attachToEntity:"key"}},
     {command:"Entity", params:{id:"key", fn:"addKeyFrame", block:{statusID:"transtlation"}, args:{type:"transtlation", keyFrame:{val:{x:825,y:300}, time:2000}}}},
     {command:"Entity", params:{id:"runner", attachEntity:"key"}},
     {command:"Camera", params:{zoom:2.7}},
     {command:"Delay", params:{delayTime:1000}},
-    {command:"Camera", params:{attachToEnity:"runner"}},
+    {command:"Camera", params:{attachToEntity:"runner"}},
     {command:"Entity", params:{id:"runner", fn:"run", args:{}, block:{statusID:"GottoDoor"}}},
     {command:"Entity", params:{id:"runner", fn:"detachChild", args:"key"}},
     {command:"Camera", params:{zoom:1, time:500}},
@@ -113,7 +113,7 @@ const rescueSpiritSequence = [
     {command:"Delay", params:{delayTime:1000}},
     {command:"Spawn", params:{id:"skull", entityType:"Skull",params:{shouldRotate:false},pos:{x:850,y:500}, delayTime:100}},
     {command:"Delay", params:{delayTime:100}},
-    {command:"Camera", params:{attachToEnity:"skull"}},
+    {command:"Camera", params:{attachToEntity:"skull"}},
     {command:"Delay", params:{delayTime:1000}},    
     {command:"Dialog", params:{open:true, text:["Thank you for resucing me adventurer! I have been stuck in this pot for a 1000 years!","Let me join you to defeat the stone Golem guarding the obelisk."]}},
     {command:"Delay", params:{delayTime:100}},
@@ -133,11 +133,39 @@ const playerDeathSequence=[
     {command:"Player", params:{controls:false}},
     {command:"Player", params:{fields:{visible:false}}},
     {command:"Spawn", params:{entityType:"Fx",params:{fxType:"THREE", destroyOnFinishAnim: true, spriteMap:"SMOKEFX03"},fields:{frameChangeInterval:0.1}, pos:"player"}},
-    {command:"Camera", params:{zoom:2,time:1000}},
+    {command:"Camera", params:{zoom:2, timeScale:0.5, time:1000}},
     {command:"Delay", params:{delayTime:1500}},
+    {command:"Camera", params:{timeScale:1}},
     {command:"Level", params:{scene:"GameOver"}},
     {command:"End"}
 ]
+
+const activateGolemSequence = [
+    {command:"Player", params:{moveTo:{x:2000,y:600}}},
+    {command:"Player", params:{controls:false}},
+    {command:"Delay", params:{delayTime:10}},
+    {command:"Camera", params:{detach:"Player"}},
+
+    {command:"Player", params:{fn:"detachChild", args:"skull"}},
+    {command:"Entity", params:{id:"skull", fields:{shouldRotate:false}}},
+    {command:"Camera", params:{attachToEntity:"skull"}},
+    {command:"Entity", params:{id:"skull", fn:"addKeyFrame", block:{statusID:"transtlation"}, args:{type:"transtlation", keyFrame:{val:{x:2250,y:850}, time:2000}}}},
+
+    {command:"Delay", params:{delayTime:1000}},
+
+    {command:"Spawn", params:{id:"golem",entityType:"Golem",params:{},pos:{x:2200,y:800}}},    
+    {command:"Entity", params:{id:"golem", attachEntity:"skull"}},
+
+    {command:"Delay", params:{delayTime:1500}},
+    {command:"Entity", params:{id:"golem", args:{}, block:{statusID:"wakeup"}, fn:"wakeup"}},
+    {command:"Entity", params:{id:"skull", fn:"setOrbit", args:{speed:50}}},
+
+    {command:"Camera", params:{zoom:2,time:1000}},
+    {command:"Camera", params:{attachToEntity:"golem"}},
+    {command:"Hud", params:{mode:"golem"}},
+    {command:"Entity", params:{id:"golem", controls:true}},
+    {command:"End"}
+];
 
 class Sequence{
     gameController = null;
@@ -173,6 +201,8 @@ class Sequence{
                 return this.command_Entity(dtPackage,command.params);
             case "Camera":
                 return this.command_Camera(dtPackage,command.params);
+            case "Hud":
+                return this.command_Hud(dtPackage,command.params);    
             case "Player":
                 return this.command_Player(dtPackage,command.params);
             case "State":
@@ -213,6 +243,14 @@ class Sequence{
             changeScene(new GameOver(this.gameController.player.score));
         }
     }
+    
+    command_Hud(dtPackage,command){
+        if("mode" in command){
+            this.gameController.currentScene.HUD.mode = command.mode;
+        }
+        this.scriptPtr++;
+        return true;
+    }
 
     command_Spawn({dt, currentTime, gameTime},command){
         if(command?.pos=="player"){
@@ -240,11 +278,22 @@ class Sequence{
     command_Entity({dt, currentTime, gameTime},command){ 
         let entity =  this.gameController.entityMap[command.id];
 
+        if (command.hasOwnProperty('fields')){        
+            entity.updateFields(command.fields);
+            this.scriptPtr++;
+            return true;
+        }
         if (command.hasOwnProperty('destroy')){
             this.gameController.destroy(entity);
             this.scriptPtr++;
             return true;            
         }  
+        
+        if (command.hasOwnProperty('controls')){
+            this.gameController.entityMap[command.id].setPlayerControlled(command.controls);
+            this.scriptPtr++;
+            return true;              
+        }
 
         if (command.hasOwnProperty('attachEntity')){
             let child = this.gameController.entityMap[command.attachEntity];
@@ -290,8 +339,11 @@ class Sequence{
         if (command.hasOwnProperty('fields')){        
             this.gameController.player.updateFields(command.fields);
         }
-        if (command.hasOwnProperty('controls')){        
+        if (command.hasOwnProperty('controls')){
             this.gameController.player.setPlayerControlled(command.controls);
+        }
+        if(command.hasOwnProperty('moveTo')){
+            this.gameController.player.position = {...command.moveTo};
         }
         if (command.hasOwnProperty('attachEntity')){
             let child = this.gameController.entityMap[command.attachEntity];
@@ -316,6 +368,37 @@ class Sequence{
             }
         }
         
+        const entity = this.gameController.player;
+        if(command.block){
+            if(this.isWaiting != true){
+                command.args["block"] = {...command.block};
+                if("args" in command){
+                    if(typeof command.args == "string") 
+                        entity[command.fn](command.args);
+                    else 
+                        entity[command.fn]({...command.args});
+                }else{
+                    entity[command.fn]();
+                }
+            }
+            this.isWaiting = true;
+            if(entity.getSequencerStatus(command.block.statusID)){
+                this.isWaiting = false;
+                this.scriptPtr++;
+                return true;
+            }
+            return false;
+        }
+
+        if("fn" in command && "args" in command){
+            if(typeof command.args == "string") 
+                entity[command.fn](command.args);
+            else 
+                entity[command.fn]({...command.args});
+        }else if("fn" in command){
+            entity[command.fn]();
+        }        
+
         this.scriptPtr++;
         return true;
     }
@@ -334,27 +417,61 @@ class Sequence{
     }
     
     command_Camera({dt, currentTime, gameTime},command){
-  
-        if(command.zoom){
-            if(command.time){
-                if(!this.isWaiting){
-                    this.commandGlobals.startZoom = this.gameController.camera.zoom;
-                    this.lastEventTime = gameTime;
-                }
+
+        if(command.time && (command.zoom || command.timeScale)){
+            if(!this.isWaiting){
+                this.commandGlobals.startZoom = this.gameController.camera.zoom;
+                this.commandGlobals.startTimeScale = timeScale;
+                this.lastEventTime = gameTime;
                 this.isWaiting = true;
-                const percent = (gameTime-this.lastEventTime)/command.time;
-                let zoom = Tools.tween1D(this.commandGlobals.startZoom, command.zoom, percent);
-                if(percent>=1){
-                    zoom = command.zoom;
-                    this.scriptPtr++;
-                    this.isWaiting = false;
-                    return true;
-                }
-                this.gameController.camera.setZoom(zoom);
-                return false;
             }
-            this.gameController.camera.setZoom(command.zoom);
+
+            const percent = Math.min(((gameTime-this.lastEventTime)/command.time),1);
+
+            if(percent>=1){
+                console.log("relesed");
+                this.scriptPtr++;
+                this.isWaiting = false;
+                return true;
+            }
+
+            if(command.zoom){
+                let zoom = Tools.tween1D(this.commandGlobals.startZoom, command.zoom, percent);
+                this.gameController.camera.setZoom(zoom);
+            }
+
+            if(command.timeScale){
+                let newTimeScale = Tools.tween1D(this.commandGlobals.startTimeScale, command.timeScale, percent);
+                timeScale = newTimeScale;
+            }
+
+            return false;                    
         }
+        else{
+            if(command.zoom) this.gameController.camera.setZoom(command.zoom);
+            if(command.timeScale) timeScale = command.timeScale;
+        }
+        
+        // if(command.zoom){
+        //     if(command.time){
+        //         if(!this.isWaiting){
+        //             this.commandGlobals.startZoom = this.gameController.camera.zoom;
+        //             this.lastEventTime = gameTime;
+        //         }
+        //         this.isWaiting = true;
+        //         const percent = (gameTime-this.lastEventTime)/command.time;
+        //         let zoom = Tools.tween1D(this.commandGlobals.startZoom, command.zoom, percent);
+        //         if(percent>=1){
+        //             zoom = command.zoom;
+        //             this.scriptPtr++;
+        //             this.isWaiting = false;
+        //             return true;
+        //         }
+        //         this.gameController.camera.setZoom(zoom);
+        //         return false;
+        //     }
+        //     this.gameController.camera.setZoom(command.zoom);
+        // }
 
         if(command.hasOwnProperty('shake')){
             this.gameController.camera.shake = command.shake;
@@ -429,9 +546,9 @@ class Sequence{
                 this.gameController.player.camera = this.gameController.camera;
             }                 
         }
-        if(command.attachToEnity){
+        if(command.attachToEntity){
             this.gameController.entities.forEach(entity=>entity.camera = null);
-            this.gameController.entityMap[command.attachToEnity].camera = this.gameController.camera;
+            this.gameController.entityMap[command.attachToEntity].camera = this.gameController.camera;
         }
         this.scriptPtr++;
         return true;
@@ -464,6 +581,7 @@ class Sequencer{
         this.addSequence(new Sequence("golemAttack",gameController,golemAttackSequence));
         this.addSequence(new Sequence("rescueSpirit",gameController,rescueSpiritSequence));
         this.addSequence(new Sequence("playerDeath",gameController, playerDeathSequence));
+        this.addSequence(new Sequence("activateGolem",gameController, activateGolemSequence));        
     }
 
     addSequence(sequence){
@@ -482,27 +600,27 @@ class Sequencer{
     // {command:"Camera", params:{detach:"torch1"}},
     // {command:"Delay", params:{delayTime:500}},
     // {command:"Spawn", params:{entityType:"Torch", id:"torch2",type:"thick",pos:{"x":640,"y":730}}},
-    // {command:"Camera", params:{attachToEnity:"torch2"}},
+    // {command:"Camera", params:{attachToEntity:"torch2"}},
 
     // {command:"Camera", params:{detach:"torch2"}},
     // {command:"Delay", params:{delayTime:500}},
     // {command:"Spawn", params:{entityType:"Torch", id:"torch3",type:"thick",pos:{"x":818,"y":1096}}},
-    // {command:"Camera", params:{attachToEnity:"torch3"}},
+    // {command:"Camera", params:{attachToEntity:"torch3"}},
 
     // {command:"Camera", params:{detach:"torch3"}},
     // {command:"Delay", params:{delayTime:500}},
     // {command:"Spawn", params:{entityType:"Torch", id:"torch4",type:"thick",pos:{"x":235,"y":1324}}},
-    // {command:"Camera", params:{attachToEnity:"torch4"}},
+    // {command:"Camera", params:{attachToEntity:"torch4"}},
 
     // {command:"Camera", params:{detach:"torch4"}},
     // {command:"Delay", params:{delayTime:500}},
     // {command:"Spawn", params:{entityType:"Torch", id:"torch5",type:"thick",pos:{"x":59,"y":881}}},
-    // {command:"Camera", params:{attachToEnity:"torch5"}},
+    // {command:"Camera", params:{attachToEntity:"torch5"}},
 
     // {command:"Camera", params:{detach:"torch4"}},
     // {command:"Delay", params:{delayTime:500}},
     // {command:"Spawn", params:{entityType:"Boss", id:"Boss",pos:{"x":380,"y":1000}}},
-    // {command:"Camera", params:{attachToEnity:"Boss"}},
+    // {command:"Camera", params:{attachToEntity:"Boss"}},
 
     // {command:"Delay", params:{delayTime:500}},
     // {command:"Spawn", params:{entityType:"Boss", pos:{"x":380,"y":1000}}},
