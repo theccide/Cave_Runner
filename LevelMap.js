@@ -23,6 +23,10 @@ class LevelMap{
     ];
 
     switchCellValue(pos, value){
+        this.grid.matrix[pos.y][pos.x] = value;
+    }
+
+    switchCellValueFromMap(pos, value){
         let pointX = pos.x - this.bounds.x;
         let pointY = pos.y - this.bounds.y;
         let x =  Math.floor((pointX/this.bounds.width)*this.grid.numCols);

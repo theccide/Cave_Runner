@@ -69,7 +69,7 @@ class MiniBoss extends Entity{
                 this.switchAnimation(this.deathAnimation);
                 this.endAnimationCallback=()=>{
                     if(this.deathAnimation === "Attack02"){
-                        this.gameController.player.inventory.questItems.Maguffin=1,
+                        // this.gameController.player.inventory.questItems.Maguffin=1,
                         this.pauseAnimation = true;
                         this.endAnimationCallback=null;
                         this.gameController.destroy(this);

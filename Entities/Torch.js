@@ -41,6 +41,9 @@ class Torch extends Entity{
         this.gameController.instatiate({
             entityType:"Fx", params:{fxType:"5", destroyOnFinishAnim: true}, pos:{...this.position}
         });
+        if("Boss" in this.gameController.entityMap){
+            this.gameController.entityMap["Boss"].hit(0,0);
+        }
         this.gameController.destroy(this);
     }
 }

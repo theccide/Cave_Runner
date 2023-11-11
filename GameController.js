@@ -67,6 +67,7 @@ class GameController {
             "Images/spritemaps/smokeFx03.png",
             "Images/spritemaps/shields.png",
             "Images/spritemaps/rocks.png",
+            "Images/spritemaps/chests.png",
             "Images/map1.png",
             "Images/lightsource.png",
             "Images/gems.png",
@@ -79,6 +80,7 @@ class GameController {
             "Images/heatlhgreen.png",
             "Images/heatlhred.png",
             "Images/dialog.png",
+            "Images/scroll.png",
         ],this.imagesFinished);
 
         loadSounds(["Sounds/noise.wav"],this.soundsFinished);
@@ -214,10 +216,12 @@ class GameController {
         // this.entities.push(new Runner(this, "Runner", {}, {x:2600,y:1000}));
         this.entities.push(new Obelisk(this, "Obelisk", {x:2400,y:1000}));
 
+        // this.entities.push(new Chest(this, "Chest", {}, {x:400,y:1000}));
+
         this.entities.push(new Pot(this, "Pot", {type:"ONE"}, {x:800,y:500}));
         this.entities.push(new Pot(this, "Pot", {type:"TWO"}, {x:750,y:500}));
         this.entities.push(new Pot(this, "Pot", {type:"THREE"}, {x:700,y:500}));
-        this.entities.push(new Pot(this, "Pot", {type:"THREE",dropSequence:"rescueSpirit"}, {x:850,y:500}));
+        this.entities.push(new Pot(this, "Pot", {type:"THREE",dropSequence:"rescueSpirit"}, {x:50,y:500}));
 
         // this.entities.push(new Fx(this, "smoke", {fxType:"SEVEN", destroyOnFinishAnim: false, spriteMap:"SMOKEFX02"}, {x:800,y:420}));
 
@@ -279,9 +283,9 @@ class GameController {
     }
     
     triggerPlaySequence(self, sequenceName, removeTrigger){
-        if(removeTrigger){
-            self.levelMap.switchCellValue({x:self.player.position.x, y:self.player.position.y},0);
-        }
+        // if(removeTrigger){
+        //     self.levelMap.switchCellValue({x:self.player.position.x, y:self.player.position.y},0);
+        // }
         this.playSequence(self, sequenceName);
     }
 
@@ -311,7 +315,7 @@ class GameController {
         }
 
         const createInstance=(className, context, id, params, pos)=>{
-            const classes = { Bullet, Gem, Fx, Torch, Boss, Arrow, FallingRock, Skull, Key, Runner, Golem, EndRunner };
+            const classes = { Bullet, Gem, Fx, Torch, Boss, Arrow, FallingRock, Skull, Key, Runner, Golem, EndRunner, Chest };
             return new classes[className](context, id, params, pos);
         }
         

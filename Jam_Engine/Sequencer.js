@@ -1,4 +1,6 @@
 const startBossBattleSequence = [
+    {command:"Level", params:{setCell:0, cellPos:{x:16,y:22}}},
+    {command:"Level", params:{setCell:0, cellPos:{x:17,y:22}}},
     {command:"Player", params:{controls:false}},
     {command:"Camera", params:{zoom:2,time:1000}},
     {command:"Delay", params:{delayTime:10}},
@@ -6,21 +8,29 @@ const startBossBattleSequence = [
     {command:"Player", params:{keyPressed:"s",time:1000}},
     {command:"Delay", params:{delayTime:1000}},
 
-    {command:"Spawn", params:{entityType:"Torch", params:{type:"thick"},pos:{"x":54,"y":740}}},
-    {command:"Camera", params:{fromEntity:"Player", moveTo:{"x":54,"y":740}, time:1000}},
-    // {command:"Delay", params:{delayTime:500}},
-
-    {command:"Camera", params:{from:{"x":54,"y":740}, moveTo:{"x":640,"y":730}, time:1000}},
-    {command:"Spawn", params:{entityType:"Torch", params:{type:"thick"},pos:{"x":640,"y":730}}},    
-
-    {command:"Camera", params:{from:{"x":640,"y":730}, moveTo:{"x":818,"y":1096}, time:1000}},
-    {command:"Spawn", params:{entityType:"Torch", params:{type:"thick"},pos:{"x":818,"y":1096}}},    
+    {command:"Camera", params:{fromEntity:"Player", moveTo:{"x":235,"y":1324}, time:1000}},
+    {command:"Spawn", params:{entityType:"Torch", params:{type:"thick",isInteractable:true},pos:{"x":235,"y":1324}}},
+    {command:"Delay", params:{delayTime:250}},
+    {command:"Camera", params:{from:{"x":235,"y":1324}, moveTo:{"x":640,"y":730}, time:1000}},
+    {command:"Spawn", params:{entityType:"Torch", params:{type:"thick",isInteractable:true},pos:{"x":640,"y":730}}},    
+    {command:"Delay", params:{delayTime:250}},
+    {command:"Camera", params:{from:{"x":640,"y":730}, moveTo:{"x":54,"y":740}, time:1000}},
+    {command:"Spawn", params:{entityType:"Torch", params:{type:"thick",isInteractable:true},pos:{"x":54,"y":740}}}, 
     
-    {command:"Camera", params:{from:{"x":818,"y":1096}, moveTo:{"x":235,"y":1324}, time:1000}},
-    {command:"Spawn", params:{entityType:"Torch", params:{type:"thick"},pos:{"x":235,"y":1324}}},  
+    // {command:"Spawn", params:{entityType:"Torch", params:{type:"thick"},pos:{"x":54,"y":740}}},
+    // {command:"Camera", params:{fromEntity:"Player", moveTo:{"x":54,"y":740}, time:1000}},
 
-    {command:"Camera", params:{from:{"x":235,"y":1324}, moveTo:{"x":59,"y":881}, time:1000}},
-    {command:"Spawn", params:{entityType:"Torch", params:{type:"thick"},pos:{"x":59,"y":881}}},  
+    // {command:"Camera", params:{from:{"x":54,"y":740}, moveTo:{"x":640,"y":730}, time:1000}},
+    // {command:"Spawn", params:{entityType:"Torch", params:{type:"thick"},pos:{"x":640,"y":730}}},    
+
+    // {command:"Camera", params:{from:{"x":640,"y":730}, moveTo:{"x":818,"y":1096}, time:1000}},
+    // {command:"Spawn", params:{entityType:"Torch", params:{type:"thick"},pos:{"x":818,"y":1096}}},    
+    
+    // **{command:"Camera", params:{from:{"x":818,"y":1096}, moveTo:{"x":235,"y":1324}, time:1000}},
+    // **{command:"Spawn", params:{entityType:"Torch", params:{type:"thick"},pos:{"x":235,"y":1324}}},  
+
+    // {command:"Camera", params:{from:{"x":235,"y":1324}, moveTo:{"x":59,"y":881}, time:1000}},
+    // {command:"Spawn", params:{entityType:"Torch", params:{type:"thick"},pos:{"x":59,"y":881}}},  
     
     {command:"Delay", params:{delayTime:500}},
 
@@ -33,25 +43,25 @@ const startBossBattleSequence = [
     {command:"Camera", params:{zoom:2,time:1000}},
     {command:"Camera", params:{shake:false}},
 
-    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:true},pos:{"x":413,"y":729}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":413,"y":729}, delayTime:100}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.89}]}},
-    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:true},pos:{"x":650,"y":936}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":650,"y":936}, delayTime:100}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.79}]}},
-    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:true},pos:{"x":715,"y":996}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":715,"y":996}, delayTime:100}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.69}]}},
-    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:true},pos:{"x":868,"y":994}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":868,"y":994}, delayTime:100}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.59}]}},
-    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:true},pos:{"x":873,"y":1101}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":873,"y":1101}, delayTime:100}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.49}]}},
-    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:true},pos:{"x":740,"y":1149}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":740,"y":1149}, delayTime:100}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.39}]}},
-    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:true},pos:{"x":742,"y":1327}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":742,"y":1327}, delayTime:100}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.29}]}},
-    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:true},pos:{"x":444,"y":1327}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":444,"y":1327}, delayTime:100}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.19}]}},
-    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:true},pos:{"x":48,"y":1317}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":48,"y":1317}, delayTime:100}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.09}]}},
-    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:true},pos:{"x":48,"y":1107}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":48,"y":1107}, delayTime:100}},
     {command:"Delay", params:{delayTime:500}},
     // {command:"GameController", params:{fields:[{key:"useDarkOverlay",value:false}]}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.99}]}},
@@ -76,10 +86,107 @@ const startBossBattleSequence = [
 
     {command:"Camera", params:{from:{"x":380,"y":1000}, moveToEntity:"Player", time:1500}},
     {command:"Camera", params:{attach:"Player"}},
+    {command:"Entity", params:{id:"midbossOutdoor", fn:"setLock", args:{shouldLock:true}}},
+    {command:"Entity", params:{id:"midbossINdoor", fn:"setLock", args:{shouldLock:true}}},
     {command:"Player", params:{controls:true}},
     {command:"State", params:{entity:"Boss", state:2}},
     {command:"End"}
 ];
+
+const bossHitSequence=[
+    {command:"Entity", params:{id:"Boss",fields:{isLightSource:true}}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.2}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.3}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.4}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.5}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.6}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.7}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.8}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.9}}},
+    {command:"Delay", params:{delayTime:100}},
+
+    {command:"Entity", params:{id:"Boss",fn:"playStunAnim"}},
+
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.9}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.8}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.7}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.6}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.5}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.4}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.3}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.2}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss",fn:"chase"}},
+    {command:"Entity", params:{id:"Boss",fields:{isLightSource:false}}},    
+    
+    {command:"End"}
+]
+
+const bossDeathSequence=[
+    {command:"Player", params:{controls:false}},
+    {command:"Camera", params:{detach:"Player"}},
+    {command:"Camera", params:{fromEntity:"Player", moveToEntity:"Boss", time:2000}},
+    // {command:"Camera", params:{attachToEntity:"Boss"}},
+
+    {command:"Entity", params:{id:"Boss",fields:{isLightSource:true}}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.2}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.3}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.4}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.5}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.6}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.7}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.8}}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Entity", params:{id:"Boss", fields:{brightness:0.9}}},
+    {command:"Delay", params:{delayTime:100}},
+
+    {command:"Entity", params:{id:"Boss",fn:"playDeathAnim"}},
+    {command:"Delay", params:{delayTime:1000}},
+
+    {command:"Spawn", params:{id:"Chest", entityType:"Chest", params:{}, pos:{x:400,y:1000}}},
+    {command:"Camera", params:{fromEntity:"Boss", moveToEntity:"Chest", time:1000}},
+
+    {command:"Camera", params:{fromEntity:"Chest", moveToEntity:"Player", time:1000}},
+    {command:"Camera", params:{attach:"Player"}},
+    {command:"Player", params:{controls:true}},
+
+    {command:"Entity", params:{id:"midbossOutdoor", fn:"setLock", args:{shouldLock:false}}},
+    {command:"Entity", params:{id:"midbossINdoor", fn:"setLock", args:{shouldLock:false}}},    
+    {command:"Camera", params:{zoom:1,time:1000}},
+
+    {command:"End"}
+]
+
+const testSequence=[
+    // {command:"Entity", params:{id:"midbossOutdoor", fn:"setLock", args:{shouldLock:true}}},
+    // {command:"Entity", params:{id:"midbossINdoor", fn:"setLock", args:{shouldLock:true}}},
+
+    {command:"Level", params:{getMapLoc:{x:525,y:734}}},
+
+    {command:"Level", params:{getMapLoc:{x:525,y:734}}},
+
+    {command:"End"}
+]
 
 const miniBossDeathSequence = [
     {command:"Entity", params:{id:"miniboss", fn:"removeOrbit"}},
@@ -153,9 +260,9 @@ const rescueSpiritSequence = [
 
 const playerDeathSequence=[
     {command:"Player", params:{controls:false}},
-    {command:"Player", params:{fields:{visible:false}}},
+    {command:"Player", params:{fields:{visible:false, brightness:.01}}},
     {command:"Spawn", params:{entityType:"Fx",params:{fxType:"THREE", destroyOnFinishAnim: true, spriteMap:"SMOKEFX03"},fields:{frameChangeInterval:0.1}, pos:"player"}},
-    {command:"Camera", params:{zoom:2, timeScale:0.5, time:1000}},
+    {command:"Camera", params:{zoom:2, timeScale:0.5, time:1000}},    
     {command:"Delay", params:{delayTime:1500}},
     {command:"Camera", params:{timeScale:1}},
     {command:"Level", params:{scene:"GameOver"}},
@@ -307,11 +414,21 @@ class Sequence{
         if(command.start){
             this.gameController.sequencer.startSequence(command.start);
             this.scriptPtr++;
-            return true;                        
+            return true;
         }
     }
 
     command_Level(dtPackage,command){
+        if(command.getMapLoc){
+            console.log(this.gameController.levelMap.findCellFrom(command.getMapLoc));
+            this.scriptPtr++;
+            return true;
+        }
+        if("setCell" in command){
+            this.gameController.levelMap.switchCellValue(command.cellPos, command.setCell);
+            this.scriptPtr++;
+            return true;
+        }        
         if(command.scene == "GameOver"){
             changeScene(new GameOver(this.gameController.player.score));
         }
@@ -659,7 +776,10 @@ class Sequencer{
         this.addSequence(new Sequence("playerDeath",gameController, playerDeathSequence));
         this.addSequence(new Sequence("activateGolem",gameController, activateGolemSequence));
         this.addSequence(new Sequence("stealObeliskPower",gameController, stealObeliskPowerSequence));        
-        this.addSequence(new Sequence("win",gameController, winSequence));        
+        this.addSequence(new Sequence("win", gameController, winSequence)); 
+        this.addSequence(new Sequence("test", gameController, testSequence)); 
+        this.addSequence(new Sequence("bossHit", gameController, bossHitSequence)); 
+        this.addSequence(new Sequence("bossDeath", gameController, bossDeathSequence));                 
     }
 
     addSequence(sequence){

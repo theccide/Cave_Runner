@@ -51,7 +51,13 @@ class Player extends MoveableEntity {
                     if(Collision.testBoxOnBox(this.swingBoxBounds,interactableObject.collisionBounds)){
                         interactableObject.hit(this.faceDir, this.hitForce);
                     }
-                });                   
+                }); 
+                
+                if("Chest" in this.gameController.entityMap){
+                    if(Collision.testBoxOnBox(this.swingBoxBounds,this.gameController.entityMap["Chest"].collisionBounds)){
+                        this.gameController.entityMap["Chest"].hit();
+                    }
+                }; 
             }
         } else if (event.type === "up") {
             if (event.key === "w" || event.key === "s") this.moveDirection.y = 0;
@@ -133,15 +139,31 @@ class Player extends MoveableEntity {
         }
 
         const collisionDetection=()=>{
-            if(this.gameController.levelMap.findCellFrom({x:this.position.x+(this.moveDirection.x*10), y:this.position.y}).col !== 1) 
-                this.position.x += this.speed * this.moveDirection.x * dt;
-            if(this.moveDirection.y < 0) {
-                if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*15)}).col !== 1) 
-                    this.position.y += this.speed * this.moveDirection.y * dt;
-            }
-            else {
-                if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*25)}).col !== 1) 
-                    this.position.y += this.speed * this.moveDirection.y * dt;
+
+            let hitObsticle = false;
+            // use grid map to close the doors instead
+            // this.gameController.doors.forEach (door=>{
+            //     if(door.isLocked && Collision.testBoxOnBox({
+            //         x: this.collisionBounds.x+(this.speed * this.moveDirection.x * dt),
+            //         y: this.collisionBounds.y+(this.speed * this.moveDirection.y * dt),
+            //         width: this.collisionBounds.width,
+            //         height: this.collisionBounds.height
+            //     },door.collisionBounds)){
+            //         hitObsticle = true;
+            //     }
+            // });
+
+            if(!hitObsticle){
+                if(this.gameController.levelMap.findCellFrom({x:this.position.x+(this.moveDirection.x*10), y:this.position.y}).col !== 1) 
+                    this.position.x += this.speed * this.moveDirection.x * dt;
+                if(this.moveDirection.y < 0) {
+                    if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*15)}).col !== 1) 
+                        this.position.y += this.speed * this.moveDirection.y * dt;
+                }
+                else {
+                    if(this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y+(this.moveDirection.y*25)}).col !== 1) 
+                        this.position.y += this.speed * this.moveDirection.y * dt;
+                }
             }
             
             // trigger Detection

@@ -226,6 +226,7 @@ class Dialog{
     runNext(){
       if(this.textPtr >= this.text.length-1){
         setPause(false);
+        this.close();
         return;
       }
       this.text[this.textPtr++];

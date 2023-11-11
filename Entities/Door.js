@@ -9,8 +9,10 @@ class Door extends Entity{
         this.isCLosing = false;        
         this.isLocked = false;
         this.isHor = (type=="hor");
+        this.doorOnMap = [];
 
         if(this.isHor){
+            this.doorOnMap=[ {x:this.position.x-16, y:this.position.y}, {x:this.position.x+16, y:this.position.y} ];
             this.initSpriteSheet( {
                 sprite: null,
                 fileName: "Images/spritemaps/hor_door.png",
@@ -26,7 +28,8 @@ class Door extends Entity{
                 }
             });
         }
-        if(!this.isHor){            
+        if(!this.isHor){
+            this.doorOnMap=[ {x:this.position.x, y:this.position.y-16}, {x:this.position.x, y:this.position.y+16} ];
             this.initSpriteSheet( {
                 sprite: null,
                 fileName: "Images/spritemaps/ver_door.png",
@@ -43,6 +46,13 @@ class Door extends Entity{
             });
         }
         this.frameChangeInterval = 0.2;
+    }
+
+    setLock({shouldLock}){
+        this.isLocked=shouldLock;
+        this.doorOnMap.forEach(doorSlot=>
+            this.gameController.levelMap.switchCellValueFromMap(doorSlot,shouldLock?1:0)
+        );
     }
 
     doorShouldBeOpen(){
