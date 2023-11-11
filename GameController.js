@@ -46,6 +46,11 @@ class GameController {
             "Images/spritemaps/miniboss.png",
             "Images/spritemaps/boss.png",
             "Images/spritemaps/fx.png",
+            "Images/spritemaps/fx1.png",
+            "Images/spritemaps/fx2.png",
+            "Images/spritemaps/fx3.png",
+            "Images/spritemaps/fx4.png",
+            "Images/spritemaps/starfall.png",
             "Images/spritemaps/hor_door.png",
             "Images/spritemaps/ver_door.png",
             "Images/spritemaps/bubble.png",
@@ -212,7 +217,7 @@ class GameController {
         this.entities.push(new Pot(this, "Pot", {type:"ONE"}, {x:800,y:500}));
         this.entities.push(new Pot(this, "Pot", {type:"TWO"}, {x:750,y:500}));
         this.entities.push(new Pot(this, "Pot", {type:"THREE"}, {x:700,y:500}));
-        this.entities.push(new Pot(this, "Pot", {type:"THREE",dropSequence:"activateGolem"}, {x:850,y:500}));
+        this.entities.push(new Pot(this, "Pot", {type:"THREE",dropSequence:"rescueSpirit"}, {x:850,y:500}));
 
         // this.entities.push(new Fx(this, "smoke", {fxType:"SEVEN", destroyOnFinishAnim: false, spriteMap:"SMOKEFX02"}, {x:800,y:420}));
 
@@ -306,7 +311,7 @@ class GameController {
         }
 
         const createInstance=(className, context, id, params, pos)=>{
-            const classes = { Bullet, Gem, Fx, Torch, Boss, Arrow, FallingRock, Skull, Key, Runner, Golem };
+            const classes = { Bullet, Gem, Fx, Torch, Boss, Arrow, FallingRock, Skull, Key, Runner, Golem, EndRunner };
             return new classes[className](context, id, params, pos);
         }
         

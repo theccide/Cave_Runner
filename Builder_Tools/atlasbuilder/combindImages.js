@@ -65,9 +65,59 @@ const imageDoubleArray = [
     // ['sourseImages/key2/keys_2_1.png','sourseImages/key2/keys_2_2.png','sourseImages/key2/keys_2_3.png','sourseImages/key2/keys_2_4.png']
 
     // ['sourseImages/skull/skull_v2_1.png','sourseImages/skull/skull_v2_2.png','sourseImages/skull/skull_v2_3.png','sourseImages/skull/skull_v2_4.png']
-       ['sourseImages/death.png'],
-       ['sourseImages/hit.png'],
-       ['sourseImages/idle.png'],
+    //    ['sourseImages/death.png'],
+    //    ['sourseImages/hit.png'],
+    //    ['sourseImages/idle.png'],
+
+    // [
+    //     'sourseImages/Explosion_1/Explosion_1.png',
+    //     'sourseImages/Explosion_1/Explosion_2.png',
+    //     'sourseImages/Explosion_1/Explosion_3.png',
+    //     'sourseImages/Explosion_1/Explosion_4.png',
+    //     'sourseImages/Explosion_1/Explosion_5.png',
+    //     'sourseImages/Explosion_1/Explosion_6.png',
+    //     'sourseImages/Explosion_1/Explosion_7.png',
+    //     'sourseImages/Explosion_1/Explosion_8.png',
+    //     'sourseImages/Explosion_1/Explosion_9.png',
+    //     'sourseImages/Explosion_1/Explosion_10.png'
+    // ],
+    // [
+    //     'sourseImages/Explosion_2/Explosion_1.png',
+    //     'sourseImages/Explosion_2/Explosion_2.png',
+    //     'sourseImages/Explosion_2/Explosion_3.png',
+    //     'sourseImages/Explosion_2/Explosion_4.png',
+    //     'sourseImages/Explosion_2/Explosion_5.png',
+    //     'sourseImages/Explosion_2/Explosion_6.png',
+    //     'sourseImages/Explosion_2/Explosion_7.png',
+    //     'sourseImages/Explosion_2/Explosion_8.png',
+    //     'sourseImages/Explosion_2/Explosion_9.png',
+    //     'sourseImages/Explosion_2/Explosion_10.png'
+    // ],
+    // [
+    //     'sourseImages/Explosion_5/Explosion_1.png',
+    //     'sourseImages/Explosion_5/Explosion_2.png',
+    //     'sourseImages/Explosion_5/Explosion_3.png',
+    //     'sourseImages/Explosion_5/Explosion_4.png',
+    //     'sourseImages/Explosion_5/Explosion_5.png',
+    //     'sourseImages/Explosion_5/Explosion_6.png',
+    //     'sourseImages/Explosion_5/Explosion_7.png',
+    //     'sourseImages/Explosion_5/Explosion_8.png',
+    //     'sourseImages/Explosion_5/Explosion_9.png',
+    //     'sourseImages/Explosion_5/Explosion_10.png'
+    // ],
+    // [
+    //     'sourseImages/Explosion_6/Explosion_1.png',
+    //     'sourseImages/Explosion_6/Explosion_2.png',
+    //     'sourseImages/Explosion_6/Explosion_3.png',
+    //     'sourseImages/Explosion_6/Explosion_4.png',
+    //     'sourseImages/Explosion_6/Explosion_5.png',
+    //     'sourseImages/Explosion_6/Explosion_6.png',
+    //     'sourseImages/Explosion_6/Explosion_7.png',
+    //     'sourseImages/Explosion_6/Explosion_8.png',
+    //     'sourseImages/Explosion_6/Explosion_9.png',
+    //     'sourseImages/Explosion_6/Explosion_10.png'
+    // ],
+
 
     // ['sourseImages/Attack01/0.png', 'sourseImages/Attack01/1.png','sourseImages/Attack01/2.png', 'sourseImages/Attack01/3.png','sourseImages/Attack01/4.png','sourseImages/Attack01/5.png'],
     // ['sourseImages/Attack02/0.png', 'sourseImages/Attack02/1.png','sourseImages/Attack02/2.png', 'sourseImages/Attack02/3.png','sourseImages/Attack02/4.png'],

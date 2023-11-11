@@ -24,6 +24,7 @@
     <script src="Entities/MiniBoss.js"></script>
     <script src="Entities/Boss.js"></script>
     <script src="Entities/Runner.js"></script>
+    <script src="Entities/EndRunner.js"></script>
     <script src="Entities/Golem.js"></script>
     <script src="Entities/SpikeTrap.js"></script>
     <script src="Entities/Door.js"></script>
@@ -45,6 +46,7 @@
     <script src="Scences/Title.js"></script>
     <script src="Scences/GameOver.js"></script>
     <script src="Scences/LargeMap.js"></script>
+    <script src="Scences/Credits.js"></script>
     <script src="Jam_Engine/Sequencer.js"></script>
 
     <script src="Scences/Story.js"></script>
@@ -180,7 +182,7 @@
             lastTimestamp = currentTime;
             currentScene.update({dt, currentTime, gameTime}); // Update and render the game 
                         
-            drawFPS(timestamp);          
+            // drawFPS(timestamp);          
             requestAnimationFrame(gameLoop);
         }
 

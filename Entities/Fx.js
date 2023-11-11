@@ -115,7 +115,89 @@ class Fx extends Entity{
                     "SIX":   [[0,5],[1,5],[2,5],[3,5],[4,5],[5,5],[6,5],[7,5],[8,5],[9,5],[10,5],[11,5],[12,5],[13,5],[14,5],[15,5],[16,5],[17,5],[18,5],[19,5],[20,5],[21,5],[22,5],[23,5]],   // 5
                 }
             });            
-        }        
+        }
+        if(spriteMap == "EXPLODE_1"){
+            // 1375x138
+            this.initSpriteSheet( {
+                sprite: null,
+                fileName: "Images/spritemaps/fx1.png",
+                cellSize: { width: 137.5, height: 138 },
+                spriteSize: { width: 137.5, height: 138 },
+                grid: { rows: 1, columns: 18 },
+                startAnimation: "EXPLODE",
+                animations:{
+                    "EXPLODE":   [[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[7,0],[8,0],[9,0]],   // 0
+                }
+            });
+        }
+        if(spriteMap == "EXPLODE_2"){
+            // 1152x576 16x9
+            this.initSpriteSheet( {
+                sprite: null,
+                fileName: "Images/spritemaps/fx2.png",
+                cellSize: { width: 130, height: 130 },
+                spriteSize: { width: 130, height: 130 },
+                grid: { rows: 1, columns: 18 },
+                startAnimation: "EXPLODE",
+                animations:{
+                    "EXPLODE":   [[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[7,0],[8,0],[9,0]],   // 0
+                }
+            });
+        }
+        if(spriteMap == "EXPLODE_3"){
+            // 1152x576 16x9
+            this.initSpriteSheet( {
+                sprite: null,
+                fileName: "Images/spritemaps/fx3.png",
+                cellSize: { width: 160, height: 160 },
+                spriteSize: { width: 160, height: 160 },
+                grid: { rows: 1, columns: 10 },
+                startAnimation: "EXPLODE",
+                animations:{
+                    "EXPLODE":   [[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[7,0],[8,0],[9,0]],   // 0
+                }
+            });
+        }
+        if(spriteMap == "EXPLODE_4"){
+            // 1900x190 16x9
+            this.initSpriteSheet( {
+                sprite: null,
+                fileName: "Images/spritemaps/fx4.png",
+                cellSize: { width: 190, height: 190 },
+                spriteSize: { width: 190, height: 190 },
+                grid: { rows: 1, columns: 10 },
+                startAnimation: "EXPLODE",
+                animations:{
+                    "EXPLODE":   [[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[7,0],[8,0],[9,0]],   // 0
+                }
+            });
+        }
+        if(spriteMap == "STARFALL"){
+            // 1712x824
+            this.initSpriteSheet( {
+                sprite: null,
+                fileName: "Images/spritemaps/starfall.png",
+                cellSize: { width: 214, height: 206 },
+                spriteSize: { width: 214, height: 206 },
+                grid: { rows: 4, columns: 8 },
+                startAnimation: "EXPLODE",
+                animations:{
+                    "EXPLODE":   [
+                        [0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[7,0],
+                        [0,1],[1,1],[2,1],[3,1],[4,1],[5,1],[6,1],[7,1],
+                        [0,2],[1,2],[2,2],[3,2],[4,2],[5,2],[6,2],[7,2],
+                        [0,3],[1,3],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3]
+                    ],   // 0
+                }
+            });
+        }
+
+        
+        // "Images/spritemaps/fx1.png",
+        // "Images/spritemaps/fx2.png",
+        // "Images/spritemaps/fx3.png",
+        // "Images/spritemaps/fx4.png",
+        // "Images/spritemaps/starfall.png",
         
         this.frameChangeInterval = 0.2;
         if(destroyOnFinishAnim) this.endAnimationCallback = this.endAnimation;

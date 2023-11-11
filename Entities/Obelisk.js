@@ -1,15 +1,14 @@
 class Obelisk extends Entity{
-    
-    constructor (gameController, id, position) {
-        super(gameController, id, null, position);
+    scale = 0.75;
 
-        // 3400x1200
+    constructor (gameController, id, position) {
+        super(gameController, id, null, position);    
 
         this.initSpriteSheet( {
             sprite: null,
             fileName: "Images/spritemaps/obelisk.png",
             cellSize: { width: 200, height: 400 },
-            spriteSize: { width: 100, height: 200 },
+            spriteSize: { width: 100*this.scale, height: 200*this.scale },
             grid: { rows: 3, columns: 16 },
             startAnimation: "IDLE",
             animations:{
@@ -22,42 +21,33 @@ class Obelisk extends Entity{
         this.frameChangeInterval = 0.2;
         this.brightness=2;
 
-        //960, 1536
-        this.shield = new Entity(gameController,"shield", 
-        {
-            sprite: null,
-            fileName: "Images/spritemaps/shields.png",
-            cellSize: { width: 192, height: 192 },
-            spriteSize: { width: 192, height: 192 },
-            grid: { rows: 8, columns: 5 },
-            startAnimation: "OFF",
-            animations:{
-                "OFF":          [[0,0]], 
-                // "LEFT_SIDE":    [[0,1],[2,1][4,1],[1,2],[2,2],[0,3],[2,3],[4,3]], 
-                "LEFT_SIDE":    [[0,1],[1,1],[2,1],[3,1],[4,1],
-                                 [0,2],[1,2],[2,2],[3,2],[4,2],
-                                 [0,3],[1,3],[2,3],[3,3],[4,3]],
-                "RIGHT_SIDE":    [[4,5],[3,5],[2,5],[1,5],[0,5],
-                                 [4,6],[3,6],[2,6],[1,6],[0,6],
-                                 [4,7],[3,7],[2,7],[1,7],[0,7]]
-            }
-        }, {x:0, y:0});
-        //}, {...this.position});
-
-        this.addChild(this.shield);
-    }
-
-    update ({dt, currentTime, gameTime}){
-        super.update({dt, currentTime, gameTime});
-    }
-    brain=({dt, currentTime, gameTime})=>{
+        // this.addChild(new Fx(this.gameController, "starfall", {fxType:"0", destroyOnFinishAnim: false, spriteMap:"STARFALL"}, {x:20, y:50}));
     }
     
+    setupCollisionBounds(){
+        this.collisionBounds.x = this.parent.position.x+this.position.x - this.spriteSheet.spriteSize.width*this.scale;
+        this.collisionBounds.y = -100+this.parent.position.y+this.position.y - this.spriteSheet.spriteSize.height*this.scale;        
+        this.collisionBounds.width = (this.spriteSheet.spriteSize.width*this.scale)*2;
+        this.collisionBounds.height = (this.spriteSheet.spriteSize.height*this.scale)*2;
+    }
+
+    // update ({dt, currentTime, gameTime}){
+    //     super.update({dt, currentTime, gameTime});
+    // }
+    // brain=({dt, currentTime, gameTime})=>{
+    // }
+    
     hit(direction, hitForce){
-        if(direction.x==-1) this.shield.switchAnimation("LEFT_SIDE");
-        if(direction.x==1) this.shield.switchAnimation("RIGHT_SIDE");
-        this.shield.endAnimationCallback=()=>{
-            this.shield.switchAnimation("OFF");
+        this.switchAnimation("DEATH");
+        this.endAnimationCallback=()=>{
+            this.gameController.sequencer.pauseSequence("stealObeliskPower",true);
+            this.gameController.destroy(this);
         }
+
+        // if(direction.x==-1) this.shield.switchAnimation("LEFT_SIDE");
+        // if(direction.x==1) this.shield.switchAnimation("RIGHT_SIDE");
+        // this.shield.endAnimationCallback=()=>{
+        //     this.shield.switchAnimation("OFF");
+        // }
     }
 }

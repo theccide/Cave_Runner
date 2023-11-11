@@ -108,13 +108,21 @@ class Golem extends MoveableEntity{
         collisionDetection();
         this.children.forEach(child=>child.update({dt, currentTime, gameTime}));
 
-        if(this.currentAnimation.startsWith("ATTACK") && this.frame==6)
-        if(Collision.testBoxOnBox(this.swingBoxBounds,this.gameController.entityMap["Obelisk"].collisionBounds)){
-            const direction = {x:this.currentAnimation.endsWith("RIGHT")?-1:1, y:0}
-            this.gameController.entityMap["Obelisk"].hit(direction, this.hitForce);
-            this.hit(direction, this.hitForce);
+        if("Obelisk" in this.gameController.entityMap){
+            if(this.currentAnimation.startsWith("ATTACK") && this.frame==6)
+            if(Collision.testBoxOnBox(this.swingBoxBounds,this.gameController.entityMap["Obelisk"].collisionBounds)){
+                const direction = {x:this.currentAnimation.endsWith("RIGHT")?-1:1, y:0}
+                this.gameController.entityMap["Obelisk"].hit(direction, this.hitForce);
+                // this.hit(direction, this.hitForce);
+            }
         }
-
+        if("endRunner" in this.gameController.entityMap){
+            if(Collision.testBoxOnBox(this.swingBoxBounds,this.gameController.entityMap["endRunner"].collisionBounds)){
+                const direction = {x:this.currentAnimation.endsWith("RIGHT")?-1:1, y:0}
+                this.gameController.entityMap["endRunner"].hit(direction, this.hitForce);
+                this.hit(direction, this.hitForce);
+            }
+        }
     }
 
     hitTime = 0;
