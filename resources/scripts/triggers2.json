@@ -1,0 +1,1 @@
+[{"id":5,"name":"Spikes","color":"#ff0000","code":"this.runSpikes(this)","entity":"spikes","letter":"S"},{"id":6,"name":"Spawn1","color":"#ff7b00","code":"this.triggerPlaySequence(this,'startBossBattle',true)","entity":"NONE","letter":"S1"},{"id":7,"name":"Arrow","color":"#f9d801","code":"this.shootArrow(this)","entity":"","letter":"A"}]

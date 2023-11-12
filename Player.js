@@ -33,10 +33,15 @@ class Player extends MoveableEntity {
             if (event.key === "a") this.moveDirection.x = -1;
             else if (event.key === "d") this.moveDirection.x = 1;
             if(event.key === "e") {
+                if(this.currentAnimation.startsWith("SWING")) return;
+                
+                this.gameController.soundManager.playSoundEffect('Sounds/swordswing.wav', 0.5);
+
                 if(this.faceDir == this.directions.UP){this.forceAnimation("SWING_UP");}
                 if(this.faceDir == this.directions.DOWN){this.forceAnimation("SWING_DOWN");}
                 if(this.faceDir == this.directions.LEFT){this.forceAnimation("SWING_LEFT");}
                 if(this.faceDir == this.directions.RIGHT){this.forceAnimation("SWING_RIGHT");}
+
                 this.gameController.enemies.forEach (enemy=>{                    
                     if(Collision.testBoxOnBox(this.swingBoxBounds,enemy.collisionBounds)){
                         enemy.hit(this.faceDir, this.hitForce);

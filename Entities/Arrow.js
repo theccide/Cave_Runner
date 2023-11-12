@@ -51,6 +51,7 @@ class Arrow extends Entity{
         
         // check to see if the player was hit
         if(Collision.testBoxOnBox(this.gameController.player.collisionBounds,this.collisionBounds)){
+            this.gameController.soundManager.playSoundEffect('Sounds/arrow_damage.wav', 0.5);
             this.gameController.player.hit(0, 0);
             this.gameController.destroy(this);
         }

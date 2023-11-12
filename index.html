@@ -52,16 +52,17 @@
 
     <script src="Scences/Story.js"></script>
     <script src="storyGenerator.js"></script>
+    <script src="SoundManager.js"></script>
 
 </head>
 <body style="background-color: black;">
-    <div class="parent-container"> -->
+    <div class="parent-container"> 
         <canvas id="myCanvas" width="0" height="0"></canvas>
     </div>
-    <button id="playButton"></button> -->
+    <!-- <button id="playButton"></button> --> 
 
     <script>
-        const skipStory = true;
+        const skipStory = false;
         const canvas = document.getElementById('myCanvas');
         let loadingStatus = "Loading...";
         let gameStartTime = (new Date()).getTime();

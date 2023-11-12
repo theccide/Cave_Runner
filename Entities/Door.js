@@ -74,10 +74,11 @@ class Door extends Entity{
                 this.isClosed = false;
                 this.isOpening = true;
                 this.switchAnimation("OPENING");
-                this.endAnimationCallback=()=>{
+                this.endAnimationCallback=()=>{                    
+                    this.gameController.soundFxManager.playSoundEffect('Sounds/door_open.wav', this.position);
                     this.isOpening = false;
                     this.isClosed = false;
-                    this.switchAnimation("OPEN");              
+                    this.switchAnimation("OPEN");                    
                 }
             }
         }
@@ -86,6 +87,7 @@ class Door extends Entity{
                 this.switchAnimation("CLOSING");
                 this.isClosing = true;
                 this.endAnimationCallback=()=>{
+                    this.gameController.soundFxManager.playSoundEffect('Sounds/door_close.mp3', this.position);
                     this.isClosing = false;
                     this.isClosed = true;
                     this.switchAnimation("CLOSED");

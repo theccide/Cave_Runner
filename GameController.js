@@ -22,6 +22,7 @@ class GameController {
     useDarkOverlay = true;
     darkOverlayLevel = 0.99;
     gameTime = 0;
+    ear = null;
 
     getMouseInput=(event)=>{if(this.player) this.player.getMouseInput(event);}    
     getMouseMoveInput=(event)=>{if(this.player) this.player.getMouseMoveInput(event);}
@@ -31,8 +32,10 @@ class GameController {
         if(this.entityMap?.["golem"]) this.entityMap["golem"].getKeyboardInput(event);
     }
 
-    start = (scene) => {
+    start = (scene) => {        
         if(this.resouncesReady) return;
+        this.soundManager = new SoundManager(this);
+        this.soundFxManager = new SoundFxManager(this);
         this.currentScene = scene;
         this.currentScene.dialogManager = new Dialog(this);
         this.camera = scene.camera;
@@ -83,7 +86,39 @@ class GameController {
             "Images/scroll.png",
         ],this.imagesFinished);
 
-        loadSounds(["Sounds/noise.wav"],this.soundsFinished);
+        //loadSounds(["Sounds/noise.wav"],this.soundsFinished);
+        
+        this.soundManager.loadBackgroundMusic('Sounds/music/Regular.wav');
+        this.soundManager.fadeInBackgroundMusic();
+
+        this.soundManager.loadAllSoundEffects([
+            "Sounds/noise.wav",
+            "Sounds/swordswing.wav",
+            "Sounds/arrow_damage.wav",
+            // "Sounds/door_open.wav",
+            // "Sounds/door_close.mp3",
+        ], this.soundsFinished);
+
+        this.soundFxManager.loadAllSoundEffects([
+            "Sounds/door_open.wav",
+            "Sounds/door_close.mp3",
+        ], this.soundsFinished);
+
+        // const loadSounds = (soundsToLoad, callback) => {
+        //     // let soundsToLoad = ["Sounds/noise.wav"];
+        //     let resourceCounter = 0;
+        //     let sounds = {}
+        //     soundsToLoad.forEach(soundFile => {
+        //         let audio = new Audio();
+        //         audio.src = soundFile;
+        //         audio.oncanplaythrough = () => {
+        //             sounds[soundFile]=audio;
+        //             resourceCounter++;
+        //             if (resourceCounter >= soundsToLoad.length) callback(sounds);
+        //         };
+        //     });
+        // };
+
         if(localStorage.getItem('objectModel')){
             this.jsonsFinished({
                 "resources/scripts/objects.json":JSON.parse(localStorage.getItem('objectModel')),
@@ -112,7 +147,7 @@ class GameController {
     resourceCounter = 0;
     resourceFinished = () => {
         this.resourceCounter ++;
-        if(this.resourceCounter >= 3) this.finishedLoadingResources();
+        if(this.resourceCounter >= 4) this.finishedLoadingResources();
     }
 
     addEntity(self, entity, isInteractable){
@@ -237,14 +272,16 @@ class GameController {
             this.entityMap[newID]=entity;
         });
         // this.entities.push(new Boss(this, {x:400,y:800}));
-
+        this.entityMap["dragondoor"].setLock({shouldLock:true});
         
         this.player = new Player(this);
+        this.ear = this.player;
         this.entityMap["miniboss"].addChild(new Key(this,"key", {shouldRotate:true}, {x:35, y:35}));
         this.addTriggerEntities();
 
         this.sequencer = new Sequencer(this);
         this.lavaManager = new LavaManager(this);
+        this.playSequence(this,"test");
         this.resouncesReady = true;
     }
 

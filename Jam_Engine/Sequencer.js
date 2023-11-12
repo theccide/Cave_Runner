@@ -1,3 +1,6 @@
+// const triggers = [{"id":5,"name":"Spikes","color":"#ff0000","code":"this.runSpikes(this)","entity":"spikes","letter":"S"},{"id":6,"name":"Spawn1","color":"#ff7b00","code":"this.triggerPlaySequence(this,'startBossBattle',true)","entity":"NONE","letter":"S1"},{"id":7,"name":"Arrow","color":"#f9d801","code":"this.shootArrow(this)","entity":"","letter":"A"}]
+// triggerModel = "eJzt0NkJgDAUBdGG8mHApZhH+m9DEdEPn6CQm0WGaeAwZjHEMPRTClbCOzohRowYca9iz+n3d7HKixhxT+Ll7Emc9UORx4hzO6c9xErxFWK9WNIL8bxV3flJ3FiIESNGLBLHI8SI72bESnHVECNGjBhxG6W0Apupk+I="
+
 const startBossBattleSequence = [
     {command:"Level", params:{setCell:0, cellPos:{x:16,y:22}}},
     {command:"Level", params:{setCell:0, cellPos:{x:17,y:22}}},
@@ -181,9 +184,9 @@ const testSequence=[
     // {command:"Entity", params:{id:"midbossOutdoor", fn:"setLock", args:{shouldLock:true}}},
     // {command:"Entity", params:{id:"midbossINdoor", fn:"setLock", args:{shouldLock:true}}},
 
-    {command:"Level", params:{getMapLoc:{x:525,y:734}}},
+    {command:"Level", params:{getMapLoc:{x:2191,y:554}}},
 
-    {command:"Level", params:{getMapLoc:{x:525,y:734}}},
+    // {command:"Level", params:{getMapLoc:{x:525,y:734}}},
 
     {command:"End"}
 ]
@@ -238,9 +241,9 @@ const rescueSpiritSequence = [
     {command:"Player", params:{controls:false}},
     {command:"Camera", params:{detach:"Player"}},
     {command:"Camera", params:{zoom:2,time:1000}},
-    {command:"Spawn", params:{entityType:"Fx",params:{fxType:5, destroyOnFinishAnim: true},pos:{x:850,y:500}, delayTime:100}},
+    {command:"Spawn", params:{entityType:"Fx",params:{fxType:5, destroyOnFinishAnim: true},pos:{x:50,y:500}, delayTime:100}},
     {command:"Delay", params:{delayTime:1000}},
-    {command:"Spawn", params:{id:"skull", entityType:"Skull",params:{shouldRotate:false},pos:{x:850,y:500}, delayTime:100}},
+    {command:"Spawn", params:{id:"skull", entityType:"Skull",params:{shouldRotate:false},pos:{x:50,y:500}, delayTime:100}},
     {command:"Delay", params:{delayTime:100}},
     {command:"Camera", params:{attachToEntity:"skull"}},
     {command:"Delay", params:{delayTime:1000}},    
@@ -283,10 +286,17 @@ const stealObeliskPowerSequence = [
 ]
 
 const activateGolemSequence = [
-    {command:"Player", params:{moveTo:{x:2000,y:600}}},
+    // {command:"Player", params:{moveTo:{x:2000,y:600}}},
+    {command:"Level", params:{setCell:0, cellPos:{x:68,y:17}}}, //2191, 554
+    {command:"Level", params:{setCell:0, cellPos:{x:68,y:18}}},
     {command:"Player", params:{controls:false}},
+    {command:"Player", params:{keyPressed:"a",time:1000}},
     {command:"Delay", params:{delayTime:10}},
     {command:"Camera", params:{detach:"Player"}},
+
+    {command:"Dialog", params:{open:true, text:["Awesome I can take it from here thanks!"]}},
+    {command:"Delay", params:{delayTime:100}},
+    {command:"Dialog", params:{open:false}},
 
     {command:"Player", params:{fn:"detachChild", args:"skull"}},
     {command:"Entity", params:{id:"skull", fields:{shouldRotate:false}}},
