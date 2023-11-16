@@ -123,6 +123,7 @@ class Dialog{
         this.boxSize.height=0;
         this.setupBounds();
         setPause(true);
+        this.gameController.soundManager.playSoundEffect('Sounds/noise.wav', 0.5);
     }
 
     close(){

@@ -31,6 +31,7 @@ class Boss extends Entity{
         this.lastTimeEvent = gameTime;
     }
 
+    attacking = false;
     chasing({dt, currentTime, gameTime}){
         const {hit, dist, angle} = Tools2D.moveTowards_CloseEnough(dt,this.position,this.gameController.player.position, this.speed, this.hitDistance, this.pauseAtDistance);
         this.spriteAngle = Tools.toDegrees(angle);
@@ -39,10 +40,18 @@ class Boss extends Entity{
             this.gameController.player.hit({x:Math.sign(this.gameController.player.position.x-this.position.x),y:Math.sign(this.gameController.player.position.y-this.position.y)},15);
         }        
         if(hit){
+            if(!this.attacking){
+                this.gameController.soundManager.playSoundEffect('Sounds/boss_attack.wav', 0.5);    
+                this.attacking = true;
+            }
+            
             this.speed = 200;
             this.switchAnimation("Attack1");
         }
-        else{this.switchAnimation("Idle")}
+        else{
+            this.attacking = false;
+            this.switchAnimation("Idle")
+        }
     }   
     brain=({dt, currentTime, gameTime})=>{
         switch (this.state) {
@@ -84,10 +93,14 @@ class Boss extends Entity{
     hit(direction, force){
         this.hp--;
         this.state = this.states.HIT;
-        if(this.hp > 0)
+        if(this.hp > 0){
+            this.gameController.soundManager.playSoundEffect('Sounds/hurt_boss.wav', 1);
             this.gameController.sequencer.startSequence("bossHit");
-        else
+        }
+        else{
+            this.gameController.soundManager.playSoundEffect('Sounds/die_boss.wav', 1);
             this.gameController.sequencer.startSequence("bossDeath");
+        }
         // this.isLightSource = true;
         // this.brightness = 0.9;
         // this.switchAnimation("Die");

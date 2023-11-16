@@ -20,29 +20,41 @@ class SoundManager {
         this.backgroundMusic.currentTime = 0;
     }
 
-    fadeOutBackgroundMusic(duration = 1000) {
+    changeBackgroundMusic(src, callback) {
+        this.backgroundMusic.src = src;
+        this.backgroundMusic.load();
+        this.backgroundMusic.volume = 0; // Start with volume at 0
+        this.backgroundMusic.oncanplaythrough = () => {
+            if (callback) callback();
+        };
+    }
+
+    fadeOutBackgroundMusic(duration = 1000, callback) {
         let fadeAudio = setInterval(() => {
             if (this.backgroundMusic.volume > 0.1) {
                 this.backgroundMusic.volume -= 0.1;
             } else {
+                this.backgroundMusic.volume = 0;
+                this.backgroundMusic.pause();
                 clearInterval(fadeAudio);
-                this.stopBackgroundMusic();
+                if (callback) callback();
             }
         }, duration / 10);
     }
-
+    
     fadeInBackgroundMusic(duration = 5000) {
-        this.playBackgroundMusic();
+        this.backgroundMusic.play();
         this.backgroundMusic.volume = 0;
+        let interval = 100; // Interval in ms for volume increase steps
+        let step = interval / duration;
         let fadeAudio = setInterval(() => {
-            // Ensure volume does not exceed 1
-            if (this.backgroundMusic.volume < 0.9) {
-                this.backgroundMusic.volume += 0.1;
+            if (this.backgroundMusic.volume < 1 - step) {
+                this.backgroundMusic.volume += step;
             } else {
-                this.backgroundMusic.volume = 1; // Set volume to 1 directly
+                this.backgroundMusic.volume = 1;
                 clearInterval(fadeAudio);
             }
-        }, duration / 10);
+        }, interval);
     }
 
     setVolume(volume) {
@@ -107,7 +119,7 @@ class SoundFxManager {
         // Calculate pan (only horizontal component affects pan)
         const pan = Math.max(-1, Math.min(1, Math.cos(angle)));        
 
-        console.log("pan",pan)
+        // console.log("pan",pan)
         return { volume, pan };
 
         // // Calculate the distance between the ear and the sound source

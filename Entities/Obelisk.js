@@ -38,6 +38,7 @@ class Obelisk extends Entity{
     // }
     
     hit(direction, hitForce){
+        this.gameController.soundManager.playSoundEffect('Sounds/obbroekn.wav', 0.5);
         this.switchAnimation("DEATH");
         this.endAnimationCallback=()=>{
             this.gameController.sequencer.pauseSequence("stealObeliskPower",true);

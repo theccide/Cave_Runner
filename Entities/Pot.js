@@ -44,6 +44,7 @@ class Pot extends Entity{
             }
             return;
         }
+        this.gameController.soundManager.playSoundEffect('Sounds/sword_hit.wav', 0.5);
         this.takingDamage = true;
         this.lastEventTime = gameTime;
         this.bobbingStrength.x = 3;
@@ -85,6 +86,7 @@ class FallingRock extends Pot{
             this.landed = true;
             this.switchAnimation("BREAK"+this.type);
             this.endAnimationCallback=()=>{
+                this.gameController.soundFxManager.playSoundEffect('Sounds/fireballhit.wav', this.position);
                 this.gameController.destroy(this);
             }
         }

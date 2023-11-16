@@ -4,6 +4,7 @@
 const startBossBattleSequence = [
     {command:"Level", params:{setCell:0, cellPos:{x:16,y:22}}},
     {command:"Level", params:{setCell:0, cellPos:{x:17,y:22}}},
+    {command:"Level", params:{changeMusic:"Sounds/music/Battle.wav"}},
     {command:"Player", params:{controls:false}},
     {command:"Camera", params:{zoom:2,time:1000}},
     {command:"Delay", params:{delayTime:10}},
@@ -12,12 +13,15 @@ const startBossBattleSequence = [
     {command:"Delay", params:{delayTime:1000}},
 
     {command:"Camera", params:{fromEntity:"Player", moveTo:{"x":235,"y":1324}, time:1000}},
+    {command:"Level", params:{playSound:"Sounds/torch_light.wav", volume:0.5}},
     {command:"Spawn", params:{entityType:"Torch", params:{type:"thick",isInteractable:true},pos:{"x":235,"y":1324}}},
     {command:"Delay", params:{delayTime:250}},
     {command:"Camera", params:{from:{"x":235,"y":1324}, moveTo:{"x":640,"y":730}, time:1000}},
+    {command:"Level", params:{playSound:"Sounds/torch_light.wav", volume:0.5}},
     {command:"Spawn", params:{entityType:"Torch", params:{type:"thick",isInteractable:true},pos:{"x":640,"y":730}}},    
     {command:"Delay", params:{delayTime:250}},
     {command:"Camera", params:{from:{"x":640,"y":730}, moveTo:{"x":54,"y":740}, time:1000}},
+    {command:"Level", params:{playSound:"Sounds/torch_light.wav", volume:0.5}},
     {command:"Spawn", params:{entityType:"Torch", params:{type:"thick",isInteractable:true},pos:{"x":54,"y":740}}}, 
     
     // {command:"Spawn", params:{entityType:"Torch", params:{type:"thick"},pos:{"x":54,"y":740}}},
@@ -40,23 +44,27 @@ const startBossBattleSequence = [
     {command:"Camera", params:{from:{"x":59,"y":881}, moveTo:{"x":380,"y":1000}, time:2000}},
 
     {command:"Spawn", params:{id:"Boss", entityType:"Boss", params:{}, pos:{"x":380,"y":1000}}},
+    {command:"Level", params:{playSound:"Sounds/roar.wav"}},
     {command:"Camera", params:{shake:true,shakeIntensity:{x:5, y:5}}},
     {command:"Camera", params:{zoom:4,time:1000}},
     {command:"Delay", params:{delayTime:1000}},
     {command:"Camera", params:{zoom:2,time:1000}},
     {command:"Camera", params:{shake:false}},
 
+    {command:"Level", params:{playSound:"Sounds/torch_light2.wav", volume:0.5}},
     {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":413,"y":729}, delayTime:100}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.89}]}},
     {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":650,"y":936}, delayTime:100}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.79}]}},
     {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":715,"y":996}, delayTime:100}},
+    {command:"Level", params:{playSound:"Sounds/torch_light2.wav", volume:0.5}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.69}]}},
     {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":868,"y":994}, delayTime:100}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.59}]}},
     {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":873,"y":1101}, delayTime:100}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.49}]}},
     {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":740,"y":1149}, delayTime:100}},
+    {command:"Level", params:{playSound:"Sounds/torch_light2.wav", volume:0.5}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.39}]}},
     {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":742,"y":1327}, delayTime:100}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.29}]}},
@@ -64,7 +72,8 @@ const startBossBattleSequence = [
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.19}]}},
     {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":48,"y":1317}, delayTime:100}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.09}]}},
-    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":48,"y":1107}, delayTime:100}},
+    {command:"Level", params:{playSound:"Sounds/torch_light2.wav", volume:0.5}},
+    {command:"Spawn", params:{entityType:"Torch",params:{type:"thick",isInteractable:false},pos:{"x":48,"y":1107}, delayTime:100}},    
     {command:"Delay", params:{delayTime:500}},
     // {command:"GameController", params:{fields:[{key:"useDarkOverlay",value:false}]}},
     // {command:"GameController", params:{fields:[{key:"darkOverlayLevel",value:0.99}]}},
@@ -167,6 +176,7 @@ const bossDeathSequence=[
     {command:"Delay", params:{delayTime:1000}},
 
     {command:"Spawn", params:{id:"Chest", entityType:"Chest", params:{}, pos:{x:400,y:1000}}},
+    // {command:"Level", params:{playSound:"Sounds/success.wav", volume:0.5}},
     {command:"Camera", params:{fromEntity:"Boss", moveToEntity:"Chest", time:1000}},
 
     {command:"Camera", params:{fromEntity:"Chest", moveToEntity:"Player", time:1000}},
@@ -176,6 +186,7 @@ const bossDeathSequence=[
     {command:"Entity", params:{id:"midbossOutdoor", fn:"setLock", args:{shouldLock:false}}},
     {command:"Entity", params:{id:"midbossINdoor", fn:"setLock", args:{shouldLock:false}}},    
     {command:"Camera", params:{zoom:1,time:1000}},
+    {command:"Level", params:{changeMusic:"Sounds/music/Regular.wav"}},
 
     {command:"End"}
 ]
@@ -196,6 +207,7 @@ const miniBossDeathSequence = [
     {command:"Entity", params:{id:"miniboss", fn:"detachChild", args:"key"}},
     {command:"Player", params:{controls:false}},
     {command:"Camera", params:{detach:"Player"}},
+    {command:"Level", params:{playSound:"Sounds/grabkey.wav", volume:0.5}},
     {command:"Camera", params:{attachToEntity:"miniboss"}},
     {command:"Camera", params:{zoom:2,time:1000}},
     {command:"Spawn", params:{id:"runner",entityType:"Runner",params:{},pos:{x:850,y:300}, fields:{
@@ -206,6 +218,7 @@ const miniBossDeathSequence = [
     {command:"Camera", params:{attachToEntity:"key"}},
     {command:"Entity", params:{id:"key", fn:"addKeyFrame", block:{statusID:"transtlation"}, args:{type:"transtlation", keyFrame:{val:{x:825,y:300}, time:2000}}}},
     {command:"Entity", params:{id:"runner", attachEntity:"key"}},
+    {command:"Level", params:{playSound:"Sounds/giggle.wav", volume:0.5}},
     {command:"Camera", params:{zoom:2.7}},
     {command:"Delay", params:{delayTime:1000}},
     {command:"Camera", params:{attachToEntity:"runner"}},
@@ -242,8 +255,10 @@ const rescueSpiritSequence = [
     {command:"Camera", params:{detach:"Player"}},
     {command:"Camera", params:{zoom:2,time:1000}},
     {command:"Spawn", params:{entityType:"Fx",params:{fxType:5, destroyOnFinishAnim: true},pos:{x:50,y:500}, delayTime:100}},
+    {command:"Level", params:{playSound:"Sounds/torch_light2.wav", volume:0.5}},
     {command:"Delay", params:{delayTime:1000}},
     {command:"Spawn", params:{id:"skull", entityType:"Skull",params:{shouldRotate:false},pos:{x:50,y:500}, delayTime:100}},
+    {command:"Level", params:{playSound:"Sounds/pickup.wav", volume:0.5}},
     {command:"Delay", params:{delayTime:100}},
     {command:"Camera", params:{attachToEntity:"skull"}},
     {command:"Delay", params:{delayTime:1000}},    
@@ -276,6 +291,7 @@ const stealObeliskPowerSequence = [
     {command:"Delay", params:{delayTime:10}},
     {command:"Spawn", params:{entityType:"Fx", params:{fxType:"0", destroyOnFinishAnim: true, spriteMap:"STARFALL"}, pos:{x:2420,y:1050}}},
     {command:"Delay", params:{delayTime:2000}},
+    {command:"Level", params:{playFxSound:"Sounds/explode.wav", maxDist:1500, maxVol:1, pos:{x:2420,y:1050}}},
     {command:"Sequence", params:{start:"golemAttack"}},    
     // {command:"Camera", params:{shake:true,shakeIntensity:{x:5, y:5}}},
     // {command:"Delay", params:{delayTime:1000}},
@@ -294,7 +310,7 @@ const activateGolemSequence = [
     {command:"Delay", params:{delayTime:10}},
     {command:"Camera", params:{detach:"Player"}},
 
-    {command:"Dialog", params:{open:true, text:["Awesome I can take it from here thanks!"]}},
+    {command:"Dialog", params:{open:true, text:["Awesome, I can take it from here thanks!"]}},
     {command:"Delay", params:{delayTime:100}},
     {command:"Dialog", params:{open:false}},
 
@@ -312,6 +328,7 @@ const activateGolemSequence = [
 
     {command:"Delay", params:{delayTime:1500}},
     {command:"Entity", params:{id:"golem", args:{}, block:{statusID:"wakeup"}, fn:"wakeup"}},
+    {command:"Level", params:{playSound:"Sounds/giggle.wav", volume:0.5}},    
     {command:"Entity", params:{id:"skull", fn:"setOrbit", args:{speed:50}}},
 
     {command:"Camera", params:{zoom:2,time:1000}},
@@ -429,6 +446,27 @@ class Sequence{
     }
 
     command_Level(dtPackage,command){
+        if(command.changeMusic){
+            this.gameController.soundManager.fadeOutBackgroundMusic(1000, () => {
+                this.gameController.soundManager.changeBackgroundMusic(command.changeMusic, () => {
+                    this.gameController.soundManager.fadeInBackgroundMusic(1000);
+                });
+            });
+            this.scriptPtr++;
+            return true;
+        }
+        if(command.playFxSound){
+            this.gameController.soundFxManager.playSoundEffect(command.playFxSound,command.pos, command.maxVol, command.maxDist);
+            this.scriptPtr++;
+            return true;
+        }
+        if(command.playSound){
+            const vol = (command.volume)?command.volume:1;
+            this.gameController.soundManager.playSoundEffect(command.playSound, vol);
+            this.scriptPtr++;
+            return true;
+        }
+        
         if(command.getMapLoc){
             console.log(this.gameController.levelMap.findCellFrom(command.getMapLoc));
             this.scriptPtr++;
@@ -798,7 +836,7 @@ class Sequencer{
     }
 
     pauseSequence(sequenceName, pause){ this.sequenceMap[sequenceName].pause(pause);}
-    startSequence(sequenceName){ this.sequenceMap[sequenceName].start();}
+    startSequence(sequenceName){ console.log(sequenceName); this.sequenceMap[sequenceName].start();}
 
     update(dtPackage){
         this.sequences.forEach(sequence=>sequence.update(dtPackage));

@@ -111,7 +111,10 @@ class Enemy extends MoveableEntity{
         if(this.hitPoints <= 0){
             this.gameController.destroy(this);
             this.gameController.instatiate({entityType:"Fx", params:{fxType: fxTypes.EXPLODE, destroyOnFinishAnim:true}, pos:this.position});
+            this.gameController.soundManager.playSoundEffect('Sounds/orc_death.wav', 0.5);
+            return;
         }
+        this.gameController.soundManager.playSoundEffect('Sounds/orc_damage.wav', 0.5);
     }
 
     hitTime = 0;

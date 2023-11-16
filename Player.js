@@ -205,6 +205,11 @@ class Player extends MoveableEntity {
         if(this.visible){ this.drawSprite({dt, currentTime, gameTime});}
         this.processCamera();       
         setupBounds();
+
+        if(this.moveDirection.x!=0 || this.moveDirection.y!=0){
+            this.playFootStep({dt, currentTime, gameTime});
+        }
+        this.walkingOnWater = false;
         collisionDetection();
         this.children.forEach(child=>child.update({dt, currentTime, gameTime}));
 
@@ -213,10 +218,12 @@ class Player extends MoveableEntity {
     waterDelay = 250;
     lastWaterTime = 0;
     overWater({dt, currentTime, gameTime}){
+        this.walkingOnWater = false;
         if(this.inventory.questItems["Maguffin"]==0) {
             this.hit(0,0);
             return;
         }
+        this.walkingOnWater = true;
 
         if(gameTime > this.lastWaterTime+this.waterDelay){
             this.lastWaterTime = gameTime;
@@ -224,12 +231,25 @@ class Player extends MoveableEntity {
         }
         // console.log("over water");
     }
+    
+    footDelay = 500;
+    lastFootTime = 0;
+    playFootStep({dt, currentTime, gameTime}){
+        if(gameTime > this.lastFootTime+this.footDelay){
+            this.lastFootTime = gameTime;
+            if(!this.walkingOnWater)
+                this.gameController.soundManager.playSoundEffect('Sounds/step.wav', 0.3);
+            else
+                this.gameController.soundManager.playSoundEffect('Sounds/water_step.wav', 0.3);
+        }        
+    }
 
     hitTime = 0;
     forceHitDist = {x:0, y:0};
     forceDir = {x:0, y:0};
     hit(direction, force){
         if(this.takingDamage) return;
+        
         this.takingDamage = true;        
         this.damageStartTime=gameTime;
         this.hp -= 1;
@@ -237,9 +257,14 @@ class Player extends MoveableEntity {
             this.hitTime = gameTime;
             this.forceDir= {x:direction.x, y:direction.y}
             this.forceHitDist = {x:Math.abs(direction.x)*force, y:Math.abs(direction.y)*force}
+            this.gameController.soundManager.playSoundEffect('Sounds/player_thrown.mp3', 0.5);
         }
+        else
+            this.gameController.soundManager.playSoundEffect('Sounds/playerhit.mp3', 0.5);
+
         if(this.hp <= 0){
             this.hp = 0;
+            this.gameController.soundManager.playSoundEffect('Sounds/player_death.wav', 0.5);
             this.gameController.playSequence(this.gameController,"playerDeath");
             // changeScene(new GameOver(this.score));
         }

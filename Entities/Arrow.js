@@ -21,6 +21,8 @@ class Arrow extends Entity{
             }
         });
         this.frameChangeInterval = 0.2;
+
+        this.gameController.soundFxManager.playSoundEffect('Sounds/arrow.wav', this.position, 0.1, 1000);
     }
 
     brain=({dt, currentTime, gameTime})=>{
@@ -40,7 +42,11 @@ class Arrow extends Entity{
         }
 
         if(this.gameController.levelMap.findCellFrom({x:this.position.x+dist.x, y:this.position.y+dist.y}).col === 1) {            
-            if(!this.fadeOut) this.lastTime = gameTime;
+            if(!this.fadeOut){
+                 this.lastTime = gameTime;
+                 this.gameController.soundFxManager.playSoundEffect('Sounds/arrow_damage.wav', this.position);
+            }
+            
             this.fadeOut = true;
             // this.gameController.destroy(this);
             return;

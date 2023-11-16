@@ -61,9 +61,16 @@ class Runner extends MoveableEntity{
     }
 
     runRUNState({dt, currentTime, gameTime}){
-
+        this.walkingOnWater = false;
         let triggerID = this.gameController.levelMap.findCellFrom({x:this.position.x, y:this.position.y}).col;
-        if(triggerID === 4) this.overWater({dt, currentTime, gameTime});
+        if(triggerID === 4) {
+            this.walkingOnWater = true;
+            this.overWater({dt, currentTime, gameTime});
+        }
+
+        if(this.moveDirection.x!=0 || this.moveDirection.y!=0){
+            this.playFootStep({dt, currentTime, gameTime});
+        }
 
         if(!this.target) {
             this.waypointPointer=0;
@@ -113,6 +120,18 @@ class Runner extends MoveableEntity{
             this.gameController.spawn(this.gameController, {entityType:"Fx", params:{fxType:"0", destroyOnFinishAnim: true}, pos:{...this.position}});
             this.gameController.placeOnTop(this);
         }
+   }
+   
+   footDelay = 250;
+   lastFootTime = 0;
+   playFootStep({dt, currentTime, gameTime}){
+       if(gameTime > this.lastFootTime+this.footDelay){
+           this.lastFootTime = gameTime;
+           if(!this.walkingOnWater)
+               this.gameController.soundManager.playSoundEffect('Sounds/step.wav', 0.3);
+           else
+               this.gameController.soundManager.playSoundEffect('Sounds/water_step.wav', 0.3);
+       }        
    }   
    
 }

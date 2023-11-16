@@ -28,6 +28,8 @@ class Chest extends Entity{
     }
 
     hit(){
+        this.gameController.soundManager.playSoundEffect('Sounds/success.wav', 1);
+        this.gameController.soundManager.playSoundEffect('Sounds/chest_open.wav', 0.5);
         this.switchAnimation("OPENING");
         this.endAnimationCallback=()=>{
             this.switchAnimation("OPEN");

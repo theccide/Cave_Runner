@@ -35,6 +35,7 @@ class Golem extends MoveableEntity{
         this.frameChangeInterval = 0.2;
         this.brightness=.8;
         this.lightOffset = {x:50, y:50};
+        this.gameController.ear = this;
     }
     
     swingBoxBounds= {x:-50,y:0,width:100,height:50};
@@ -105,8 +106,17 @@ class Golem extends MoveableEntity{
         if(this.visible){ this.drawSprite({dt, currentTime, gameTime});}
         this.processCamera();       
         setupBounds();
+        if(this.moveDirection.x!=0 || this.moveDirection.y!=0){
+            this.playFootStep({dt, currentTime, gameTime});
+        }
         collisionDetection();
         this.children.forEach(child=>child.update({dt, currentTime, gameTime}));
+
+        if(this.currentAnimation.startsWith("ATTACK") && this.frame==5) this.canPlaySound=true;
+        if(this.currentAnimation.startsWith("ATTACK") && this.frame==6 && this.canPlaySound){
+            this.canPlaySound = false;
+            this.gameController.soundManager.playSoundEffect('Sounds/torch_light2.wav', 0.3);
+        }
 
         if("Obelisk" in this.gameController.entityMap){
             if(this.currentAnimation.startsWith("ATTACK") && this.frame==6)
@@ -139,7 +149,8 @@ class Golem extends MoveableEntity{
             //this.forceDir= {x:1, y:0};
             //direction = {x:1,y:0};
             this.forceDir= {x:direction.x, y:direction.y};
-            this.forceHitDist = {x:Math.abs(direction.x)*force, y:Math.abs(direction.y)*force}
+            this.forceHitDist = {x:Math.abs(direction.x)*force, y:Math.abs(direction.y)*force};
+            this.gameController.soundManager.playSoundEffect('Sounds/giant_grunt.wav', 0.5);
         }
         // if(this.hp <= 0){
         //     this.hp = 0;
@@ -277,6 +288,16 @@ class Golem extends MoveableEntity{
             this.moveDirection.x = -1;
         }            
    }
+
+   footDelay = 500;
+   lastFootTime = 0;
+   playFootStep({dt, currentTime, gameTime}){
+       if(gameTime > this.lastFootTime+this.footDelay){
+           this.lastFootTime = gameTime;
+           this.gameController.soundManager.playSoundEffect('Sounds/torch_light2.wav', 0.3);
+       }        
+   }  
+
    wakeup(){
         this.switchAnimation("WAKEUP_RIGHT");
         this.endAnimationCallback=()=>{

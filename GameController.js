@@ -91,17 +91,53 @@ class GameController {
         this.soundManager.loadBackgroundMusic('Sounds/music/Regular.wav');
         this.soundManager.fadeInBackgroundMusic();
 
+        // negative.wav
+        // success.wav
+        
         this.soundManager.loadAllSoundEffects([
             "Sounds/noise.wav",
             "Sounds/swordswing.wav",
             "Sounds/arrow_damage.wav",
-            // "Sounds/door_open.wav",
-            // "Sounds/door_close.mp3",
+            "Sounds/chest_open.wav",
+            "Sounds/orc_damage.wav",
+            "Sounds/orc_death.wav",
+            "Sounds/player_death.wav",
+            "Sounds/sword_hit.wav",
+            "Sounds/pickup.wav",
+            "Sounds/pickup2.wav",
+            "Sounds/playerhit.mp3",
+            "Sounds/player_thrown.mp3",
+            "Sounds/roar.wav",
+            "Sounds/torch_light2.wav",
+            "Sounds/torch_light.wav",
+            "Sounds/boss_attack.wav",
+            "Sounds/hurt_boss.wav",
+            "Sounds/die_boss.wav",
+            "Sounds/success.wav",
+            "Sounds/miniboss_die.wav",
+            "Sounds/giggle.wav",
+            "Sounds/grabkey.wav",
+            "Sounds/awake_golem.wav",
+            "Sounds/giant_grunt.wav",
+            "Sounds/obbroekn.wav",
+            "Sounds/step.wav",
+            "Sounds/water_step.wav"
         ], this.soundsFinished);
 
         this.soundFxManager.loadAllSoundEffects([
             "Sounds/door_open.wav",
-            "Sounds/door_close.mp3",
+            "Sounds/door_close.mp3",          
+            "Sounds/arrow_damage.wav",
+            "Sounds/arrow.wav",
+            "Sounds/explode.wav",
+            "Sounds/wall_fire.wav",
+            "Sounds/fireballhit.wav",
+            "Sounds/teleport.wav",
+            "Sounds/teleport_apear.wav",
+
+            "Sounds/sawswing.wav",
+            "Sounds/floor_spikes.wav",
+            "Sounds/obelisk.wav",            
         ], this.soundsFinished);
 
         // const loadSounds = (soundsToLoad, callback) => {
@@ -281,7 +317,7 @@ class GameController {
 
         this.sequencer = new Sequencer(this);
         this.lavaManager = new LavaManager(this);
-        this.playSequence(this,"test");
+        // this.playSequence(this,"stealObeliskPower");
         this.resouncesReady = true;
     }
 

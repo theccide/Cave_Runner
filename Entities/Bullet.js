@@ -28,6 +28,7 @@ class Bullet extends Entity{
         });
         this.frameChangeInterval = 0.2;
         this.target = this.gameController.player;
+        this.gameController.soundFxManager.playSoundEffect('Sounds/wall_fire.wav', this.position);
     }
 
     brain=({dt, currentTime, gameTime})=>{
@@ -47,6 +48,7 @@ class Bullet extends Entity{
         }
 
         if(this.gameController.levelMap.findCellFrom({x:this.position.x+dist.x, y:this.position.y+dist.y}).col === 1) {
+            this.gameController.soundFxManager.playSoundEffect('Sounds/fireballhit.wav', this.position);
             this.gameController.instatiate({entityType:"Fx", params:{fxType:fxTypes.SMOKE_POOF, destroyOnFinishAnim:true}, pos:{...this.position}});
             this.gameController.destroy(this);
             return;
@@ -57,6 +59,8 @@ class Bullet extends Entity{
         
         // check to see if the player was hit
         if(Collision.testBoxOnBox(this.target.collisionBounds,this.collisionBounds)){
+            this.gameController.soundFxManager.playSoundEffect('Sounds/fireballhit.wav', this.position);
+            
             this.target.hit(this.faceDir, this.hitForce);
             this.gameController.destroy(this);
         }
@@ -65,6 +69,7 @@ class Bullet extends Entity{
     hit(direction, force){
         if("miniboss" in this.gameController.entityMap) 
             this.target = this.gameController.entityMap["miniboss"];
+        this.gameController.soundManager.playSoundEffect('Sounds/miniboss_die.wav');
         this.dir.x = -2;
     } 
 }

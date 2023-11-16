@@ -34,7 +34,7 @@ class Gem extends Entity{
 
     brain=({dt, currentTime, gameTime})=>{
         if(Collision.testCircleOnCircle(this.gameController.player.position,8,this.position,8)){
-            this.gameController.soundManager.playSoundEffect('Sounds/noise.wav', 0.5);
+            this.gameController.soundManager.playSoundEffect('Sounds/pickup2.wav', 0.5);
             this.gameController.player.score +=(4 - (this.gemType + 1)) * 10;
             this.gameController.destroy(this);
             // this.gameController.score+=;

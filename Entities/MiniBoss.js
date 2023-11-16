@@ -38,6 +38,8 @@ class MiniBoss extends Entity{
                 if(gameTime > this.lastTimeEvent+this.nextTimeEvent){
                     this.lastTimeEvent = gameTime;
                     this.state = (Math.random()>= 0.5)?this.states.TELEPORTING:this.states.SHOOTING;
+                    if(this.state == this.states.TELEPORTING)
+                        this.gameController.soundFxManager.playSoundEffect('Sounds/teleport.wav', this.position);                    
                 }
                 break;
             case this.states.TELEPORTING:
@@ -46,6 +48,7 @@ class MiniBoss extends Entity{
                 if(gameTime > this.lastTimeEvent+this.nextTimeEvent){
                     this.lastTimeEvent = gameTime;
                     this.state = this.states.IDLE;
+                    this.gameController.soundFxManager.playSoundEffect('Sounds/teleport_apear.wav', this.position);
                     const newSpawnPoint = Tools.getNumberBetween(0, this.spawnPoints.length-1);
                     this.position = this.spawnPoints[newSpawnPoint];
                 }
@@ -89,6 +92,7 @@ class MiniBoss extends Entity{
         this.hp=0;
         // this.hp--;
         if(this.hp <= 0){
+            console.log("miniBossDeath");
             this.gameController.sequencer.startSequence("miniBossDeath");
             this.deathAnimation = "Idle";
             this.state = this.states.DIE;
